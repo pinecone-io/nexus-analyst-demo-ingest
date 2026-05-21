@@ -1,0 +1,21 @@
+id: acme
+name: Acme Inc — synthetic enterprise warehouse
+description: |
+  Synthetic enterprise warehouse for Acme Inc, a fictitious workflow-automation
+  B2B SaaS (~$39M ARR, 800 customers, 100 employees). 13 BigQuery tables
+  (subscriptions, invoices, workflow runs, user events, support tickets,
+  opportunities, NPS, marketing touches) curated alongside ~126 internal docs
+  (Notion runbooks, Slack threads, Gong calls, dbt model docs, query logs,
+  postmortems). Models the full internal-data-team experience.
+bq_reference: nexus-analyst-demo.acme
+nexus_context_id: <your-context-id>
+nexus_context_slug: <your-context-slug>
+license: synthetic-demo
+attribution: Synthetic Acme Inc demo for Nexus Analyst. Acme Inc is a fictitious company; any resemblance to real entities is coincidental.
+sources_dirs:
+  - acme
+sample_queries:
+  - What's the total ARR by plan tier for Acme as of the latest snapshot?
+  - Which customers churned in Q1 2026 and why?
+  - Show me NPS trend over the last 12 months by segment.
+  - What's the win rate on enterprise opportunities this quarter?

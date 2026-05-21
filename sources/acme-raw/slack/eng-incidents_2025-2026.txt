@@ -1,0 +1,10 @@
+# Slack export — #eng-incidents (relevant threads only)
+
+[2025-09-12 14:03] oncall.ben: workflow_runs_daily looks stale, yesterday's partition is empty
+[2025-09-12 14:20] dan.lee: incremental window bug. the model only looked back 7d but late events arrived past that. tightening... actually we're moving the window from 7d to 3d AND fixing the late-arrival handling. postmortem to follow
+[2025-09-12 18:40] dan.lee: mitigated. doc: workflow-runs-stale 2025-09-12
+--- (separate incident, months later) ---
+[2026-02-04 03:11] oncall.ben: stripe webhook backlog, fact_invoices not updating
+[2026-02-04 07:30] dan.lee: stripe invoice pipeline was stuck ~6h overnight. downstream effect: account_health.has_uncollectible_recent read FALSE for accounts that actually had fresh uncollectible invoices during the window. so health bands under-reported critical until backfill
+[2026-02-04 09:15] elena.volkov: this is NOT the same as the sept workflow_runs thing, different pipeline. let's keep the postmortems separate
+[2026-02-04 12:00] dan.lee: agreed. doc: stripe-invoice-pipeline-stuck 2026-02-04

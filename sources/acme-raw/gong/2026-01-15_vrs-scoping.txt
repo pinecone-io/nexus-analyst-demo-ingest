@@ -1,0 +1,13 @@
+Gong — "VRS scoping" — 2026-01-15 — 50m
+Participants: Dan Lee (Data), Elena Volkov (VP CS)
+[transcript, auto]
+
+00:00:30 Elena: so this is the value realization score kickoff. dan you and i own it.
+00:00:38 Dan: yep. to be clear up front — this is a design proposal, nothing is built. there is no table yet.
+00:01:05 Elena: the proposed schema had a vrs_band column, and champion_login_recency, feature_adoption_depth...
+00:01:18 Dan: right, all proposed. the proposed table would be acme.marts.value_realization_score but it does NOT exist in bigquery. if someone asks where to query VRS today the answer is you can't, use account_health or the engaged flag.
+00:01:55 Elena: do we have a timeline
+00:02:00 Dan: honestly it's going to get parked. account_health covers most of what CS needs and we don't have eng bandwidth this half. i'll mark it scoping/parked.
+00:02:30 Elena: ok. let's not let people cite vrs_band in dashboards then
+00:02:36 Dan: agreed, it's not real yet
+00:03:10 [tangent, calendars, omitted]

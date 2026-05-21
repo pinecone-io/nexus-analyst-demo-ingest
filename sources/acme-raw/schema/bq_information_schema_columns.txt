@@ -1,0 +1,27 @@
+$ bq query --use_legacy_sql=false 'SELECT table_name, column_name, data_type FROM `nexus-analyst-demo.acme.INFORMATION_SCHEMA.COLUMNS` ORDER BY table_name, ordinal_position'
+
+# NOTE: BigQuery datasets are FLAT. Everything lives directly under `nexus-analyst-demo.acme.*`.
+# There is no nested dataset (no acme.marts, no acme.dbt_marts, no acme.marts.cs). The dbt
+# folder layout (marts/finance, marts/cs, ...) is filesystem-only and is NOT a table path.
+
+# --- base tables (5 dims + 8 facts = 13) ---
+dim_customers      customer_id, company_name, signup_date, country, region, industry, account_tier, current_plan_tier, current_mrr_usd, seat_count_licensed, status, churn_date, csm_employee_id, ae_employee_id, acquisition_channel
+dim_users          user_id, customer_id, email_domain, role, signup_date, last_login_date, is_active, invited_by_user_id
+dim_employees      employee_id, full_name, team, role, manager_employee_id, hire_date, termination_date, location, is_active
+dim_plans          plan_tier, monthly_price_per_seat_usd, min_seats, workflow_run_quota_per_month, storage_gb, sla_uptime_pct
+dim_dates          date, year, quarter, month, month_name, week, day_of_week, is_weekend, is_business_day
+fact_subscriptions subscription_id, customer_id, plan_tier, start_date, end_date, mrr_usd, seat_count, billing_cycle, is_current, change_type, changed_from_subscription_id
+fact_invoices      invoice_id, customer_id, subscription_id, invoice_date, period_start, period_end, amount_usd, status, paid_at
+fact_workflow_runs run_id, workflow_id, customer_id, triggered_at, triggered_by, status, duration_ms, step_count, error_code
+fact_user_events   event_id, user_id, customer_id, event_at, event_name, properties_json
+fact_support_tickets ticket_id, customer_id, user_id, opened_at, closed_at, channel, priority, category, resolution_time_hours, csat_score, assigned_to_employee_id
+fact_opportunities opportunity_id, customer_id, account_name, ae_employee_id, sdr_employee_id, created_date, stage, amount_usd, close_date, closed_won_at, loss_reason
+fact_nps_responses response_id, customer_id, user_id, responded_at, score, comment, segment, survey_quarter
+fact_marketing_touches touch_id, lead_email_hash, customer_id, touched_at, channel, campaign, utm_source, utm_medium, utm_campaign, attributed_revenue_usd
+
+# --- materialized marts (also flat under acme) ---
+arr_snapshot         snapshot_date, arr_usd, arr_pro_usd, arr_business_usd, arr_enterprise_usd, paying_customers
+nrr_trailing_12      cohort_size, cohort_start_mrr_usd, cohort_end_mrr_usd, nrr, grr, churned_mrr_loss_usd, expansion_mrr_usd
+account_health       customer_id, account_tier, current_plan_tier, has_uncollectible_recent, n_open_p1_over_48h, has_open_p1_over_48h, has_recent_nps_detractor, is_engaged, utilization_band, account_health_status
+bookings_attribution opportunity_id, customer_id, account_name, bookings_acv_usd, closed_won_at, first_touch_channel
+workflow_runs_daily  run_date, customer_id, n_runs, n_success, success_rate, p50_duration_ms, p95_duration_ms, p99_duration_ms, auth_failed_count, rate_limited_count, step_timeout_count, integration_down_count

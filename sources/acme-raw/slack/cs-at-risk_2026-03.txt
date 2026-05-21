@@ -1,0 +1,11 @@
+# Slack export — #cs-at-risk — March 2026
+
+[2026-03-02 08:00] health-bot: :rotating_light: 4 accounts moved to *critical* overnight. (daily 08:00 UTC digest)
+[2026-03-02 08:12] marco.chen: on it, monday triage. pulling the looker account health board
+[2026-03-02 08:30] elena.volkov: remember enterprise critical is the uncollectible-invoice rule, not utilization. don't panic on an Ent with low logins
+[2026-03-05 16:20] sara: is there a renewal forecast table i can join? dbt references marts/cs/renewal_forecast
+[2026-03-05 16:28] dan.lee: that's a dbt model path, downstream of account_health. i'm not sure it's actually materialized to bigquery yet — check the inventory before you query acme.renewal_forecast, it may not exist
+[2026-03-05 16:29] sara: ok will verify
+[2026-03-09 09:15] marco.chen: the open-P1-over-48h signal flagged cust000287 again
+[2026-03-09 09:16] sara: that's has_open_p1_over_48h right, only P1?
+[2026-03-09 09:17] marco.chen: yep only P1, P2 and below don't escalate

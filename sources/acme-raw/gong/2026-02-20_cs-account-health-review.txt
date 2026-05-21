@@ -1,0 +1,16 @@
+Gong — "CS account health weekly" — 2026-02-20 — 44m
+Participants: Marco Chen (Sr CSM), Priya Anand (VP Eng), Sara (CSM)
+[transcript]
+
+00:00:20 Marco: health board. the account_health mart drives the bands. status column account_health_status, five values, critical at_risk monitoring stable healthy_expansion.
+00:00:51 Sara: how does a customer land in critical
+00:00:58 Marco: depends on tier. for Enterprise it's basically a recent uncollectible invoice, last 60 days. enterprise has unlimited seats so there's no utilization rule, utilization_band is null for them.
+00:01:30 Marco: for everyone else, non-enterprise, critical is uncollectible OR seat utilization under 0.20.
+00:01:44 Priya: and engaged, the engaged flag
+00:01:49 Marco: is_engaged on the mart. three or more active users and ten or more successful workflow runs in 28 days. that's the floor.
+00:02:20 Sara: there's also the P1 thing
+00:02:24 Marco: yeah has_open_p1_over_48h. an open P1 ticket older than 48 hours. only P1. P2 P3 P4 don't trip it. and recent nps detractor in 90 days flags at_risk too.
+00:03:05 Priya: someone asked about a champion login recency signal
+00:03:11 Marco: that's not built. that's in the VRS draft, it's a proposal. for now if you want champion activity you query fact_user_events for admin logins, join dim_users on role admin.
+00:03:40 [5 min tangent about a specific customer, redacted]
+00:09:02 Marco: triage cadence is monday, looker account health board, work the ones that moved into critical

@@ -1,0 +1,242 @@
+{
+  "version": "2.0",
+  "dataset": "acme",
+  "description": "Retrieval eval set for the Acme synthetic enterprise warehouse Nexus context. Each case is a multi-part descriptive prompt that bundles 2-5 sub-questions an internal data-team partner would actually ask. Cases force the pipeline to (a) prefer materialized derived metrics over base-table re-derivations, (b) treat draft / WIP / not-yet-built artifacts as non-authoritative, (c) thread quantitative facts (FQTs, columns, formulas) with qualitative context (CSM threads, postmortems, sales calls), and (d) reject names from runbooks/draft specs/training memory that do not exist in the BigQuery mirror. expected_output enumerates the core load-bearing facts the retrieved context must cover; secondary citations are nice-to-have, not required for pass.",
+  "test_cases": [
+    {
+      "id": "nrr_trailing_12_canonical",
+      "input": "Compute the trailing-12-month Net Revenue Retention number we report to the board, using the canonical fixed-cohort definition. I need the exact FQT — please don't make me re-derive from raw subscriptions — and the cohort definition (who's in, who's out — Free tier?).",
+      "expected_output": "Required: (a) FQT is `nexus-analyst-demo.acme.nrr_trailing_12`; (b) cohort = paid (non-Free) customers as of (snapshot_date - 12 months); (c) NRR = SUM(end_mrr) / SUM(start_mrr) for the cohort. Negative: must NOT instruct deriving from raw `fact_subscriptions` as the canonical path."
+    },
+    {
+      "id": "current_arr_by_tier_with_qc",
+      "input": "What's our current ARR with the per-tier breakdown the board deck wants? Give me the canonical table and the per-tier columns.",
+      "expected_output": "Required: (a) FQT is `nexus-analyst-demo.acme.arr_snapshot`; (b) per-tier columns: `arr_pro_usd`, `arr_business_usd`, `arr_enterprise_usd`; (c) ARR = MRR × 12 across paying (non-Free) customers. Negative: must NOT recommend re-aggregating `fact_subscriptions` as the canonical path."
+    },
+    {
+      "id": "critical_health_band_paid_customers",
+      "input": "Give me the list of paid customers currently in the 'critical' health band. Which mart, which column, what enum values?",
+      "expected_output": "Required: (a) FQT is `nexus-analyst-demo.acme.account_health`; (b) column is `account_health_status`; (c) enum: critical / at_risk / monitoring / stable / healthy_expansion. Negative: must NOT surface the draft `value_realization_score` model as the source for current health band."
+    },
+    {
+      "id": "vrs_draft_handling",
+      "input": "Where do I query the Value Realization Score (VRS) with the vrs_band column?",
+      "expected_output": "Required: (a) VRS is a DRAFT / WIP / not-yet-built spec; (b) the proposed table `acme.marts.value_realization_score` does NOT exist in BigQuery; (c) current alternative for health is `nexus-analyst-demo.acme.account_health`. Negative: MUST NOT present the proposed schema as a queryable table; MUST NOT return `vrs_band` as a real column."
+    },
+    {
+      "id": "bookings_first_touch_attribution",
+      "input": "Quarterly bookings-by-channel slide. For Closed_Won opps, the canonical mart, the first-touch channel column, and is the ACV column already annualized?",
+      "expected_output": "Required: (a) FQT is `nexus-analyst-demo.acme.bookings_attribution`; (b) `first_touch_channel` is the channel column (NULL = pure outbound); (c) `bookings_acv_usd` is ALREADY annualized — do NOT multiply by 12. Negative: must NOT suggest re-deriving from `fact_opportunities + fact_marketing_touches` when the mart exists."
+    },
+    {
+      "id": "workflow_health_per_customer_daily",
+      "input": "Per-customer-per-day workflow run health: total runs, success rate, p95 latency, error breakdown. What table?",
+      "expected_output": "Required: (a) FQT is `nexus-analyst-demo.acme.workflow_runs_daily`, partitioned on `run_date`; (b) key columns: `total_runs`, `success_rate`, `p95_duration_ms`, error breakdown by code; (c) `other_error_count` catches new error codes not in the enumerated list. Negative: must NOT instruct re-aggregating `fact_workflow_runs`."
+    },
+    {
+      "id": "churn_diagnosis_multi_hop_beacon",
+      "input": "Why did customer cust_000287 (Beacon Studios) churn? I want quantitative state at time of churn AND qualitative observations from CSM/AE.",
+      "expected_output": "Required: (a) `gong__churn-call__cust000287-beacon-studios.md` is the call transcript; (b) `slack__cs-handoff__cust000287-churn-debrief.md` is the CSM debrief; (c) `nexus-analyst-demo.acme.account_health` for trailing health status; `fact_subscriptions` for the churn event row. MUST surface BOTH materialized state AND qualitative call/Slack context."
+    },
+    {
+      "id": "engagement_recalibration_q4_decision_history",
+      "input": "What changed about our engagement-threshold definition in Q4 2025, why, and what was the trigger data point?",
+      "expected_output": "Required: (a) `postmortem__engagement-threshold-recalibration-2025-Q4.md` is the source; (b) the trigger was that 'engaged' customers had renewal rates of ~88% vs investor-expected 92-95%; (c) recalibrated engaged-customer flag to ≥3 active users + ≥10 successful workflow runs in 28d."
+    },
+    {
+      "id": "stripe_invoice_pipeline_incident",
+      "input": "We had a Stripe / invoice pipeline incident last quarter. What happened and what was the impact on `account_health` accuracy?",
+      "expected_output": "Required: (a) `postmortem__stripe-invoice-pipeline-stuck-2026-02-04.md` is the source; (b) impact: `has_uncollectible_recent` signal in `account_health` was stale, customers who should have flipped to 'critical' for billing failure were not flagged. Negative: must NOT confuse with the workflow-runs-stale incident."
+    },
+    {
+      "id": "expansion_mrr_q1_2026_breakdown",
+      "input": "Q1 2026 expansion MRR — upgrades vs seat_change vs anything else. Which change_type values count as expansion?",
+      "expected_output": "Required: (a) `change_type` enum in `fact_subscriptions`: `new`, `upgrade`, `seat_change`, `churn` — note that `downgrade` is NOT a separate change_type (downgrades are folded into `seat_change` rows where new MRR < prior MRR via `changed_from_subscription_id`); (b) `nexus-analyst-demo.acme.nrr_trailing_12` exposes `expansion_mrr_usd` and `contraction_mrr_usd` columns for the trailing view. Negative: must NOT assert a `downgrade` change_type exists."
+    },
+    {
+      "id": "enterprise_health_special_cases",
+      "input": "Why does Enterprise get different rules in `account_health`? What's different — utilization band, critical triggers, engaged flag?",
+      "expected_output": "Required: (a) `utilization_band` is NULL for Enterprise rows by design (unlimited seats); (b) Enterprise critical = uncollectible invoice in 60d (billing failure); (c) non-Enterprise critical = uncollectible OR seat utilization < 0.20. Negative: must NOT apply the <0.20 utilization rule to Enterprise."
+    },
+    {
+      "id": "ae_quota_attainment_pipeline",
+      "input": "AE quota attainment for QBR: total Closed_Won bookings ACV last quarter. Which mart, which AE attribution column?",
+      "expected_output": "Required: (a) `nexus-analyst-demo.acme.bookings_attribution` keyed on opportunity_id; (b) `ae_employee_id` for AE attribution; (c) `bookings_acv_usd` already annualized; join `dim_employees` for AE name. Negative: must NOT instruct multiplying ACV by 12."
+    },
+    {
+      "id": "dataset_inventory_no_training_memory",
+      "input": "What BigQuery tables and datasets do I have access to in this warehouse?",
+      "expected_output": "Required: (a) project + dataset is `nexus-analyst-demo.acme`; (b) base facts include fact_subscriptions, fact_invoices, fact_user_events, fact_workflow_runs, fact_support_tickets, fact_nps_responses, fact_opportunities, fact_marketing_touches; (c) materialized marts (flat under acme): account_health, arr_snapshot, bookings_attribution, nrr_trailing_12, workflow_runs_daily; (d) the `value_realization_score` table is NOT present. Negative: must NOT enumerate Citi Bike, NYC Taxi, NOAA, Stack Overflow, GitHub, dabstep, or any unrelated dataset; must NOT invent `acme.marts.cs.account_health`."
+    },
+    {
+      "id": "process_at_risk_account_triage",
+      "input": "What's our process for triaging at-risk accounts? Cadence, owner, data inputs.",
+      "expected_output": "Required: (a) `notion__csm-account-health-runbook.md` is the canonical runbook; (b) cadence is the Monday CSM review of accounts that moved into critical/at_risk; (c) data inputs: `account_health.account_health_status`, NPS detractor flag, P1 open ticket flag, recent uncollectible invoice flag."
+    },
+    {
+      "id": "customer_count_definition_ambiguity",
+      "input": "Define paid customer, paying customer, engaged customer precisely with the table/column to query.",
+      "expected_output": "Required: (a) `paid_customer` = current sub where plan_tier != 'Free' (`is_current=TRUE` AND `plan_tier != 'Free'` on `fact_subscriptions`); (b) `paying_customers` is same definition, surfaced in `arr_snapshot.paying_customers`; (c) `engaged_customer` = paid customer AND ≥3 active users + ≥10 successful runs in 28d, surfaced as `is_engaged` in `account_health`. Negative: must NOT define paid_customer to include Free."
+    },
+    {
+      "id": "pricing_decision_history",
+      "input": "Did we decide to raise Pro pricing? What was the discussion?",
+      "expected_output": "Required: (a) `slack__pricing__should-we-raise-pro.md` is the discussion thread; (b) `notion__pricing-tiers.md` is the current pricing reference; (c) status of the decision MUST be reported verbatim from the thread (open / parked / decided). Negative: must NOT fabricate a pricing decision the thread doesn't conclude."
+    },
+    {
+      "id": "workflow_runs_stale_incident_2025_09",
+      "input": "Sept 2025 workflow_runs stale incident. Root cause and what changed in the daily mart.",
+      "expected_output": "Required: (a) `postmortem__workflow-runs-stale-2025-09-12.md` is the source; (b) `dbt__model__workflow_runs_daily.md` shows the remediation tightened the incremental window from 7d to 3d; (c) downstream impact: `account_health.successful_runs_28d` signal is sourced from this mart so stale partitions degrade the engaged-customer flag accuracy."
+    },
+    {
+      "id": "negative_assertion_no_nested_dataset",
+      "input": "I want to query `nexus-analyst-demo.acme.marts.cs.account_health`. Is that the right path?",
+      "expected_output": "Required: (a) BigQuery does NOT support nested datasets — that is NOT a valid FQT; (b) the correct FQT is `nexus-analyst-demo.acme.account_health` (flat under acme); (c) the dbt PATH `marts/cs/account_health` is filesystem convention only. Negative: must NOT treat the dbt path as the BigQuery FQT."
+    },
+    {
+      "id": "nps_segmentation_and_use_in_health",
+      "input": "How is NPS segmented? Cutoffs and how detractor feeds account_health.",
+      "expected_output": "Required: (a) `fact_nps_responses` has `score` (0-10) and `segment` enum (promoter / passive / detractor); (b) `account_health` mart pulls detractors via `segment='detractor'` AND `responded_at >= now - 90d`, surfaced as `has_recent_nps_detractor`; (c) detractor flag pushes to monitoring band (not critical). Negative: must NOT claim detractor alone pushes Enterprise to critical."
+    },
+    {
+      "id": "h2_roadmap_and_initiatives_status",
+      "input": "What is the data team currently working on for H1/H2 2026? Which initiatives are scoping vs in progress vs shipped?",
+      "expected_output": "Required: (a) VRS — DRAFT / scoping per `notion__draft__value-realization-score-spec.md`, NOT shipped; (b) account_health mart consolidation — SHIPPED 2025-08-12; (c) workflow_runs_daily incremental window 7d→3d — SHIPPED 2025-09-22 post-incident. Negative: must NOT present VRS as in-progress when comments say it's parked; must NOT claim multi-touch attribution is shipped."
+    },
+    {
+      "id": "support_ticket_resolution_ambiguity",
+      "input": "How do we measure support ticket resolution time? Is `resolution_time_hours` the same as time-to-first-response?",
+      "expected_output": "Required: (a) `fact_support_tickets.resolution_time_hours` = total time from `opened_at` to `closed_at` (close-time, NOT first-response); (b) `account_health.has_open_p1_over_48h` is INDEPENDENT of resolution_time — it's `priority='P1'` AND `closed_at IS NULL` AND `opened_at < now - 48h`. Negative: must NOT conflate the 48h-open-P1 health signal with average resolution time."
+    },
+    {
+      "id": "free_to_paid_conversion_path",
+      "input": "How do customers move from Free to Paid in our data? Which table and which change_type for the upgrade?",
+      "expected_output": "Required: (a) `fact_subscriptions` is the source — conversion = transition from a row with `plan_tier='Free'` to a subsequent row with paid plan_tier for the same customer_id, joined via `changed_from_subscription_id`; (b) the change_type for the upgrade row is `upgrade` (or `new` for first paid sub). Negative: must NOT instruct a `dim_customers.is_free_converted` boolean (no such column)."
+    },
+    {
+      "id": "draft_vs_live_glossary_ambiguity",
+      "input": "Two team members gave conflicting definitions for 'engaged customer'. Live current definition? Prior definition? Forward-looking change?",
+      "expected_output": "Required: (a) LIVE definition (`glossary__engaged_customer.md`): paid customer with ≥3 active users + ≥10 successful workflow runs in 28d; (b) PRIOR was a looser threshold per `postmortem__engagement-threshold-recalibration-2025-Q4.md`; (c) FORWARD-LOOKING: `notion__draft__value-realization-score-spec.md` proposes a continuous 0-100 VRS score, DRAFT / not shipped. Negative: must NOT present VRS bands as the live definition."
+    },
+    {
+      "id": "renewal_forecast_dependency_chain",
+      "input": "Where does the renewal forecast model live and what does it consume?",
+      "expected_output": "Required: (a) `dbt__model__account_health.md` references `marts/cs/renewal_forecast.sql` as a downstream consumer; (b) it consumes `account_health` mart; (c) if the corresponding BQ table is NOT in `INFORMATION_SCHEMA.TABLES`, it's a pipeline stub not a queryable table — surface that uncertainty. Negative: must NOT fabricate a `renewal_forecast` schema as if it were materialized."
+    },
+    {
+      "id": "intra_quarter_metric_freshness",
+      "input": "Mid-quarter, someone asked for 'current' ARR. arr_snapshot rebuilds nightly at 06:30 UTC. What can I quote?",
+      "expected_output": "Required: (a) `arr_snapshot` rebuilds nightly @ 06:30 UTC; intra-day events after 06:30 UTC are NOT reflected until next morning; (b) `qc_recency_disagreements` is the integrity check — should be 0-2, alert if >5. Negative: must NOT claim arr_snapshot is real-time."
+    },
+    {
+      "id": "ae_expansion_scoring",
+      "input": "Which AEs have the strongest record of customers expanding post-close?",
+      "expected_output": "Required: (a) `nexus-analyst-demo.acme.bookings_attribution` is the canonical mart; (b) `post_close_mrr_delta_vs_initial_usd` is the expansion delta column (positive=expanded, negative=contracted); (c) `ae_employee_id` joins to `dim_employees` for AE name. Negative: must NOT instruct multiplying ACV × 12."
+    },
+    {
+      "id": "marketing_channel_roas_attribution",
+      "input": "Marketing ROAS for Closed_Won opps trailing 12 months — bookings ACV by first-touch channel.",
+      "expected_output": "Required: (a) `nexus-analyst-demo.acme.bookings_attribution`; (b) `first_touch_channel` (NULL = outbound bucket); (c) `bookings_acv_usd` already annualized. Negative: must NOT claim multi-touch attribution is currently shipped."
+    },
+    {
+      "id": "p1_ticket_open_signal_freshness",
+      "input": "The 'open P1 over 48h' signal feeding account_health: which states qualify and what timestamp does the 48h count from?",
+      "expected_output": "Required: (a) qualifying state: `priority='P1'` AND `closed_at IS NULL` AND `opened_at < (now - 48h)`; ONLY P1; (b) surfaced as `has_open_p1_over_48h` and `n_open_p1_over_48h` in `account_health` mart; (c) refresh: `account_health` rebuilds nightly @ 06:45 UTC. Negative: must NOT claim the signal includes P2 tickets."
+    },
+    {
+      "id": "drag_industries_discovery_signals",
+      "input": "What was the discovery call with cust_000412 / Drag Industries about, and are they in the at-risk band?",
+      "expected_output": "Required: (a) `gong__discovery__cust000412-drag-industries.md` is the call transcript; (b) `slack__cs-at-risk__customer-cust000412.md` is the CSM at-risk thread; (c) live state via `nexus-analyst-demo.acme.account_health` for `customer_id='cust_000412'`. MUST combine Gong + Slack + materialized health."
+    },
+    {
+      "id": "nps_promoter_passive_detractor_by_tier",
+      "input": "NPS promoter / passive / detractor distribution by plan tier in the last 90 days.",
+      "expected_output": "Required: (a) `fact_nps_responses` (columns: `score`, `segment`, `responded_at`, `customer_id`); (b) join to `fact_subscriptions WHERE is_current=TRUE` for `plan_tier`; (c) `query_log__07__nps-by-plan-tier.md` is the canonical query pattern. Negative: must NOT fabricate a 0-100 NPS scale."
+    },
+    {
+      "id": "workflow_error_trend_root_cause",
+      "input": "Workflow error rate trending up. Which error codes, which mart, breakdown by trigger type?",
+      "expected_output": "Required: (a) `nexus-analyst-demo.acme.workflow_runs_daily`; (b) per-error-code columns including `auth_failed_count`, `rate_limited_count`, `step_timeout_count`, `integration_down_count`, `user_error_count`, `validation_error_count`, `other_error_count`; (c) trigger type columns: `schedule_triggered`, `webhook_triggered`, `manual_triggered`, `api_triggered`. Negative: must NOT recompute from raw `fact_workflow_runs`."
+    },
+    {
+      "id": "logo_churn_definition_distinction",
+      "input": "Define 'logo churn' vs 'revenue churn'.",
+      "expected_output": "Required: (a) `glossary__logo_churn.md` is canonical; (b) logo churn = COUNT-based on customers who churned; revenue churn = SUM(start_mrr_usd) of churned cohort; (c) `nexus-analyst-demo.acme.nrr_trailing_12.churned_mrr_loss_usd` exposes the dollar version. Negative: must NOT conflate logo and revenue churn."
+    },
+    {
+      "id": "sales_cycle_benchmarking_by_tier",
+      "input": "Average sales cycle (created → closed_won) by current plan tier and by acquisition channel.",
+      "expected_output": "Required: (a) `nexus-analyst-demo.acme.bookings_attribution` is the mart; (b) columns: `sales_cycle_days`, `current_plan_tier`, `first_touch_channel`. Negative: must NOT instruct re-deriving from `fact_opportunities + fact_marketing_touches`."
+    },
+    {
+      "id": "stripe_incident_revenue_blast_radius",
+      "input": "Did the Feb 2026 Stripe pipeline incident affect arr_snapshot or nrr_trailing_12?",
+      "expected_output": "Required: (a) `postmortem__stripe-invoice-pipeline-stuck-2026-02-04.md` is the source; (b) `arr_snapshot` and `nrr_trailing_12` read from `fact_subscriptions`, NOT `fact_invoices` — so headline ARR/NRR were NOT directly affected; (c) account_health WAS affected because `has_uncollectible_recent` reads `fact_invoices`. Negative: must NOT claim arr_snapshot itself was wrong."
+    },
+    {
+      "id": "halcyon_renewal_outcome",
+      "input": "Walk me through the renewal call with Halcyon Research — outcome, pushback, current health.",
+      "expected_output": "Required: (a) `gong__renewal__halcyon-research.md` is the call transcript; (b) post-call health via `nexus-analyst-demo.acme.account_health` (need to resolve customer_id via `dim_customers.company_name = 'Halcyon Research'`). MUST combine Gong qualitative + materialized health."
+    },
+    {
+      "id": "champion_login_recency_signal",
+      "input": "What's the 'champion login recency' signal proposed in the VRS spec? Is it currently computed live?",
+      "expected_output": "Required: (a) `notion__draft__value-realization-score-spec.md` is the source — DRAFT; (b) the signal is NOT currently computed in any live mart; (c) `account_health` has `active_users_28d` (count) but not champion-specific recency. Negative: must NOT present `champion_login_recency` as a real column in any live table."
+    },
+    {
+      "id": "workflow_runs_quota_pro_tier",
+      "input": "Are there Pro customers approaching their monthly workflow run quota? What's the quota and where's it documented?",
+      "expected_output": "Required: (a) Pro tier quota: surface from `notion__pricing-tiers.md` if defined there, else surface that the quota is NOT explicitly enumerated in the corpus; (b) per-customer monthly run count: aggregate `nexus-analyst-demo.acme.workflow_runs_daily` by customer_id and DATE_TRUNC(run_date, MONTH). Negative: must NOT fabricate a specific Pro quota number not present in the corpus."
+    },
+    {
+      "id": "open_pipeline_by_ae_canonical",
+      "input": "Open pipeline by AE — total amount in non-closed stages.",
+      "expected_output": "Required: (a) `fact_opportunities` is the source; open = stage NOT IN ('Closed_Won','Closed_Lost'); (b) `amount_usd` is the open pipeline value; (c) `query_log__10__open-pipeline-by-ae.md` is the canonical saved query. Negative: must NOT instruct using `bookings_attribution` mart for open pipeline (that mart is Closed_Won only)."
+    },
+    {
+      "id": "data_warehouse_conventions_utc_alignment",
+      "input": "What's our convention for UTC alignment across daily marts when joining workflow_runs_daily to account_health?",
+      "expected_output": "Required: (a) `notion__data-warehouse-conventions.md` is canonical — all daily marts align to UTC; (b) `workflow_runs_daily` partitions on `run_date` = `DATE(triggered_at)` UTC; (c) `account_health` is a single-snapshot mart rebuilt nightly @ 06:45 UTC, no date partition. Negative: must NOT assume both marts share a partition column."
+    },
+    {
+      "id": "engaged_customer_signal_rolling_window",
+      "input": "When account_health computes `is_engaged`, what's the exact 28-day window?",
+      "expected_output": "Required: (a) 28d back from build runtime (CURRENT_TIMESTAMP at the moment dbt model runs); (b) is_engaged threshold: ≥3 active users (login event count) AND ≥10 successful runs (`status='success'`) in the window; (c) `glossary__engaged_customer.md` is the user-facing definition. Negative: must NOT include `partial`/`error`/`timeout` runs as 'successful'."
+    },
+    {
+      "id": "support_resolution_csat_correlation",
+      "input": "Is there a relationship between ticket resolution time and CSAT score?",
+      "expected_output": "Required: (a) `fact_support_tickets` has both `resolution_time_hours` and `csat_score`; (b) join condition: `csat_score IS NOT NULL AND closed_at IS NOT NULL`; (c) caveat that CSAT response rate is not 100%. Negative: must NOT use `resolution_time_hours` as a proxy for time-to-first-response."
+    },
+    {
+      "id": "free_to_paid_conversion_attribution",
+      "input": "When a Free customer upgrades to Pro, do we credit a marketing channel?",
+      "expected_output": "Required: (a) `bookings_attribution` mart is keyed on `opportunity_id` — Free→Pro upgrades are typically PRODUCT-LED and may NOT generate a Closed_Won opp, so they may NOT appear in the bookings mart; (b) attribution typically uses original first-touch from `fact_marketing_touches`; (c) Enterprise Closed_Won opps DO get fresh attribution because they go through Sales. Negative: must NOT claim every Free→Pro upgrade lands in `bookings_attribution`."
+    },
+    {
+      "id": "scratch_doc_authority_handling",
+      "input": "Should I treat numbers in `scratch__lina-q1-board-prep-notes.md` as authoritative for board reporting?",
+      "expected_output": "Required: (a) `scratch__*` filename prefix indicates informal personal notes, NOT canonical reporting; (b) canonical board ARR is in `nexus-analyst-demo.acme.arr_snapshot`; canonical NRR in `nexus-analyst-demo.acme.nrr_trailing_12`. Negative: must NOT quote a number from a scratch__ file as if it's the canonical figure."
+    },
+    {
+      "id": "slack_random_noise_rejection",
+      "input": "Was there a discussion on Slack about lunch places near the office?",
+      "expected_output": "Required: (a) `slack__random__lunch-place-debate.md` exists; (b) it is NOT a business-critical analytics question; treat as informal organizational context with no bearing on warehouse data, metric definitions, or process. Negative: this thread should NEVER appear in retrieval results for unrelated business questions like ARR or churn."
+    },
+    {
+      "id": "enterprise_poc_playbook_process",
+      "input": "Walk me through the Enterprise POC process — gates, owners, data inputs.",
+      "expected_output": "Required: (a) `notion__enterprise-poc-playbook.md` is the canonical runbook; (b) data inputs typically include: workflow run volume from `workflow_runs_daily`, engaged-user threshold from `account_health.is_engaged`, opportunity stage progression in `fact_opportunities`. Negative: must NOT invent gates the playbook doesn't have."
+    },
+    {
+      "id": "on_call_rotation_who_to_page",
+      "input": "If `account_health` is failing dbt freshness alert at 3am UTC, who's on call?",
+      "expected_output": "Required: (a) `notion__on-call-rotation.md` is the canonical doc — surface current rotation owner; (b) pipeline freshness alert path is data-platform on-call, NOT the model owner (CS) listed in `dbt__model__account_health.md`. Negative: must NOT route the on-call to the model owner instead of the pipeline on-call."
+    },
+    {
+      "id": "stale_csm_handoff_data_consistency",
+      "input": "When a CSM handoff happens, what data inputs should the new CSM look at first?",
+      "expected_output": "Required: (a) `slack__cs-handoff__cust000287-churn-debrief.md` is a real worked example; (b) data inputs: `account_health` row, recent `fact_support_tickets`, `fact_nps_responses`, `fact_subscriptions` for current state; (c) `notion__churn-debrief-template.md` is the formal template. MUST combine materialized state with qualitative (slack/gong/notion)."
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+# Slack export — #watercooler (NON-DATA, distractor)
+
+[2026-04-01 12:30] priya.anand: who left their cold brew in the 3rd floor fridge since march
+[2026-04-01 12:31] sara: not me, i'm a hot coffee person
+[2026-04-02 17:10] jorge: anyone watching the game tonight
+[2026-04-02 17:11] marco.chen: going to the gym then yes
+[2026-04-05 09:00] people-ops-bot: reminder: dentist reimbursements due by the 15th
+[2026-04-07 14:22] sam: office dog 🐕 is in today, come say hi on 2
+[2026-04-07 14:23] lina.cho: omg on my way
+[2026-04-09 11:00] facilities: the 2nd floor AC is being serviced thursday, may be warm

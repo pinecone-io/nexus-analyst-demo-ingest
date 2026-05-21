@@ -1,0 +1,18 @@
+[project]
+name = "nexus-analyst-demo-ingest"
+version = "0.1.0"
+description = "Source materials + ship scripts for the Nexus Analyst demo. Markdown corpus across the synthetic Acme warehouse and public BigQuery datasets (NYC TLC, NOAA GSOD, NYC 311, Google Patents), plus uploaders for Nexus + Pinecone."
+license = { text = "Apache-2.0" }
+requires-python = ">=3.11"
+dependencies = [
+    "httpx>=0.27.0",
+    "pyyaml>=6.0.2",
+    "pinecone>=5.0.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = []

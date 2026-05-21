@@ -1,0 +1,132 @@
+{
+  "version": "3.1",
+  "dataset": "acme-v3",
+  "description": "Lighter retrieval eval set with anti-hallucination tightening. Each case is a SINGLE focused question with explicit FQT precision and number-grounding rules. Negative assertions reject hallucinated FQTs (no `dbt_marts` middle layer), hallucinated specific numbers, and dbt-paths-as-FQT.",
+  "test_cases": [
+    {
+      "id": "arr_table",
+      "input": "What is the canonical BigQuery table for current ARR?",
+      "expected_output": "Required: surface `nexus-analyst-demo.acme.arr_snapshot` as the FQT (mart, single-row). Required columns: `arr_usd`, `arr_pro_usd`, `arr_business_usd`, `arr_enterprise_usd`. Negative: must NOT direct re-aggregation from `fact_subscriptions`; must NOT invent a `dbt_marts` or `marts` middle dataset (BigQuery has flat layout — `acme.arr_snapshot` not `acme.dbt_marts.arr_snapshot`)."
+    },
+    {
+      "id": "nrr_table",
+      "input": "Where do I get the trailing-12-month NRR figure?",
+      "expected_output": "Required: surface `nexus-analyst-demo.acme.nrr_trailing_12` as the canonical mart FQT. Columns: `nrr`, `grr`, `cohort_size`, `cohort_start_mrr_usd`, `cohort_end_mrr_usd`. Negative: must NOT invent a middle dataset like `dbt_marts` or `marts.finance`; must NOT direct re-derivation from raw `fact_subscriptions` when the mart exists; must NOT return the dbt model PATH (`marts/finance/nrr_trailing_12`) as the BigQuery FQT."
+    },
+    {
+      "id": "account_health_table",
+      "input": "Where is the account health band stored?",
+      "expected_output": "Required: surface `nexus-analyst-demo.acme.account_health` as the FQT (NOT the dbt path `marts/cs/account_health`). Column `account_health_status` with enum: critical, at_risk, monitoring, stable, healthy_expansion. Negative: must NOT use the dbt path as the BigQuery FQT; must NOT invent middle datasets."
+    },
+    {
+      "id": "bookings_attribution_table",
+      "input": "What table has bookings with first-touch marketing attribution?",
+      "expected_output": "Required: surface `nexus-analyst-demo.acme.bookings_attribution` as the FQT. Column `bookings_acv_usd` is ALREADY annualized (do NOT multiply by 12). Column `first_touch_channel` for attribution. Negative: must NOT invent middle datasets; must NOT instruct multiplying ACV by 12."
+    },
+    {
+      "id": "workflow_runs_daily_table",
+      "input": "Where are daily per-customer workflow run rollups?",
+      "expected_output": "Required: surface `nexus-analyst-demo.acme.workflow_runs_daily` as the FQT, partitioned on `run_date`. Columns: `success_rate`, `p50/p95/p99_duration_ms`, error breakdown (auth_failed_count, etc.). Negative: must NOT invent middle datasets."
+    },
+    {
+      "id": "engaged_customer_definition",
+      "input": "How is an engaged customer defined?",
+      "expected_output": "Required: ≥3 active users AND ≥10 successful workflow runs in last 28 days. Sourced from `glossary__engaged_customer.md` and `account_health.is_engaged` boolean column. Negative: must NOT fabricate a different threshold; must NOT introduce a fictional formula."
+    },
+    {
+      "id": "vrs_status",
+      "input": "What is the VRS (Value Realization Score)?",
+      "expected_output": "Required: VRS is a DRAFT / WIP design proposal NOT built in BigQuery. Owned by @dan.lee + @elena.volkov; status is scoping/parked. Proposed table `acme.marts.value_realization_score` does NOT exist. Live alternative: `account_health` mart or engaged-customer flag. Negative: MUST NOT present VRS schema as queryable; MUST NOT return `vrs_band` as a real column; MUST surface draft status verbatim."
+    },
+    {
+      "id": "logo_vs_revenue_churn",
+      "input": "What's the difference between logo churn and revenue churn?",
+      "expected_output": "Required: logo churn is customer-count-based (COUNT distinct customers churned / cohort size); revenue churn is MRR-weighted (SUM(start_mrr) of churned / SUM(start_mrr) cohort). Revenue churn is part of GRR computation; surfaced via `nrr_trailing_12.churned_mrr_loss_usd`. Negative: must NOT conflate the two."
+    },
+    {
+      "id": "enterprise_health_rules",
+      "input": "How do account health rules differ for Enterprise vs SMB customers?",
+      "expected_output": "Required: Enterprise has `utilization_band = NULL` (unlimited seats). Enterprise critical = uncollectible invoice in 60d. Non-Enterprise critical = uncollectible OR seat utilization < 0.20. Sourced from `dbt__model__account_health.md`. Negative: must NOT apply <0.20 utilization rule to Enterprise; must NOT fabricate other thresholds."
+    },
+    {
+      "id": "stripe_incident_2026_02",
+      "input": "What was the Stripe / invoice pipeline incident in Feb 2026?",
+      "expected_output": "Required: surface `postmortem__stripe-invoice-pipeline-stuck-2026-02-04.md` (date 2026-02-04). Impact: stale `fact_invoices` → `account_health.has_uncollectible_recent` signal incorrectly negative during window. Negative: must NOT confuse with the workflow-runs-stale incident (different system, different date)."
+    },
+    {
+      "id": "engagement_recalibration_q4",
+      "input": "Why did we recalibrate the engagement threshold in Q4 2025?",
+      "expected_output": "Required: cite `postmortem__engagement-threshold-recalibration-2025-Q4.md`. Trigger: engaged customers had 88% renewal vs 92-95% expected. New threshold: ≥3 active users + ≥10 successful runs in 28d. Negative: must NOT fabricate other reasons; must NOT collapse 'recalibration' with 'VRS shipped'."
+    },
+    {
+      "id": "workflow_runs_stale_2025_09",
+      "input": "What happened with the workflow_runs_stale incident in Sept 2025?",
+      "expected_output": "Required: surface `postmortem__workflow-runs-stale-2025-09-12.md`. Remediation: dbt incremental window tightened from 7d to 3d. Negative: must NOT confuse with Stripe Feb 2026 incident."
+    },
+    {
+      "id": "csm_runbook",
+      "input": "How does the CSM team triage at-risk accounts?",
+      "expected_output": "Required: `notion__csm-account-health-runbook.md` is the canonical runbook. Cadence: Monday review of Looker Account Health board, prioritize accounts moved into critical band. Slack alerting via `#cs-at-risk` daily 08:00 UTC. Negative: must NOT invent a different cadence."
+    },
+    {
+      "id": "data_inventory",
+      "input": "What BigQuery tables are available in this warehouse?",
+      "expected_output": "Required: enumerate 13 base dim/fact tables (dim_customers, dim_users, dim_employees, dim_plans, dim_dates, fact_subscriptions, fact_invoices, fact_user_events, fact_workflow_runs, fact_support_tickets, fact_nps_responses, fact_opportunities, fact_marketing_touches) + 5 marts (account_health, arr_snapshot, bookings_attribution, nrr_trailing_12, workflow_runs_daily) all under `nexus-analyst-demo.acme` (FLAT, not nested). Negative: must NOT list NYC Taxi, NOAA, Patents, or other public datasets; must NOT invent middle datasets like `acme.dbt_marts`."
+    },
+    {
+      "id": "no_nested_dataset",
+      "input": "Is `nexus-analyst-demo.acme.marts.cs.account_health` a valid table path?",
+      "expected_output": "Required: BigQuery does NOT support nested datasets. The dbt path `marts/cs/account_health` is filesystem-only. Correct FQT is FLAT: `nexus-analyst-demo.acme.account_health`. All marts are flat under the `acme` dataset. Negative: must NOT treat the dbt path as the BigQuery FQT."
+    },
+    {
+      "id": "subscription_change_types",
+      "input": "What change_type values exist on fact_subscriptions and what do they mean?",
+      "expected_output": "Required: enum values `new`, `upgrade`, `seat_change`, `churn`. Note there is NO separate `downgrade` — downgrades fold into `seat_change` rows where new mrr_usd < prior mrr_usd (joined via `changed_from_subscription_id`). Negative: must NOT assert a `downgrade` change_type exists."
+    },
+    {
+      "id": "paid_customer_definition",
+      "input": "What's the precise definition of a paid customer?",
+      "expected_output": "Required: customer with current subscription where plan_tier != 'Free' (filter `is_current=TRUE AND plan_tier != 'Free'` on `fact_subscriptions`). Approximately 530 paid customers. Source: `glossary__paid_customer.md`. Negative: must NOT include Free in paid; must NOT equate paid with engaged (engaged is stricter)."
+    },
+    {
+      "id": "champion_signal_proposed",
+      "input": "Where is champion login recency tracked?",
+      "expected_output": "Required: champion login recency is a PROPOSED signal in the VRS draft spec, NOT currently computed in any live mart. Live alternative: query `fact_user_events` for admin user logins from `dim_users`. Negative: MUST NOT present `champion_login_recency` as a real column in any live table."
+    },
+    {
+      "id": "free_to_paid_conversion",
+      "input": "How do customers convert from Free to a paid tier in our data?",
+      "expected_output": "Required: detect via change_type sequence in `fact_subscriptions` — Free row followed by a paid (Pro/Business/Enterprise) row for same customer_id, joined via `changed_from_subscription_id`. Most are product-led; `bookings_attribution` mart only covers Closed_Won opps so Free→Pro upgrades may not appear there. Negative: must NOT fabricate a `is_free_converted` boolean column."
+    },
+    {
+      "id": "p1_ticket_health_signal",
+      "input": "How does the open-P1-over-48h signal feed into account_health?",
+      "expected_output": "Required: priority='P1' AND closed_at IS NULL AND opened_at < (now - 48h). Surfaced in `account_health.has_open_p1_over_48h` (boolean) and `n_open_p1_over_48h` (count). Only P1 — P2/P3/P4 do NOT escalate via this signal. Negative: must NOT include P2 in the signal."
+    },
+    {
+      "id": "nps_segments",
+      "input": "How is NPS segmented and where are detractors used?",
+      "expected_output": "Required: `fact_nps_responses.segment` enum (promoter/passive/detractor). Detractor in last 90d feeds `account_health.has_recent_nps_detractor`. Source: `dbt__model__account_health.md` `nps_detractors_90d` CTE. Negative: must NOT invent a 0-100 NPS scale."
+    },
+    {
+      "id": "scratch_doc_authority",
+      "input": "Should I trust numbers in scratch__lina-q1-board-prep-notes.md as canonical?",
+      "expected_output": "Required: scratch__ files are informal personal notes, NOT canonical. Authority hierarchy puts scratch < slack < notion runbook < dbt model doc < materialized mart. Canonical board ARR is `arr_snapshot` mart; canonical NRR is `nrr_trailing_12` mart. Negative: must NOT quote a number from a scratch__ file as if it's the canonical figure."
+    },
+    {
+      "id": "expansion_mrr_definition",
+      "input": "How is expansion MRR computed?",
+      "expected_output": "Required: positive delta when current sub MRR > prior sub MRR for same customer, joined via `changed_from_subscription_id`, summed across `upgrade` and `seat_change` events. Surfaced in `nrr_trailing_12.expansion_mrr_usd`. Negative: must NOT fabricate specific quarterly figures (e.g., '$1.21M for Q1') unless that exact number appears in the source corpus."
+    },
+    {
+      "id": "data_warehouse_utc",
+      "input": "What's our convention for UTC alignment in daily marts?",
+      "expected_output": "Required: surface `notion__data-warehouse-conventions.md`. All daily marts align to UTC day boundaries. `workflow_runs_daily` partitions on `DATE(triggered_at)` in UTC. Negative: must NOT assume a non-UTC timezone."
+    },
+    {
+      "id": "renewal_forecast_existence",
+      "input": "Where is the renewal forecast table?",
+      "expected_output": "Required: `marts/cs/renewal_forecast` is referenced by `dbt__model__account_health.md` as a downstream consumer (dbt model PATH). Must flag whether the corresponding BigQuery table actually exists — if not in the surfaced inventory, surface that fact rather than presenting a hallucinated FQT. Negative: must NOT fabricate an FQT for it."
+    }
+  ]
+}

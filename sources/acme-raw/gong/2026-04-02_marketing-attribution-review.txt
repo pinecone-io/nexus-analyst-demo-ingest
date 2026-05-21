@@ -1,0 +1,12 @@
+Gong — "Q1 bookings attribution review" — 2026-04-02 — 28m
+Participants: Jorge (Marketing Ops), Lina Cho (FP&A)
+[transcript]
+
+00:00:25 Jorge: bookings by channel slide. the mart is bookings_attribution, one row per closed-won opp, first_touch_channel is the attribution column.
+00:00:50 Lina: and a null channel means
+00:00:54 Jorge: pure outbound, no marketing touch on record.
+00:01:20 Lina: i was about to multiply bookings_acv_usd by twelve to annualize
+00:01:25 Jorge: no no — don't. bookings_acv_usd is ALREADY annual. it's the annual contract value off the opportunity, not an mrr. multiplying by 12 would 12x the number.
+00:01:42 Lina: got it, already annualized.
+00:02:05 Jorge: and it only covers Closed_Won opps. self-serve free-to-pro conversions don't show up here, those are product-led, no opp.
+00:02:40 [tangent about a webinar, omitted]

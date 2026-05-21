@@ -1,0 +1,24 @@
+# Slack export — #data-help — April 2026 (raw, threads concatenated)
+
+[2026-04-03 09:14] rachel.stein: which table for current ARR for the board deck? i keep getting two numbers
+[2026-04-03 09:18] dan.lee: arr_snapshot mart. don't re-sum fact_subscriptions. it's `nexus-analyst-demo.acme.arr_snapshot`, single row, arr_usd + the per-tier arr_pro_usd/arr_business_usd/arr_enterprise_usd
+[2026-04-03 09:19] rachel.stein: is it acme.marts.finance.arr_snapshot?
+[2026-04-03 09:20] dan.lee: no, flat. acme.arr_snapshot. bq has no nested datasets, the marts/finance folder is just dbt
+[2026-04-03 09:21] rachel.stein: :pray:
+
+[2026-04-08 11:02] newgrad.sam: what's an "engaged" customer, PM asked
+[2026-04-08 11:09] marco.chen: >=3 active users and >=10 successful workflow runs in trailing 28 days. it's account_health.is_engaged
+[2026-04-08 11:10] newgrad.sam: ty
+
+[2026-04-11 15:40] jorge: reminder bookings_acv_usd is already annualized, saw someone x12 it in a sheet
+[2026-04-11 15:41] lina.cho: yeah it's ACV not MRR, don't multiply
+
+[2026-04-14 10:05] priya.anand: anyone know a good lunch spot near the SF office :sandwich:
+[2026-04-14 10:06] sara: the poke place on 2nd
+[2026-04-14 10:07] priya.anand: bless
+
+[2026-04-18 13:22] newgrad.sam: how do free→paid conversions show up in data? is there an attribution mart row?
+[2026-04-18 13:31] dan.lee: not in bookings_attribution — that's Closed_Won opps only. free→paid is product-led, no opp. you detect it in fact_subscriptions: a Free row then a paid row for the same customer_id, linked by changed_from_subscription_id
+[2026-04-18 13:33] newgrad.sam: ahh ok
+[2026-04-18 13:40] newgrad.sam: also is there a downgrade change_type
+[2026-04-18 13:44] dan.lee: no. change_type is new/upgrade/seat_change/churn. a downgrade is a seat_change row where the new mrr_usd is lower than the prior one (follow changed_from_subscription_id)

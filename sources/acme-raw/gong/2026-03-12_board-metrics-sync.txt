@@ -1,0 +1,18 @@
+Gong Recording — "Board metrics sync" — 2026-03-12 09:02 PT — 31m
+Participants: Rachel Stein (CFO), Lina Cho (FP&A), Dan Lee (Data)
+[auto-transcribed, lightly cleaned]
+
+00:00:14 Rachel: ok morning. board deck friday. i need the ARR number and the per-tier split. last quarter someone re-summed fact_subscriptions and got a number that didn't match the deck, let's not do that again.
+00:00:39 Dan: right, don't re-aggregate the raw table. there's a snapshot mart, arr_snapshot. it's a single row, rebuilt nightly. arr_usd plus arr_pro_usd, arr_business_usd, arr_enterprise_usd.
+00:01:02 Rachel: and that's nexus-analyst-demo.acme.arr_snapshot? flat? someone wrote me acme.marts.finance.arr_snapshot and it 404'd.
+00:01:10 Dan: yeah flat. bigquery doesn't do nested datasets. the marts/finance thing is just the dbt folder. table is acme.arr_snapshot.
+00:01:31 Lina: arr is just mrr times twelve over the paying customers right, free excluded
+00:01:36 Dan: correct. free is excluded, times 12.
+00:02:10 Rachel: and NRR for the retention slide
+00:02:14 Dan: nrr_trailing_12 mart. nrr and grr columns, cohort_size, cohort_start_mrr_usd, cohort_end_mrr_usd. fixed cohort, paid customers as of twelve months before the snapshot. nrr is sum of end mrr over sum of start mrr for that cohort. churned customers stay in at zero, it's a left join.
+00:02:51 Rachel: ok. and ignore the numbers in lina's prep doc, those were my back-of-envelope
+00:02:55 Lina: lol yeah the scratch doc is not canonical, pull from the marts
+00:03:20 Rachel: cool. unrelated, are we still doing the offsite in lisbon
+00:03:24 Dan: i think so, ask people ops
+00:03:30 [tangent about flights, ~2 min, omitted]
+00:05:48 Rachel: ok thanks all
