@@ -340,3 +340,362 @@ adapter: bq_query_log
 - **Upcoming MBR Prep:** All vertical leads (`maya.lindqvist`, `owen.faust`, `sanjay.bhatt`, `ines.delgado`, `noah.kessler`, `camille.duarte`, `aisha.rahman`, `julian.moss`, `tara.oduya`, `leo.brandt`, `simone.laurent`, `derek.holloway`, `malik.hendon`) have finalized their Q2FY27 QTD metrics ahead of today's executive review with `deborah.osei` and `felix.arroyo`.
 
 ---
+
+
+  {
+    "query_id": "bq_qry_7239",
+    "timestamp": "2026-07-20T08:15:42Z",
+    "user_email": "amara.shah@acme-ecomm.internal",
+    "job_type": "QUERY",
+    "total_bytes_billed": 142606336,
+    "query_text": "SELECT market, SUM(gmv_usd) FROM nexus-analyst-demo.acme_ecomm.traffic_conversion_summary WHERE fiscal_week_ending >= '2026-05-01' GROUP BY market"
+  },
+  {
+    "query_id": "bq_qry_7240",
+    "timestamp": "2026-07-20T08:45:12Z",
+    "user_email": "connor.blake@acme-ecomm.internal",
+    "job_type": "QUERY",
+    "total_bytes_billed": 78643200,
+    "query_text": "SELECT COUNT(*) FROM nexus-analyst-demo.acme_ecomm.dim_fulfillment_node WHERE is_active = TRUE"
+  },
+  {
+    "query_id": "bq_qry_7241",
+    "timestamp": "2026-07-20T09:12:33Z",
+    "user_email": "giulia.romano@acme-ecomm.internal",
+    "job_type": "QUERY",
+    "total_bytes_billed": 524288000,
+    "query_text": "SELECT theme_tag, COUNT(*) FROM nexus-analyst-demo.acme_ecomm.fact_voc_responses WHERE responded_at >= '2026-05-01' GROUP BY theme_tag"
+  },
+  {
+    "query_id": "bq_qry_7242",
+    "timestamp": "2026-07-20T09:30:15Z",
+    "user_email": "camille.duarte@acme-ecomm.internal",
+    "job_type": "QUERY",
+    "total_bytes_billed": 314572800,
+    "query_text": "SELECT theme_tag, COUNT(*) FROM nexus-analyst-demo.acme_ecomm.fact_seller_voc_responses GROUP BY theme_tag"
+  },
+  {
+    "query_id": "bq_qry_7243",
+    "timestamp": "2026-07-20T10:04:19Z",
+    "user_email": "owen.faust@acme-ecomm.internal",
+    "job_type": "QUERY",
+    "total_bytes_billed": 1153433600,
+    "query_text": "SELECT experiment_id, variant, SUM(units_exposed) FROM nexus-analyst-demo.acme_ecomm.fact_experiment_exposures GROUP BY experiment_id, variant"
+  },
+  {
+    "query_id": "bq_qry_7244",
+    "timestamp": "2026-07-20T10:22:50Z",
+    "user_email": "derek.holloway@acme-ecomm.internal",
+    "job_type": "QUERY",
+    "total_bytes_billed": 629145600,
+    "query_text": "SELECT benefits_adopted_count, AVG(projected_cltv_usd) FROM nexus-analyst-demo.acme_ecomm.member_cltv GROUP BY benefits_adopted_count"
+  },
+  {
+    "query_id": "bq_qry_7245",
+    "timestamp": "2026-07-20T11:01:04Z",
+    "user_email": "maya.lindqvist@acme-ecomm.internal",
+    "job_type": "QUERY",
+    "total_bytes_billed": 838860800,
+    "query_text": "SELECT device, SUM(sessions) FROM nexus-analyst-demo.acme_ecomm.fact_traffic_daily WHERE date >= '2026-05-01' GROUP BY device"
+  },
+  {
+    "query_id": "bq_qry_7246",
+    "timestamp": "2026-07-20T11:25:48Z",
+    "user_email": "sanjay.bhatt@acme-ecomm.internal",
+    "job_type": "QUERY",
+    "total_bytes_billed": 419430400,
+    "query_text": "SELECT category, AVG(price_usd) FROM nexus-analyst-demo.acme_ecomm.fact_marketplace_listings WHERE status='active' GROUP BY category"
+  },
+  {
+    "query_id": "bq_qry_7247",
+    "timestamp": "2026-07-20T11:40:12Z",
+    "user_email": "tara.oduya@acme-ecomm.internal",
+    "job_type": "QUERY",
+    "total_bytes_billed": 943718400,
+    "query_text": "SELECT fulfillment_type, AVG(on_time_rate) FROM nexus-analyst-demo.acme_ecomm.fulfillment_speed_daily GROUP BY fulfillment_type"
+  },
+  {
+    "query_id": "bq_qry_7248",
+    "timestamp": "2026-07-20T12:02:10Z",
+    "user_email": "malik.hendon@acme-ecomm.internal",
+    "job_type": "QUERY",
+    "total_bytes_billed": 209715200,
+    "query_text": "SELECT vertical_code, SUM(gmv_usd) FROM nexus-analyst-demo.acme_ecomm.fact_orders WHERE vertical_code='B2B' GROUP BY vertical_code"
+  },
+  {
+    "query_id": "bq_qry_7249",
+    "timestamp": "2026-07-20T12:15:30Z",
+    "user_email": "aisha.rahman@acme-ecomm.internal",
+    "job_type": "QUERY",
+    "total_bytes_billed": 524288000,
+    "query_text": "SELECT sub_program, AVG(csat_score) FROM nexus-analyst-demo.acme_ecomm.fact_care_contacts GROUP BY sub_program"
+  },
+  {
+    "query_id": "bq_qry_7250",
+    "timestamp": "2026-07-20T12:33:04Z",
+    "user_email": "lucia.ferreira@acme-ecomm.internal",
+    "job_type": "QUERY",
+    "total_bytes_billed": 314572800,
+    "query_text": "SELECT status, COUNT(*) FROM nexus-analyst-demo.acme_ecomm.dim_seller GROUP BY status"
+  },
+  {
+    "query_id": "bq_qry_7251",
+    "timestamp": "2026-07-20T13:00:22Z",
+    "user_email": "carlos.figueroa@acme-ecomm.internal",
+    "job_type": "QUERY",
+    "total_bytes_billed": 1258291200,
+    "query_text": "SELECT fiscal_quarter_label, SUM(gmv_usd) FROM nexus-analyst-demo.acme_ecomm.traffic_conversion_summary t JOIN nexus-analyst-demo.acme_ecomm.dim_date d ON t.fiscal_week_ending = d.week_ending_date GROUP BY fiscal_quarter_label"
+  }
+]
+```
+
+---
+
+## Slack & Operational Log Notes (Continuation Archive)
+
+- **Slack Aside (2026-07-16):** `camille.duarte` in `#marketplace-product`: *"Just finished writing up the seller funnel breakdown. The new-seller cohort analysis shows Collectibles really stalling out between listing 5 and 10 due to GradeSure verification lag. Pushed the markdown note to Confluence."*
+- **Compass BI Sync Status:** Routine data refreshes completed successfully as of 06:00 ET. Reminder from `amara.shah` regarding MBR follow-up action items: ensure all weekly cut files pull directly from `traffic_conversion_summary` and `marketplace_gmv_summary`.
+- **Data Engineering Churn:** `connor.blake` noted that upstream Airflow dependency checks for `fact_traffic_daily` have been tightened following the session-definition cutover from earlier in the fiscal year.
+
+  {
+    "query_id": "bq_qry_7252",
+    "timestamp": "2026-07-20T13:21:40Z",
+    "user_email": "amara.shah@acme-ecomm.internal",
+    "job_type": "QUERY",
+    "total_bytes_billed": 157286400,
+    "query_text": "SELECT market, SUM(gmv_usd) FROM nexus-analyst-demo.acme_ecomm.traffic_conversion_summary WHERE fiscal_week_ending >= '2026-05-01' GROUP BY market"
+  },
+  {
+    "query_id": "bq_qry_7253",
+    "timestamp": "2026-07-20T13:45:12Z",
+    "user_email": "giulia.romano@acme-ecomm.internal",
+    "job_type": "QUERY",
+    "total_bytes_billed": 419430400,
+    "query_text": "SELECT theme_tag, COUNT(*) FROM nexus-analyst-demo.acme_ecomm.fact_voc_responses WHERE survey_type = 'post_purchase' GROUP BY theme_tag"
+  },
+  {
+    "query_id": "bq_qry_7254",
+    "timestamp": "2026-07-20T14:10:05Z",
+    "user_email": "connor.blake@acme-ecomm.internal",
+    "job_type": "QUERY",
+    "total_bytes_billed": 104857600,
+    "query_text": "SELECT table_name, row_count FROM nexus-analyst-demo.acme_ecomm.__TABLES__"
+  },
+  {
+    "query_id": "bq_qry_7255",
+    "timestamp": "2026-07-20T14:30:19Z",
+    "user_email": "camille.duarte@acme-ecomm.internal",
+    "job_type": "QUERY",
+    "total_bytes_billed": 838860800,
+    "query_text": "SELECT seller_id, category_focus, active_listings FROM nexus-analyst-demo.acme_ecomm.marketplace_seller_performance WHERE category_focus = 'collectibles'"
+  },
+  {
+    "query_id": "bq_qry_7256",
+    "timestamp": "2026-07-20T15:04:55Z",
+    "user_email": "aisha.rahman@acme-ecomm.internal",
+    "job_type": "QUERY",
+    "total_bytes_billed": 209715200,
+    "query_text": "SELECT sub_program, AVG(handle_time_minutes) FROM nexus-analyst-demo.acme_ecomm.fact_care_contacts WHERE channel = 'chat' GROUP BY sub_program"
+  },
+  {
+    "query_id": "bq_qry_7257",
+    "timestamp": "2026-07-20T15:22:11Z",
+    "user_email": "derek.holloway@acme-ecomm.internal",
+    "job_type": "QUERY",
+    "total_bytes_billed": 629145600,
+    "query_text": "SELECT plan_type, COUNT(*) FROM nexus-analyst-demo.acme_ecomm.dim_member WHERE status = 'active' GROUP BY plan_type"
+  },
+  {
+    "query_id": "bq_qry_7258",
+    "timestamp": "2026-07-20T15:58:30Z",
+    "user_email": "owen.faust@acme-ecomm.internal",
+    "job_type": "QUERY",
+    "total_bytes_billed": 314572800,
+    "query_text": "SELECT experiment_id, variant, units_exposed FROM nexus-analyst-demo.acme_ecomm.fact_experiment_exposures WHERE experiment_id = 'exp_2601'"
+  },
+  {
+    "query_id": "bq_qry_7259",
+    "timestamp": "2026-07-20T16:15:00Z",
+    "user_email": "malik.hendon@acme-ecomm.internal",
+    "job_type": "QUERY",
+    "total_bytes_billed": 943718400,
+    "query_text": "SELECT vertical_code, SUM(gmv_usd) FROM nexus-analyst-demo.acme_ecomm.fact_orders WHERE vertical_code = 'B2B' GROUP BY vertical_code"
+  },
+  {
+    "query_id": "bq_qry_7260",
+    "timestamp": "2026-07-20T16:40:42Z",
+    "user_email": "carlos.figueroa@acme-ecomm.internal",
+    "job_type": "QUERY",
+    "total_bytes_billed": 1468006400,
+    "query_text": "SELECT d.fiscal_quarter_label, SUM(t.gmv_usd) FROM nexus-analyst-demo.acme_ecomm.traffic_conversion_summary t JOIN nexus-analyst-demo.acme_ecomm.dim_date d ON t.fiscal_week_ending = d.week_ending_date GROUP BY d.fiscal_quarter_label"
+  }
+]
+```
+
+---
+
+## Slack & Operational Log Notes (Second Continuation Archive)
+
+- **Slack Aside (2026-07-18):** `giulia.romano` in `#analytics-chat`: *"Just verified the item-page Medallia verbatims for `exp_2618`. The autoplay carousel complaints are quite localized—mostly mobile web users who tap and get interrupted. Volume is low, but sentiment is reliably negative."*
+- **Compass BI Sync Status:** Evening data refresh completed successfully at 18:30 ET. Reminder from `amara.shah`: please ensure all ad-hoc queries against marketplace data reference `marketplace_gmv_summary` rather than attempting local joins on `fact_orders`.
+- **Data Engineering Churn:** `connor.blake` noted that routine checks on `fact_seller_voc_responses` partition pruning are passing cleanly after last week's schema adjustments.
+
+  {
+    "query_id": "bq_qry_7261",
+    "timestamp": "2026-07-20T17:02:15Z",
+    "user_email": "connor.blake@acme-ecomm.internal",
+    "job_type": "QUERY",
+    "total_bytes_billed": 184549376,
+    "query_text": "SELECT partition_id, table_name, row_count FROM nexus-analyst-demo.acme_ecomm.INFORMATION_SCHEMA.PARTITIONS WHERE table_name IN ('fact_orders', 'fact_traffic_daily')"
+  },
+  {
+    "query_id": "bq_qry_7262",
+    "timestamp": "2026-07-20T17:10:04Z",
+    "user_email": "amara.shah@acme-ecomm.internal",
+    "job_type": "QUERY",
+    "total_bytes_billed": 629145600,
+    "query_text": "SELECT fiscal_week_ending, SUM(gmv_usd) FROM nexus-analyst-demo.acme_ecomm.marketplace_gmv_summary WHERE fiscal_week_ending >= '2026-05-01' GROUP BY fiscal_week_ending ORDER BY fiscal_week_ending"
+  },
+  {
+    "query_id": "bq_qry_7263",
+    "timestamp": "2026-07-20T17:35:12Z",
+    "user_email": "wei.hartono@acme-ecomm.internal",
+    "job_type": "QUERY",
+    "total_bytes_billed": 419430400,
+    "query_text": "SELECT sessions_definition_version, COUNT(*) FROM nexus-analyst-demo.acme_ecomm.fact_traffic_daily WHERE date >= '2026-01-01' GROUP BY sessions_definition_version"
+  },
+  {
+    "query_id": "bq_qry_7264",
+    "timestamp": "2026-07-20T18:02:50Z",
+    "user_email": "camille.duarte@acme-ecomm.internal",
+    "job_type": "QUERY",
+    "total_bytes_billed": 104857600,
+    "query_text": "SELECT theme_tag, COUNT(*) FROM nexus-analyst-demo.acme_ecomm.fact_seller_voc_responses WHERE survey_type = 'onboarding_pulse_l1' GROUP BY theme_tag"
+  },
+  {
+    "query_id": "bq_qry_7265",
+    "timestamp": "2026-07-20T18:22:18Z",
+    "user_email": "derek.holloway@acme-ecomm.internal",
+    "job_type": "QUERY",
+    "total_bytes_billed": 524288000,
+    "query_text": "SELECT benefits_adopted_count, AVG(trailing_12mo_gmv_usd) FROM nexus-analyst-demo.acme_ecomm.member_cltv GROUP BY benefits_adopted_count"
+  },
+  {
+    "query_id": "bq_qry_7266",
+    "timestamp": "2026-07-20T18:50:33Z",
+    "user_email": "aisha.rahman@acme-ecomm.internal",
+    "job_type": "QUERY",
+    "total_bytes_billed": 314572800,
+    "query_text": "SELECT sub_program, AVG(handle_time_minutes) FROM nexus-analyst-demo.acme_ecomm.fact_care_contacts WHERE deflected = TRUE GROUP BY sub_program"
+  },
+  {
+    "query_id": "bq_qry_7267",
+    "timestamp": "2026-07-20T19:15:00Z",
+    "user_email": "lucia.ferreira@acme-ecomm.internal",
+    "job_type": "QUERY",
+    "total_bytes_billed": 209715200,
+    "query_text": "SELECT seller_id, COUNT(*) FROM nexus-analyst-demo.acme_ecomm.fact_marketplace_listings WHERE status = 'removed' GROUP BY seller_id HAVING COUNT(*) > 2"
+  },
+  {
+    "query_id": "bq_qry_7268",
+    "timestamp": "2026-07-20T19:40:11Z",
+    "user_email": "gabriel.stroud@acme-ecomm.internal",
+    "job_type": "QUERY",
+    "total_bytes_billed": 419430400,
+    "query_text": "SELECT fulfillment_type, AVG(avg_days_late_when_late) FROM nexus-analyst-demo.acme_ecomm.fact_promise_vs_actual WHERE date >= '2026-05-01' GROUP BY fulfillment_type"
+  },
+  {
+    "query_id": "bq_qry_7269",
+    "timestamp": "2026-07-20T20:05:40Z",
+    "user_email": "maya.lindqvist@acme-ecomm.internal",
+    "job_type": "QUERY",
+    "total_bytes_billed": 838860800,
+    "query_text": "SELECT device, SUM(add_to_cart_sessions) / SUM(product_view_sessions) FROM nexus-analyst-demo.acme_ecomm.fact_traffic_daily WHERE date BETWEEN '2026-05-01' AND '2026-07-18' GROUP BY device"
+  },
+  {
+    "query_id": "bq_qry_7270",
+    "timestamp": "2026-07-20T20:30:25Z",
+    "user_email": "owen.faust@acme-ecomm.internal",
+    "job_type": "QUERY",
+    "total_bytes_billed": 314572800,
+    "query_text": "SELECT experiment_id, metric_name, metric_value FROM nexus-analyst-demo.acme_ecomm.fact_experiment_readouts WHERE experiment_id = 'exp_2601' AND as_of_date = '2026-07-18'"
+  }
+]
+```
+
+  {
+    "query_id": "bq_qry_7271",
+    "timestamp": "2026-07-20T21:02:14Z",
+    "user_email": "connor.blake@acme-ecomm.internal",
+    "job_type": "QUERY",
+    "total_bytes_billed": 157286400,
+    "query_text": "SELECT COUNT(*) FROM nexus-analyst-demo.acme_ecomm.dim_member WHERE status = 'active'"
+  },
+  {
+    "query_id": "bq_qry_7272",
+    "timestamp": "2026-07-20T21:14:50Z",
+    "user_email": "connor.blake@acme-ecomm.internal",
+    "job_type": "QUERY",
+    "total_bytes_billed": 419430400,
+    "query_text": "-- CORRECTION FOR ANALYSIS SLIDE DECK: dim_member is a 120k representative sample panel, NOT the true active base of 14.62M members. Do not use COUNT(*) here for board reporting.\nSELECT 'panel_size' AS metric, COUNT(*) AS val FROM nexus-analyst-demo.acme_ecomm.dim_member UNION ALL SELECT 'true_base_millions', 14.62"
+  },
+  {
+    "query_id": "bq_qry_7273",
+    "timestamp": "2026-07-20T21:45:02Z",
+    "user_email": "amara.shah@acme-ecomm.internal",
+    "job_type": "QUERY",
+    "total_bytes_billed": 629145600,
+    "query_text": "SELECT market, SUM(gmv_usd) FROM nexus-analyst-demo.acme_ecomm.fact_orders WHERE order_date >= '2026-05-01' GROUP BY market"
+  },
+  {
+    "query_id": "bq_qry_7274",
+    "timestamp": "2026-07-20T22:10:33Z",
+    "user_email": "giulia.romano@acme-ecomm.internal",
+    "job_type": "QUERY",
+    "total_bytes_billed": 314572800,
+    "query_text": "SELECT theme_tag, COUNT(*) FROM nexus-analyst-demo.acme_ecomm.fact_voc_responses WHERE responded_at >= '2026-06-01' GROUP BY theme_tag"
+  },
+  {
+    "query_id": "bq_qry_7275",
+    "timestamp": "2026-07-20T22:35:19Z",
+    "user_email": "camille.duarte@acme-ecomm.internal",
+    "job_type": "QUERY",
+    "total_bytes_billed": 209715200,
+    "query_text": "SELECT seller_id, COUNT(*) FROM nexus-analyst-demo.acme_ecomm.fact_seller_voc_responses WHERE survey_type LIKE 'onboarding_pulse%' GROUP BY seller_id"
+  },
+  {
+    "query_id": "bq_qry_7276",
+    "timestamp": "2026-07-20T23:01:44Z",
+    "user_email": "owen.faust@acme-ecomm.internal",
+    "job_type": "QUERY",
+    "total_bytes_billed": 524288000,
+    "query_text": "SELECT variant, SUM(units_exposed), SUM(units_converted) FROM nexus-analyst-demo.acme_ecomm.fact_experiment_exposures WHERE experiment_id = 'exp_2601' GROUP BY variant"
+  },
+  {
+    "query_id": "bq_qry_7277",
+    "timestamp": "2026-07-20T23:30:12Z",
+    "user_email": "maya.lindqvist@acme-ecomm.internal",
+    "job_type": "QUERY",
+    "total_bytes_billed": 734003200,
+    "query_text": "SELECT variant, SUM(units_exposed), SUM(units_converted) FROM nexus-analyst-demo.acme_ecomm.fact_experiment_exposures WHERE experiment_id = 'exp_2618' GROUP BY variant"
+  },
+  {
+    "query_id": "bq_qry_7278",
+    "timestamp": "2026-07-20T23:55:08Z",
+    "user_email": "derek.holloway@acme-ecomm.internal",
+    "job_type": "QUERY",
+    "total_bytes_billed": 314572800,
+    "query_text": "SELECT event_type, COUNT(*) FROM nexus-analyst-demo.acme_ecomm.fact_membership_events WHERE event_date >= '2026-05-01' GROUP BY event_type"
+  }
+]
+```
+
+
+  {
+    "query_id": "bq_qry_7279",
+    "timestamp": "2026-07-20T23:59:14Z",
+    "user_email": "connor.blake@acme-ecomm.internal",
+    "job_type": "QUERY",
+    "total_bytes_billed": 104857600,
+    "query_text": "SELECT table_name, row_count FROM nexus-analyst-demo.acme_ecomm.__TABLES__ WHERE table_id LIKE 'fact_%'"
+  },

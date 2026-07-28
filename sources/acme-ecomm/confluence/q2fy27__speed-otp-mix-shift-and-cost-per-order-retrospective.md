@@ -99,13 +99,13 @@ Whoever is briefing leadership on either metric should pull the channel-level an
 
 ## 5. Confluence Discussion & Comments
 
-> **`gabriel.stroud`** *(Fulfillment Ops Lead)* — 2026-07-21 09:14 AM  
+> **`gabriel.stroud`** *(Fulfillment Ops Lead)* — 2026-07-20 09:14 AM  
 > Looking back at the FON2/JOL1 rollout logs from February, our sort throughput per man-hour went up roughly 24% once the automated sorters bedded in. That's a mechanical throughput gain at the sort line — separate question whether it shows up the same way in over-the-road transit during a snowstorm. Worth Finance having the channel-level rows in front of them either way.
 
-> **`amara.shah`** *(Data Analyst)* — 2026-07-21 10:32 AM  
+> **`amara.shah`** *(Data Analyst)* — 2026-07-20 10:32 AM  
 > Thanks for putting this together, Tara. Will reference this exact page in the upcoming Q3 MBR prep deck. One minor note: make sure anyone querying the historical tables remembers that `fulfillment_speed_daily` is full-population aggregate grain, so the mix share calculations check out to 3 decimal places without needing to touch `fact_orders`.
 
-> **`tara.oduya`** *(Director PM Speed)* — 2026-07-21 11:05 AM  
+> **`tara.oduya`** *(Director PM Speed)* — 2026-07-20 11:05 AM  
 > @amara.shah - Agreed, added a explicit callout to `fulfillment_speed_daily` in the text. Let's make sure Leo sees this too before his next promise-window policy review.
 
 ---
