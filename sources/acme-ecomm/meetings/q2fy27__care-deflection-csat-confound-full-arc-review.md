@@ -1,0 +1,92 @@
+---
+title: "Care ops review: deflection's multi-quarter rise, read together with the CSAT-among-deflected dip and recovery"
+source_url: "internal://acme-ecomm/meetings/q2fy27__care-deflection-csat-confound-full-arc-review"
+license: "synthetic-demo"
+attribution: "Synthetic content, Acme internal demo. Acme is a fictitious company."
+fetched_at: '2026-07-20T12:00:00+00:00'
+adapter: meeting_notes
+---
+
+# Meeting Notes: Care Ops & Deflection Arc Full Review
+**Date:** July 9, 2026  
+**Attendees:** hannah.brennan (SVP Customer Care), dominic.paquet (Care Ops Lead), giulia.romano (Analytics Engineer - Care & VOC), aisha.rahman (Director PM Care), carlos.figueroa (VP Data & Analytics)  
+**Channel / Location:** Zoom (Care Dept Conf Rm 4B / San Francisco HQ)  
+
+---
+
+### 1. Opening & Ordinary Meeting Noise
+**hannah.brennan:** Morning everyone. Thanks for dialing in. I know we’ve got the full MBR prep coming up with Carlos and Deborah later this week, but Dominic and I wanted to pull this specific group together to lock down the narrative on the care deflection arc. Now that we’re sitting here in Q2FY27—81 days into the quarter, essentially wrapping up the period—we finally have clean enough data across all the historical quarters to stop looking at these metrics in separate silos. 
+
+**dominic.paquet:** Yeah, sorry I'm a minute late, coffee line downstairs was absolute chaos. Before we dive into the deflection numbers, did anyone see the snack table situation on floor 3? Someone brought in a box of stale donuts from Friday. Anyway, I pulled the multi-quarter extracts from `care_deflection_daily` last night, and the trajectory is pretty stark once you line it up against the Medallia VOC feeds Giulia pushed over.
+
+**giulia.romano:** Morning. Yeah, my data pipeline ran clean overnight. I've got the full breakdown of the Medallia scores and the ticket themes ready if we need to cross-reference anything. 
+
+**hannah.brennan:** Perfect. Let's get right into it. We need a unified story for the executive deck because looking at deflection in isolation right now is straight-up misleading, and if we present it that way to Deborah, someone's going to poke a hole in it during Q&A.
+
+---
+
+### 2. Reviewing the Multi-Quarter Deflection Arc
+**hannah.brennan:** Let's look at the headline numbers. Deflection rate across the last several quarters has moved as follows:
+- **Q4FY26:** 45.0%
+- **Q1FY27:** 49.6%
+- **Q2FY27 QTD:** 52.1%
+
+On the surface, looking at our FY27 target of 50.0% by fiscal exit, we look phenomenal—we're pacing at 52.1% QTD, which puts us at 104.2% of goal. It’s an easy win to put on a slide. But Dominic, walk everyone through why we can't just slap a green checkmark on that and call it a day.
+
+**dominic.paquet:** Right. The immediate temptation from leadership—and I get why—is to attribute this entire multi-quarter climb straight to the rollout of 'Ask Acme v2', which went live way back on September 15, 2025 (`2025-09-15` launch event in the ledger). But when you actually unpack the timeline and the trendlines, the attribution is strictly **inferential, not holdback-proven**. 
+
+If you look closer at the prereq quarters:
+1. Deflection was *already* climbing before the bot even launched—it went up +2.3pp in the quarter immediately prior to Ask Acme v2.
+2. In the first full quarter after the launch (which we reviewed back in the January launch review meetings, back when we were hovering around 45%), the gain was actually *smaller* (+2.2pp from Q3 to Q4FY26) than the pre-launch quarter had been.
+3. The single largest quarterly jump in the entire series—a massive **+4.6pp** bump—didn’t happen when we deployed the bot in September. It landed between Q4FY26 and Q1FY27, which was *four-plus months after* the launch. 
+
+**aisha.rahman:** Right, and that lines up with what we saw when we ran the 'Bot Handoff Threshold' experiment (`exp_2489`) in April and May of this year. Relaxing those hand-off triggers gave us another +3pp, but even that doesn't account for the huge Q4-to-Q1 leap on its own. Something else was pushing users into self-serve channels during Q1.
+
+---
+
+### 3. The Confound: CSAT-Among-Deflected and the Ontario Refund Delay Mess
+**hannah.brennan:** Exactly. And that "something else" is why we are holding this review today. We have to read the deflection rate together with what happened to **CSAT-among-deflected**, because those two metrics moved in *completely opposite directions* over the exact same window. 
+
+Let's look at the CSAT numbers for deflected users:
+- **Q4FY26:** 3.70
+- **Q1FY27:** 3.42 (a sharp, painful dip)
+- **Q2FY27 QTD:** 3.55 (partial recovery as the backlog cleared)
+
+Meanwhile, look at agent-assisted CSAT over the same period: it stayed rock-solid, hovering between 4.20 and 4.35 across every single quarter. Agent quality didn't drop. Customers who talked to a human were just as happy as ever. But customers who were deflected by the bot or self-serve tools were deeply frustrated in Q1.
+
+**giulia.romano:** And if you tie that back to the Medallia verbatims and the operational crisis we dealt with in January, the puzzle pieces snap together. Remember the refund-delay staffing problem up at the Ontario, CA returns center (`node_id` for the returns center in `dim_fulfillment_node`), where the hiring-freeze exception didn't get applied and they ran 22% understaffed through the peak holidays? 
+
+The Medallia "refund delay" verbatim share crossed our 10% alert threshold the week of December 15, 2025 (hitting 11.2%), and our quantitative 4-week-rolling `avg_refund_cycle_days` crossed the 5.0-day SLA threshold the week of January 5, 2026, before we finally escalated it at the February 2 MBR. 
+
+**dominic.paquet:** Right. During that entire window, what were customers doing? They were flooding us asking where their money was. And where did our self-serve flows send them? Straight to the automated package tracking and return-status self-serve widget. 
+
+**hannah.brennan:** Which couldn't actually tell them when their refund was coming because the packages were sitting in an un-scanned backlog on the dock in Ontario! So the system registered those contacts as "deflected" because the member clicked through the self-serve widget instead of opening a live chat or calling an agent. But it wasn't genuine self-service success. It was forced deflection of angry people running into a brick wall.
+
+**carlos.figueroa:** That's a critical nuance for the MBR deck. So you're saying a meaningful share of that Q1FY27 deflection spike to 49.6% was essentially phantom deflection driven by return-status inquiries for orders stuck in the Ontario queue?
+
+**hannah.brennan:** Exactly, Carlos. As soon as we got Ontario back to full staffing around February 20, 2026, and cleared out the backlog by mid-March, look what happened: our CSAT-among-deflected bounced back from 3.42 up to 3.55 this quarter, and deflection stabilized and continued its natural rise to 52.1% as the Ask Acme v2 improvements and Aisha's non-billing hand-off adjustments took hold organically.
+
+---
+
+### 4. Conclusions and Executive Summary for MBR
+**hannah.brennan:** So here is our explicit conclusion for leadership: 
+1. Rising deflection at Acme is directionally real progress, driven by genuine bot maturity and product improvements over the last four quarters.
+2. However, that progress was **temporarily inflated** during Q1FY27 by an unrelated operational failure (the Ontario returns backlog). 
+3. You cannot read the deflection rate alone. If you look at deflection without pairing it with the deflected-CSAT drop and recovery, you miss the operational friction that caused real customer pain. 
+
+**dominic.paquet:** I'll update the slide deck slides for the MBR prep later this afternoon to include the dual-axis chart showing deflection alongside deflected-CSAT. Giulia, can you pull me the exact weekly rolling series for the deck appendix just so Amara Shah has it for the finance notes?
+
+**giulia.romano:** Already exported it to the shared Drive folder. I'll drop the link in our Slack channel when we wrap up here.
+
+**aisha.rahman:** Makes total sense. Glad we’re getting ahead of this before someone asks why deflected CSAT dipped so hard in Q1 while deflection looked like a rocket ship.
+
+**hannah.brennan:** Alright, thanks team. Let's reconvene at 2 PM for the wider operational dry-run. 
+
+---
+
+### Action Items
+- [ ] **dominic.paquet:** Update MBR slides to incorporate the deflected-CSAT recovery narrative alongside the 52.1% QTD deflection metric (Due: 2026-07-10).
+- [ ] **giulia.romano:** Provide Amara Shah with the weekly rolling series export for the financial appendix (Completed / Link shared in Slack).
+- [ ] **hannah.brennan:** Brief Deborah Osei ahead of the executive MBR on the Q1 deflection inflation confound so there are no surprises during the Q&A (Due: 2026-07-20).
+
+---
