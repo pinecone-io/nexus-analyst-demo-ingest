@@ -10,6 +10,13 @@ dependencies = [
     "pinecone>=5.0.0",
 ]
 
+[project.optional-dependencies]
+# Judge calls in eval/acme_ecomm_eval.py (claude-sonnet-5 via Vertex AI).
+# Not needed for --dry-run or --no-judge runs.
+eval = [
+    "anthropic[vertex]>=0.40",
+]
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"

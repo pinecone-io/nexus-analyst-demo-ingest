@@ -214,6 +214,50 @@ RULES:
 # datasets/acme/gen_grow.py's append-loop (run against the file this script
 # produces, after the fact, to reach full size) -- called out inline above
 # each one, not just here.
+#
+# THIRD EXPANSION (2026-07, seven new user stories): CANON.md grew to 1,070
+# lines and QUESTIONS.md was renumbered Q1-Q22 around 7 user stories -- the
+# offsetting experiment pair (exp_2601 Search Relevance Re-ranking +1.6% /
+# exp_2618 Item Page Media Carousel Autoplay -1.5%, both live from
+# 2026-06-08, "the masked trend," Q11), the cross-vertical
+# `listing-accuracy-gap` VOC blind spot at Style 14%/Resold 12%/Collectibles
+# 9%/B2B 22% plus its complete 20-item (5x4) backlog snapshot ("the
+# unstaffed blind spot," Q14), the Item Page surface's two legitimate
+# metrics for Q1FY27 (view-to-cart 18.0%->19.9%, item-page-scoped conversion
+# 5.13% vs. site-wide 3.18%, Q15), the Q2FY27 weekly US conversion drop
+# 3.24%->2.86% decomposed into device mix-shift + real softening (Q1),
+# surface ownership (2 new PMs -- camille.duarte on Seller Listing/Seller
+# Optimization, malik.hendon as B2B's first PM -- plus the deliberate
+# no-dedicated-Marketplace-Search-PM gap), the seller side built out fully
+# (the listing-count New-Seller Onboarding Funnel, the separate "Seller
+# Pulse" VOC instrument on the new `fact_seller_voc_responses` table,
+# adapter `seller_pulse_survey`, tied to the Acme Verified/GradeSure root
+# cause -- 24% of new Collectibles sellers reach listing 10 vs. 46-48% for
+# Style/Resold, Q21), and a ranked-prioritization synthesis spanning all of
+# the above plus CLTV (Q16). 23 new specs close these: 1 appended to q2fy26
+# (the malik.hendon hire announcement, dated 2025-06-15, safely before that
+# round's own 2025-07-15 as-of date), 1 appended to q1fy27 (the
+# camille.duarte join announcement, 2026-04-08, before that round's
+# 2026-04-15 as-of date), and 21 appended to q2fy27 -- everything else in
+# this expansion lands there because the new material is pinned to "today"
+# (2026-07-20) or to events (the two experiments starting 2026-06-08,
+# Homepage Hero Banner Refresh 2026-07-13, Seller Pulse's 2026-04-20 launch)
+# that postdate q1fy27's 2026-04-15 as-of cutoff, so q2fy27 is the earliest
+# round any of them can appear in without foreshadowing. Auditing all 22
+# questions against the pre-expansion 66 specs (per this expansion's own
+# brief) also surfaced two pre-existing gaps, unrelated to the seven new
+# stories, closed alongside them: Q3/Q9 (Speed's blended-OTP mix-shift vs.
+# the separate cost-per-order efficiency story -- two real, already-in-CANON
+# findings that no existing spec had actually landed with their numbers) and
+# Q5 (Care's CSAT-among-deflected full arc read against the deflection-rate
+# rise, same gap) -- one new confluence/meetings retrospective apiece.
+# Q2FY27's weekly-detail doc also folds in a routine CA/MX scorecard,
+# closing a similar low-confidence gap for Q6 without a dedicated spec. As
+# with the second expansion, every new spec is APPENDED after its round's
+# existing specs, never interleaved -- the 3 already-generated q3fy26 files
+# (untouched this pass; nothing was added to q3fy26) stay byte-identical,
+# and every one of the original 66 specs keeps its original position and
+# text.
 # ---------------------------------------------------------------------------
 ROUNDS = [
     {
@@ -532,6 +576,27 @@ ROUNDS = [
                     "corpus's larger narratives. Standard postmortem structure (timeline, root "
                     "cause, action items), brief. End with a LEDGER 'incident' event dated "
                     "2025-06-20, vertical MARKETPLACE, owner connor.blake."
+                ),
+                "parallel_ok": True,
+            },
+            {
+                "path": "docs/q2fy26__malik-hendon-b2b-pm-hire-announcement.md",
+                "system": "docs",
+                "adapter": "org_announcement",
+                "topic": "Org announcement: malik.hendon hired as Sr PM Acme Business (B2B/Wholesale) -- B2B's first dedicated PM",
+                "focus": (
+                    "A company-wide announcement dated 2025-06-15 (per CANON): malik.hendon "
+                    "hired as Sr PM Acme Business (B2B/Wholesale), assoc_100160, reporting to "
+                    "felix.arroyo (SVP Product & Growth) -- explicitly framed as B2B's FIRST "
+                    "dedicated PM (the vertical has run without one until now). Cover his mandate "
+                    "(bulk-order buyer experience, wholesale-catalog, account-rep model) and note "
+                    "B2B remains one of the 11 'light' verticals -- one dedicated PM does not "
+                    "make it a deep-dive vertical, just a staffed one. Ordinary announcement "
+                    "noise: welcome-aboard congratulations, an upcoming intro-meeting invite, one "
+                    "unrelated facilities aside. Do not foreshadow anything from later in the "
+                    "corpus (no B2B backlog items, no listing-accuracy-gap VOC theme -- those "
+                    "come much later). End with a LEDGER 'decision' event dated 2025-06-15, "
+                    "vertical B2B, owner felix.arroyo."
                 ),
                 "parallel_ok": True,
             },
@@ -1216,6 +1281,29 @@ ROUNDS = [
                 ),
                 "parallel_ok": False,
             },
+            {
+                "path": "docs/q1fy27__camille-duarte-seller-experience-pm-announcement.md",
+                "system": "docs",
+                "adapter": "org_announcement",
+                "topic": "Org announcement: camille.duarte joins as Sr PM Marketplace Seller Experience (Seller Listing + Seller Optimization)",
+                "focus": (
+                    "A company-wide announcement dated 2026-04-08 (per CANON): camille.duarte "
+                    "joins as Sr PM Marketplace Seller Experience, assoc_100123, reporting to "
+                    "victor.okonkwo (SVP Marketplace) -- a SURFACE-based role (Seller Listing + "
+                    "Seller Optimization) spanning all three Marketplace sub-verticals "
+                    "(Collectibles/Resold/Style), distinct from the existing vertical-based PM "
+                    "roles (sanjay.bhatt/noah.kessler/ines.delgado, each scoped to one "
+                    "sub-vertical's View Item Page). Explain plainly why this role exists: sellers "
+                    "are a separate constituency from buyers with their own onboarding/tooling "
+                    "needs that no single vertical PM currently owns end-to-end. Do not preview any "
+                    "specific program she'll launch later (no 'Seller Pulse' by name, no funnel "
+                    "figures -- those come in a later round). Ordinary announcement noise: "
+                    "welcome-aboard note, an org-chart aside, one unrelated scheduling item. End "
+                    "with a LEDGER 'decision' event dated 2026-04-08, vertical MARKETPLACE, owner "
+                    "victor.okonkwo."
+                ),
+                "parallel_ok": True,
+            },
         ],
     },
     {
@@ -1579,6 +1667,654 @@ ROUNDS = [
                     "event -- empty LEDGER array."
                 ),
                 "parallel_ok": True,
+            },
+            # -- Below: additions for the seven new user stories (CANON/QUESTIONS.md's
+            # 2026-07 expansion -- the offsetting-experiment pair, the cross-vertical
+            # blind spot, the Item Page surface, the weekly conversion drop, surface
+            # ownership, the seller side, and the ranked-prioritization synthesis) plus
+            # three pre-existing coverage gaps found while auditing all 22 questions
+            # against the original 66 (Speed's OTP-mix-shift/cost-per-order retrospective
+            # for Q3/Q9, Care's CSAT-confound full arc for Q5) -- see the header comment
+            # above ROUNDS for the full account. All new; nothing above this line in any
+            # round was touched.
+            {
+                "path": "expo/q2fy27__exp-search-relevance-reranking-inflight.md",
+                "system": "expo",
+                "adapter": "expo_experiment",
+                "topic": "Expo experiment spec + in-flight readout: 'Search Relevance Re-ranking' (exp_2601), +1.6% on exposed arm",
+                "focus": (
+                    "An experiment spec-plus-current-status document, owned by owen.faust (Sr PM "
+                    "Checkout & Conversion, incl. Search surface), for 'Search Relevance "
+                    "Re-ranking' (`exp_2601`, US market), started 2026-06-08 per CANON -- still "
+                    "RUNNING as of this round's as-of date (2026-07-20), no end date yet, no ship/"
+                    "kill decision made. Cover hypothesis (improved relevance ranking lifts search-"
+                    "to-purchase conversion), variants, primary metric (conversion), guardrails, "
+                    "and the CURRENT interim readout: **+1.6%** conversion lift on the exposed arm, "
+                    "trending positive and clean so far, but explicitly NOT final -- the test is "
+                    "still accumulating exposure and no ship decision has been made. Do not resolve "
+                    "it (no ship, no kill) -- that would foreshadow an ending CANON doesn't give. "
+                    "Ordinary expo-doc noise: sample-size tracking, a routine guardrail-metrics "
+                    "table. End with a LEDGER 'experiment' event dated 2026-06-08, vertical "
+                    "US_CONV, owner owen.faust, summary noting both the kickoff and the current "
+                    "+1.6% interim read, still running."
+                ),
+                "parallel_ok": True,
+            },
+            {
+                "path": "expo/q2fy27__exp-item-page-media-carousel-autoplay-inflight.md",
+                "system": "expo",
+                "adapter": "expo_experiment",
+                "topic": "Expo experiment spec + in-flight readout: 'Item Page Media Carousel Autoplay' (exp_2618), -1.5% on exposed arm",
+                "focus": (
+                    "An experiment spec-plus-current-status document, owned by maya.lindqvist "
+                    "(Director PM US Conversion & Traffic, View Item Page surface), for 'Item Page "
+                    "Media Carousel Autoplay' (`exp_2618`, US market), started 2026-06-08 per "
+                    "CANON -- the SAME day `exp_2601` started, a coincidence, not a joint test "
+                    "(different owner, different hypothesis, no shared design doc). Still RUNNING "
+                    "as of this round's as-of date (2026-07-20). Cover the hypothesis (autoplaying "
+                    "a media carousel on the item page increases engagement and conversion -- a "
+                    "well-intentioned bet), variants, primary metric, and the CURRENT interim "
+                    "readout: **-1.5%** conversion on the exposed arm -- a real, negative result so "
+                    "far, i.e. the feature is currently backfiring. Do NOT ship or kill it in this "
+                    "document -- it's still running, no decision made yet (a future planning cycle "
+                    "will have to decide, don't pre-empt that). It is fine, and realistic, for the "
+                    "team to be watching this closely without having pulled the trigger yet. "
+                    "Ordinary expo-doc noise: exposure-tracking table, a guardrail check on page-"
+                    "load-time. End with a LEDGER 'experiment' event dated 2026-06-08, vertical "
+                    "US_CONV, owner maya.lindqvist, summary noting both the kickoff and the "
+                    "current -1.5% interim read, still running, not yet shipped or killed."
+                ),
+                "parallel_ok": True,
+            },
+            {
+                "path": "slack/q2fy27__us-conv-experiment-check-blended-net-wash.md",
+                "system": "slack",
+                "adapter": "slack_thread",
+                "topic": "Slack thread: a PM checks 'anything running in US_CONV' and reads the blended net experiment effect as ~nothing",
+                "focus": (
+                    "A #product-eng or #us-conv Slack thread, dated within this round, where a PM "
+                    "or analyst (invent a minor, non-CANON name for the asker if needed, or keep it "
+                    "unattributed/'someone from growth-marketing') asks whether anything currently "
+                    "running in US_CONV could explain recent conversion softness, gets pointed at "
+                    "`dim_experiment`/`fact_experiment_readouts`, and someone computes an "
+                    "equal-weighted BLENDED net of the two experiments live since 2026-06-08 "
+                    "(reference both this round's existing LEDGER events for `exp_2601` and "
+                    "`exp_2618`) -- lands on roughly **+0.05%**, essentially flat -- and the thread "
+                    "concludes something like 'ok, nothing really happening there then' WITHOUT "
+                    "anyone pulling the two experiments' INDIVIDUAL readouts apart. Write this "
+                    "as a genuine, easy-to-make analytical shortcut, not a strawman -- the person "
+                    "isn't being lazy, checking the net is a normal first move, they just don't "
+                    "take the next step. Do NOT have anyone in the thread catch the mistake or "
+                    "circle back and correct it later in this same document -- leave it exactly as "
+                    "the un-caught near-miss it is. Ordinary Slack noise: emoji reactions, a couple "
+                    "of tangents. Emits no new event -- empty LEDGER array."
+                ),
+                "parallel_ok": False,
+            },
+            {
+                "path": "marketing_calendar/q2fy27__homepage-hero-banner-refresh-launch.md",
+                "system": "marketing_calendar",
+                "adapter": "marketing_calendar_export",
+                "topic": "Marketing calendar: 'Homepage Hero Banner Refresh' launch",
+                "focus": (
+                    "Marketing calendar entry (event_type: launch), owned by maya.lindqvist, for "
+                    "'Homepage Hero Banner Refresh' launching 2026-07-13 per CANON -- state its "
+                    "scope EXPLICITLY and plainly as homepage-only (hero banner creative/layout "
+                    "refresh), with NO item-page or search-surface overlap. Routine campaign-"
+                    "calendar detail: creative rationale, target segment (all visitors landing on "
+                    "homepage), expected engagement lift on homepage-specific metrics only. "
+                    "Independent of the other US_CONV threads this round (the two experiments "
+                    "started 2026-06-08 are unrelated to this). End with a LEDGER 'launch' event "
+                    "dated 2026-07-13, vertical US_CONV, owner maya.lindqvist, summary stating the "
+                    "homepage-only scope explicitly (so a later document can cite the scope, not "
+                    "just the date)."
+                ),
+                "parallel_ok": True,
+            },
+            {
+                "path": "fullstory/q2fy27__homepage-banner-refresh-no-conversion-effect-review.md",
+                "system": "fullstory",
+                "adapter": "fullstory_session_note",
+                "topic": "FullStory session-replay note: Homepage Hero Banner Refresh shows no measurable conversion effect",
+                "focus": (
+                    "A FullStory session-replay note from maya.lindqvist's team, reviewing "
+                    "homepage session replays in the days after 'Homepage Hero Banner Refresh' "
+                    "shipped (2026-07-13, reference this round's existing LEDGER event) -- "
+                    "explicitly concluding the refresh shows NO measurable conversion effect, "
+                    "positive or negative, and no measurable effect on downstream item-page or "
+                    "search behavior either (consistent with its homepage-only scope). Write this "
+                    "as a routine, mildly anticlimactic post-launch check, not a big finding -- the "
+                    "team looked because it's standard practice after any homepage change, not "
+                    "because they suspected a problem. This is the direct evidentiary source for "
+                    "ruling the banner OUT as an explanation for the same week's US conversion "
+                    "softness (a different, unrelated question this document does not itself "
+                    "raise or answer -- it just reports what FullStory shows for the banner "
+                    "itself). Usual FullStory-note noise: session counts reviewed, device "
+                    "breakdown, a couple of unrelated dead ends. Emits no new event -- empty "
+                    "LEDGER array."
+                ),
+                "parallel_ok": False,
+            },
+            {
+                "path": "medallia/q2fy27__voc-item-page-autoplay-carousel-verbatims.md",
+                "system": "medallia",
+                "adapter": "medallia_verbatim",
+                "topic": "Medallia VOC note: low-volume item-page verbatims skew negative on the new autoplay media module",
+                "focus": (
+                    "A targeted Medallia verbatim pull from giulia.romano's team, scoped to "
+                    "item-page-adjacent post-purchase and NPS verbatims from the weeks of "
+                    "2026-07-11 and 2026-07-18 -- the exact window 'Item Page Media Carousel "
+                    "Autoplay' (`exp_2618`, reference this round's existing LEDGER event, still "
+                    "running) is exposed to a share of traffic. State explicitly, as a batch of "
+                    "representative verbatim quotes, that comments skew toward the new autoplay "
+                    "media module feeling 'cluttered,' 'the video just starts and it's annoying,' "
+                    "and 'page feels slower now' -- LOW volume, explicitly NOT yet a top theme by "
+                    "share, but directly on-point qualitative texture for anyone investigating a "
+                    "real (non-mix-shift) softening in item-page engagement this window. Do not "
+                    "overstate the volume or claim this is a major theme -- it's a small, early, "
+                    "correctly-caveated signal. End with a LEDGER 'metric_shift' event dated "
+                    "2026-07-18, vertical US_CONV, owner giulia.romano, summary noting the "
+                    "low-volume autoplay-carousel complaint pattern in item-page verbatims."
+                ),
+                "parallel_ok": True,
+            },
+            {
+                "path": "meetings/q2fy27__wbr-week-of-0718-us-conversion-drop.md",
+                "system": "meetings",
+                "adapter": "meeting_notes",
+                "topic": "WBR notes: week-of-07-18 US conversion drop, decomposed",
+                "focus": (
+                    "Weekly Business Review (WBR) pack notes -- per CANON's cadence, locks Monday "
+                    "7am ET for the prior Sun-Sat week -- presented by maya.lindqvist with "
+                    "wei.hartono's analytics support, for the week ending 2026-07-18. Lead with "
+                    "the routine weekly scorecard across all three US_CONV markets (this is "
+                    "standard WBR content, not a special pull): US sessions 26.40M, conversion "
+                    "**2.86%** (down from the prior week's 3.24%, week ending 2026-07-11); CA "
+                    "**3.12%** and MX **2.67%** for reference (both roughly flat week-over-week, "
+                    "included as routine scorecard rows) -- note in passing that MX has run "
+                    "persistently ~0.4-0.6pp below CA and ~0.5-0.9pp below US across ALL 6 modeled "
+                    "quarters, a stable structural gap, not a new or worsening trend, so it does "
+                    "not need its own investigation this week. Then the US deep-dive: device mix "
+                    "shifted web/app/kiosk 69.0%/28.0%/3.0% -> 59.4%/37.6%/3.0% week over week; "
+                    "device conversion web 4.00%->3.76%, app steady ~1.50%, kiosk steady ~2.00%. "
+                    "Present the shift-share decomposition explicitly: **-0.24pp is device "
+                    "mix-shift** (app's share jump against its structurally-lower conversion, "
+                    "holding rates fixed), **-0.14pp is a genuine web-conversion softening** "
+                    "(rates moving, holding week-1 shares fixed) -- the two sum to the observed "
+                    "**-0.38pp** ('about 40bps'). Cross-reference: check the marketing calendar "
+                    "for the window -- only 'Homepage Hero Banner Refresh' (2026-07-13, reference "
+                    "this round's LEDGER event) launched, and this round's FullStory review "
+                    "already found no measurable effect, consistent with CANON's own SIGNAL "
+                    "[roadmap-doesnt-explain-it] -- so the shipped roadmap does NOT explain the "
+                    "softening. Separately check `dim_experiment` for anything live in US_CONV -- "
+                    "find BOTH `exp_2601` (+1.6% interim, Search Relevance Re-ranking) AND "
+                    "`exp_2618` (-1.5% interim, Item Page Media Carousel Autoplay), reference both "
+                    "this round's LEDGER events -- state plainly that neither is the primary "
+                    "driver of this specific week's drop (that's mostly mix-shift), but flag the "
+                    "autoplay experiment's negative arm as the more plausible source of the "
+                    "smaller real-softening component, consistent with this round's Medallia "
+                    "verbatim pull (reference that LEDGER event) showing low-volume 'cluttered'/"
+                    "'annoying autoplay' complaints on item-page sessions. Do NOT force the "
+                    "-0.14pp real remainder into a complete, tidy explanation -- state honestly "
+                    "that it is real, modest, and not fully attributable to any single named "
+                    "cause. Ordinary WBR noise: attendance, action items, next-week's focus areas. "
+                    "End with a LEDGER 'metric_shift' event dated 2026-07-20 for the decomposed "
+                    "weekly read, vertical US_CONV, owner maya.lindqvist."
+                ),
+                "parallel_ok": False,
+            },
+            {
+                "path": "medallia/q2fy27__voc-listing-accuracy-gap-cross-vertical-theme-report.md",
+                "system": "medallia",
+                "adapter": "medallia_verbatim",
+                "topic": "Medallia VOC theme report: 'listing-accuracy-gap' theme share, pulled across Style/Resold/Collectibles/B2B",
+                "focus": (
+                    "An unusual, deliberately CROSS-VERTICAL VOC theme pull from giulia.romano's "
+                    "team -- most Medallia theme reports in this corpus are scoped to one "
+                    "vertical's own review cadence, but this one was commissioned as a data-"
+                    "quality/coverage exercise (framed that way, not as an investigation into any "
+                    "specific complaint) checking the `listing-accuracy-gap` theme_tag (listings' "
+                    "photos/descriptions not matching true scale, condition, or specification) "
+                    "across every vertical that carries it. State the shares explicitly and "
+                    "verbatim per CANON: **Style 14%**, **Resold 12%**, **Collectibles 9%**, "
+                    "**B2B 22%** (B2B's buyer verbatims here are bulk-order buyers citing spec-"
+                    "sheet/pallet-configuration mismatches -- a different flavor of the same theme, "
+                    "not a different theme) of each vertical's post-purchase verbatims -- and note "
+                    "this has been ROUGHLY FLAT for the past 2-3 quarters in each vertical (steady-"
+                    "state, not a rising trend like the refund-delay theme was). Include a "
+                    "representative verbatim quote per vertical. Do NOT connect this to backlog "
+                    "coverage, ownership, or any recommendation in this document -- this is a "
+                    "neutral, purely descriptive cross-vertical data pull; whether anyone owns the "
+                    "problem is a separate question this document does not ask or answer. End "
+                    "with a LEDGER 'metric_shift' event dated 2026-07-08, vertical MARKETPLACE, "
+                    "owner giulia.romano, summary stating the four verticals' shares plainly."
+                ),
+                "parallel_ok": True,
+            },
+            {
+                "path": "jira/q2fy27__style-marketplace-backlog-current-initiatives.md",
+                "system": "jira",
+                "adapter": "jira_ticket",
+                "topic": "Jira backlog export: Style's complete current initiative list (5 items)",
+                "focus": (
+                    "A Jira backlog/epic-board export, owned by ines.delgado (Sr PM Marketplace "
+                    "Style), listing Style's CURRENT, COMPLETE set of open initiatives as of "
+                    "'today' (2026-07-20) -- exactly the 5 items per CANON's CROSS-VERTICAL "
+                    "BACKLOG SNAPSHOT, no more, no fewer, so the list is genuinely exhaustive, not "
+                    "illustrative: (1) size-chart standardization across supplier catalogs, (2) "
+                    "promo-calendar automation for flash sales, (3) influencer/UGC content "
+                    "licensing pilot, (4) category-page filters for sustainability/material tags, "
+                    "(5) returns-reason taxonomy cleanup (joint w/ POR). Give each its own "
+                    "ticket/epic with a realistic description, status (mix of in-progress/"
+                    "planned), and target quarter. Do NOT add a 6th item and do NOT include "
+                    "anything addressing listing photo/description/spec accuracy -- that gap is "
+                    "deliberate and must read as a genuine, complete absence, not an oversight in "
+                    "this export. Ordinary Jira noise: comment threads, story points, sprint "
+                    "labels. This board reflects only Style's own view -- do not reference "
+                    "Resold's, Collectibles', or B2B's backlogs. Emits no new event -- empty "
+                    "LEDGER array."
+                ),
+                "parallel_ok": True,
+            },
+            {
+                "path": "jira/q2fy27__resold-marketplace-backlog-current-initiatives.md",
+                "system": "jira",
+                "adapter": "jira_ticket",
+                "topic": "Jira backlog export: Resold's complete current initiative list (5 items)",
+                "focus": (
+                    "A Jira backlog/epic-board export, owned by noah.kessler (Sr PM Marketplace "
+                    "Resold), listing Resold's CURRENT, COMPLETE set of open initiatives as of "
+                    "'today' (2026-07-20) -- exactly the 5 items per CANON's CROSS-VERTICAL "
+                    "BACKLOG SNAPSHOT, exhaustive not illustrative: (1) condition-grading rubric "
+                    "v2 (seller self-assessment), (2) trade-in/buyback pilot for owned inventory, "
+                    "(3) authentication-partnership scoping (apparel-focused, explicitly NON-"
+                    "GradeSure -- a different, not-yet-selected partner track from Collectibles' "
+                    "Acme Verified/GradeSure program), (4) seller payout-speed improvement, (5) "
+                    "category-mix reporting for the Style wallet-share shift (the mix-shift "
+                    "finding already synthesized elsewhere in the corpus -- this item is Resold's "
+                    "own reporting-tooling angle on it, not a re-litigation). Realistic ticket/epic "
+                    "detail, status, target quarter for each. Do NOT add a 6th item and do NOT "
+                    "include anything addressing listing photo/description/spec accuracy. Ordinary "
+                    "Jira noise. This board reflects only Resold's own view -- do not reference "
+                    "Style's, Collectibles', or B2B's backlogs. Emits no new event -- empty LEDGER "
+                    "array."
+                ),
+                "parallel_ok": True,
+            },
+            {
+                "path": "jira/q2fy27__collectibles-marketplace-backlog-current-initiatives.md",
+                "system": "jira",
+                "adapter": "jira_ticket",
+                "topic": "Jira backlog export: Collectibles' complete current initiative list (5 items)",
+                "focus": (
+                    "A Jira backlog/epic-board export, owned by sanjay.bhatt (Sr PM Marketplace "
+                    "Collectibles), listing Collectibles' CURRENT, COMPLETE set of open "
+                    "initiatives as of 'today' (2026-07-20) -- exactly the 5 items per CANON's "
+                    "CROSS-VERTICAL BACKLOG SNAPSHOT, exhaustive not illustrative: (1) GradeSure "
+                    "SLA renegotiation (turnaround time), (2) counterfeit-detection ML model v2, "
+                    "(3) verified-badge visibility expansion INTO SEARCH RESULTS (explicitly a "
+                    "search-placement/visibility initiative -- state clearly this targets where "
+                    "the badge shows up, NOT listing photo/description accuracy, so a reader "
+                    "can't mistake it for covering that gap), (4) grading-fee subsidy pilot for "
+                    "TOP-100 sellers specifically (note explicitly this is aimed at established "
+                    "sellers, not the struggling new-seller cohort), (5) category-taxonomy "
+                    "expansion (trading cards -> memorabilia subtypes). Realistic ticket/epic "
+                    "detail, status, target quarter. Do NOT add a 6th item and do NOT include "
+                    "anything addressing listing photo/description/spec accuracy. Ordinary Jira "
+                    "noise. This board reflects only Collectibles' own view -- do not reference "
+                    "Style's, Resold's, or B2B's backlogs. Emits no new event -- empty LEDGER "
+                    "array."
+                ),
+                "parallel_ok": True,
+            },
+            {
+                "path": "jira/q2fy27__b2b-backlog-current-initiatives.md",
+                "system": "jira",
+                "adapter": "jira_ticket",
+                "topic": "Jira backlog export: B2B's complete current initiative list (5 items)",
+                "focus": (
+                    "A Jira backlog/epic-board export, owned by malik.hendon (Sr PM Acme Business, "
+                    "B2B/Wholesale -- reference his 2025-06-15 hire from this corpus's earlier "
+                    "LEDGER), listing B2B's CURRENT, COMPLETE set of open initiatives as of "
+                    "'today' (2026-07-20) -- exactly the 5 items per CANON's CROSS-VERTICAL "
+                    "BACKLOG SNAPSHOT, exhaustive not illustrative: (1) bulk-order quoting tool "
+                    "v2, (2) net-30 invoicing automation, (3) wholesale-catalog API for "
+                    "procurement-system integration, (4) volume-discount tier restructuring, (5) "
+                    "account-rep coverage model review. Realistic ticket/epic detail, status, "
+                    "target quarter for each. B2B is NOT part of the Marketplace 3P seller "
+                    "structure (no sellers, no listings per CANON) -- keep this board's framing "
+                    "as B2B's own wholesale-buyer-facing initiatives, distinct from Marketplace's "
+                    "seller-side work. Do NOT add a 6th item and do NOT include anything "
+                    "addressing bulk-order buyers' spec-sheet/pallet-configuration accuracy "
+                    "complaints. Ordinary Jira noise. This board reflects only B2B's own view -- "
+                    "do not reference Style's, Resold's, or Collectibles' backlogs. Emits no new "
+                    "event -- empty LEDGER array."
+                ),
+                "parallel_ok": True,
+            },
+            {
+                "path": "confluence/q2fy27__item-page-q1fy27-two-metrics-retrospective.md",
+                "system": "confluence",
+                "adapter": "confluence_page",
+                "topic": "Confluence retrospective: Item Page's Q1FY27, two valid metrics and the mid-quarter cutover",
+                "focus": (
+                    "A retrospective analysis page, owned by maya.lindqvist, looking back at the "
+                    "now-fully-closed Q1FY27 quarter (closed 2026-04-30, safely in the past as of "
+                    "this round's 2026-07-20 date) for the View Item Page surface -- written "
+                    "explicitly as an answer to 'how did the item page do last quarter,' a "
+                    "question that keeps coming up informally without a clear standing answer. "
+                    "State plainly, up front, that 'item page' and 'did well' both need a stated "
+                    "definition before answering. Cover the Item Page Iteration Program in full: "
+                    "6 iterations shipped across the quarter -- v1 above-fold price/CTA reflow "
+                    "(2026-02-05), v2 reviews section reorder (2026-02-19), v3 image gallery zoom/"
+                    "swipe (2026-03-05), v4 size/fit guidance module (2026-03-19), v5 cross-sell "
+                    "module placement (2026-04-02), v6 sticky add-to-cart bar/mobile (2026-04-16) "
+                    "-- all per CANON, all safely in the past now. Report BOTH item-page metrics "
+                    "for the full quarter: **view-to-cart rate** (`add_to_cart_sessions/"
+                    "product_view_sessions`) moved **18.0% -> 19.9%** (+1.9pp raw), and "
+                    "**item-page-scoped conversion** (`orders/product_view_sessions`) was "
+                    "**5.13%** for the quarter -- explicitly a DIFFERENT, larger number than the "
+                    "standard site conversion rate (3.18%) because its denominator excludes "
+                    "browse-only sessions, neither wrong, just answering different questions -- "
+                    "state which one and why before citing either. Then the definitional layer: "
+                    "the SAME `sessions_definition_version` 1->2 cutover (2026-03-02) that affects "
+                    "the site-wide rate mechanically affects both item-page metrics too, since "
+                    "they're built from the same `fact_traffic_daily` row -- of view-to-cart's "
+                    "+1.9pp move, **~+0.8pp is the same mechanical/definitional bump**, "
+                    "**~+1.1pp is real**, plausibly the iteration program (v1-v2 pre-cutover, "
+                    "v3-v6 post-cutover, so their individual bases differ too). State explicitly "
+                    "that silently averaging the whole quarter across the cutover overstates the "
+                    "real, iteration-driven gain by roughly 40% relative. This is the direct, "
+                    "load-bearing, single source that ties the whole Item Page Q1FY27 story "
+                    "together -- be precise and complete, not buried. Ordinary Confluence noise: "
+                    "a comment thread, a couple of open follow-up questions for next quarter. End "
+                    "with a LEDGER 'metric_shift' event dated 2026-07-10, vertical US_CONV, owner "
+                    "maya.lindqvist."
+                ),
+                "parallel_ok": True,
+            },
+            {
+                "path": "confluence/q2fy27__pm-surface-ownership-reference-and-search-gap.md",
+                "system": "confluence",
+                "adapter": "confluence_page",
+                "topic": "Confluence reference: PM surface-ownership matrix across US_CONV/Style/Resold/Collectibles/B2B, including the Search-PM gap",
+                "focus": (
+                    "A reference page, owned by nadia.esposito (Head of Product Operations), "
+                    "laying out how Acme's PMs are organized by SURFACE (View Item Page, Search, "
+                    "Seller Listing, Seller Optimization) crossed with vertical -- distinct from, "
+                    "and a useful complement to, the vertical-only org chart. Present the matrix "
+                    "plainly, matching CANON's Surface-ownership table verbatim: View Item Page = "
+                    "maya.lindqvist (US_CONV), ines.delgado (Style), noah.kessler (Resold), "
+                    "sanjay.bhatt (Collectibles), n/a for B2B (no consumer item page); Search = "
+                    "owen.faust (US_CONV), and for Style/Resold/Collectibles, victor.okonkwo "
+                    "(SVP-level) only -- state EXPLICITLY and without euphemism that there is NO "
+                    "dedicated Marketplace-wide Search PM today, a real, acknowledged gap, not an "
+                    "omission from this document; Seller Listing and Seller Optimization = "
+                    "camille.duarte across all three Marketplace sub-verticals (reference her "
+                    "2026-04-08 join from this corpus's earlier LEDGER), n/a for US_CONV/B2B (no "
+                    "sellers). Include brief context on why the gap exists (Search's cross-"
+                    "sub-vertical relevance ranking work has historically been handled ad hoc by "
+                    "whichever sub-vertical PM raised an issue, with victor.okonkwo arbitrating at "
+                    "the SVP level when needed) and that filling it hasn't yet been prioritized "
+                    "against other headcount asks. Do not recommend a specific hire or resolve the "
+                    "gap in this document -- it's a reference page stating the current structure, "
+                    "not a proposal. Ordinary reference-doc noise: a revision-history footer, one "
+                    "open question flagged for a future update. Emits no new event -- empty "
+                    "LEDGER array."
+                ),
+                "parallel_ok": True,
+            },
+            {
+                "path": "schema/q2fy27__dim-seller-application-date-and-fact-seller-voc-responses.md",
+                "system": "schema",
+                "adapter": "bq_schema",
+                "topic": "Schema reference note: dim_seller's new application_date column + the new fact_seller_voc_responses table (24 tables total)",
+                "focus": (
+                    "A schema/data-dictionary update note, owned by wei.hartono, documenting TWO "
+                    "warehouse changes that bring the `nexus-analyst-demo.acme_ecomm` dataset from "
+                    "23 to **24 tables** (8 dimensions + 10 base facts + 6 derived marts, per "
+                    "CANON). First: `dim_seller` gains a genuinely NEW column, "
+                    "`application_date` (DATE, nullable) -- the date a seller APPLIED to sell, "
+                    "distinct from the existing `onboarded_date` (the date they were approved/"
+                    "went live); state explicitly this is a new column, not a rename, and "
+                    "`onboarded_date` keeps its existing meaning everywhere it's already used. "
+                    "Populated only for the ~500-seller new-seller funnel cohort (onboarded "
+                    "Q3FY26-Q4FY26), NULL for earlier/legacy panel rows where it was never "
+                    "captured. Second: a wholly new base fact table, `fact_seller_voc_responses` "
+                    "(response_id with `svoc_` prefix -- deliberately distinct from buyer VOC's "
+                    "`voc_` prefix -- seller_id, survey_type "
+                    "[onboarding_pulse_l1/l5/l10/quarterly_seller_nps], responded_at, score, "
+                    "score_type, verbatim_text, theme_tag, sentiment), ~4,000-row representative "
+                    "panel, populated by the 'Seller Pulse' program (adapter seller_pulse_survey) "
+                    "since it began collecting 2026-04-20. State EXPLICITLY and unambiguously that "
+                    "this is a FULLY SEPARATE stream from `fact_voc_responses` (buyer Medallia) -- "
+                    "a seller theme (`authentication-friction`, `listing-setup-complexity`, "
+                    "`no-performance-visibility`) must never appear on a `fact_voc_responses` row, "
+                    "and a buyer theme (`refund delay`, `listing-accuracy-gap`) must never appear "
+                    "on `fact_seller_voc_responses` -- the two must never be blended into one "
+                    "'VOC' query. Dry, precise reference material. Emits no new event -- empty "
+                    "LEDGER array."
+                ),
+                "parallel_ok": True,
+            },
+            {
+                "path": "docs/q2fy27__seller-pulse-first-quarter-results-by-category.md",
+                "system": "docs",
+                "adapter": "seller_pulse_survey",
+                "topic": "Seller Pulse survey results export: first quarter of data, theme shares by category",
+                "focus": (
+                    "A survey-results export from the 'Seller Pulse' program -- camille.duarte's "
+                    "(Sr PM Marketplace Seller Experience) onboarding-milestone + quarterly-NPS "
+                    "survey instrument for SELLERS, launched 2026-04-20 per CANON and now three "
+                    "months in, wei.hartono supporting on the data side. State UP FRONT and "
+                    "explicitly that this is a FULLY SEPARATE instrument from buyer-side Medallia "
+                    "-- different survey (triggered at listing-count milestones 1/5/10, plus a "
+                    "standing quarterly NPS, vs. buyer VOC's per-order/per-care-contact cadence), "
+                    "different theme vocabulary, different underlying table "
+                    "(`fact_seller_voc_responses`, `svoc_`-prefixed, never blended with buyer "
+                    "`fact_voc_responses`). Report the onboarding-pulse (L1/L5) theme shares by "
+                    "category, verbatim per CANON: **`authentication-friction`** dominant at "
+                    "**~38%** of Collectibles onboarding-pulse respondents, vs. only **~5%** for "
+                    "Style and **~6%** for Resold (authentication isn't a pain point there -- "
+                    "those categories don't require it); TWO category-agnostic themes present at "
+                    "similar levels across all three categories -- **`listing-setup-complexity`** "
+                    "(~15-20% each, hits hardest between listing 1 and 5, no bulk-upload/"
+                    "duplicate-listing tooling) and **`no-performance-visibility`** (~12-18% each, "
+                    "concentrated in the listing 5-10 range -- sellers who got through setup but "
+                    "can't tell what to fix next). State explicitly these two map to the seller "
+                    "listing and seller optimization surfaces respectively (both camille.duarte's "
+                    "own surfaces). Include a batch of representative seller verbatim quotes per "
+                    "theme. Ordinary survey-report noise: response-rate stats, a methodology "
+                    "footnote. End with a LEDGER 'metric_shift' event dated 2026-07-12, vertical "
+                    "MARKETPLACE, owner camille.duarte, summary stating the authentication-"
+                    "friction/Collectibles concentration plainly."
+                ),
+                "parallel_ok": True,
+            },
+            {
+                "path": "meetings/q2fy27__seller-ops-review-collectibles-onboarding-friction.md",
+                "system": "meetings",
+                "adapter": "meeting_notes",
+                "topic": "Seller-ops review: Collectibles new-seller churn tied to Acme Verified authentication friction",
+                "focus": (
+                    "Seller-ops review meeting notes -- camille.duarte, lucia.ferreira (Trust & "
+                    "Safety Lead), and sanjay.bhatt (Collectibles PM) -- a SEPARATE ops cadence "
+                    "from any buyer-side Care/CX review, since sellers are a distinct constituency "
+                    "with their own feedback loop. Walk through the New-Seller Onboarding Funnel "
+                    "(listing-count-based cohort, 200 Collectibles + 150 Resold + 150 Style, "
+                    "onboarded Q3FY26-Q4FY26): Collectibles reaches listing 10 at only **24%** "
+                    "(48 of 200) vs. **46%** (Resold) and **48%** (Style) -- roughly HALF the "
+                    "rate -- with the steepest relative drop happening earliest (listing 1->5: "
+                    "46% Collectibles vs. 74-76% Style/Resold). Root-cause this explicitly to the "
+                    "'Acme Verified'/GradeSure authentication requirement (launched 2025-09-08, "
+                    "badge shipped 100% 2025-11-20, already proven worth +6.8% buyer-side "
+                    "conversion) -- and name the OTHER side of the same trade-off plainly: the "
+                    "SAME program took Collectibles' return rate from **11.2%** (Q3FY26 "
+                    "counterfeit peak) to **5.4%** (Q2FY27), a real buyer-trust win, so removing "
+                    "the requirement is not a free fix. Cover the verification-speed split: "
+                    "sellers whose debut listing gets GradeSure-verified within 7 days clear "
+                    "listing 10 at **30%** vs. **15%** for slower/unverified sellers -- 2x -- "
+                    "framing verification SPEED, not verification itself, as the actionable "
+                    "lever. Reference the archetypes by seller_id per CANON: sel_500241 "
+                    "(Collectibles, not verified within 7 days, churned after 3 listings), "
+                    "sel_500242 (Collectibles, verified within 4 days, reached listing 10 and "
+                    "sustained), sel_500243 (Style, no authentication requirement, reached "
+                    "listing 10 with no unusual friction -- the cross-category contrast isolating "
+                    "authentication, not 'being new,' as the driver). Also note the seller-side "
+                    "'conversion' distinction: sell-through (orders per active listing) runs 1.8 "
+                    "for new Collectibles sellers vs. 3.6 for tenured ones -- a second, "
+                    "reinforcing discouragement. Land on a proposed next step (a scoped pilot: "
+                    "expedited/subsidized authentication for a seller's first 10 listings) framed "
+                    "as a recommendation to bring forward, not a decision made in this meeting. "
+                    "Ordinary meeting noise: attendance, action items, next-review date. End with "
+                    "a LEDGER 'decision' event dated 2026-07-14, vertical MARKETPLACE, owner "
+                    "camille.duarte, summary naming the verification-speed lever and the proposed "
+                    "pilot."
+                ),
+                "parallel_ok": False,
+            },
+            {
+                "path": "confluence/q2fy27__new-seller-onboarding-funnel-analysis.md",
+                "system": "confluence",
+                "adapter": "confluence_page",
+                "topic": "Confluence analysis: the New-Seller Onboarding Funnel, full stage-by-stage data",
+                "focus": (
+                    "A data-analysis page, owned by camille.duarte with wei.hartono pulling the "
+                    "numbers, the detailed written companion to this round's seller-ops review "
+                    "(reference that LEDGER event) -- the full stage-by-stage funnel table, "
+                    "defined by LISTING COUNT (not calendar tenure): 'applied -> onboarded (listing "
+                    "1)' 100% all three categories; 'reached listing 5' 46% Collectibles (n=92 of "
+                    "200) vs. 74% Resold (111 of 150) vs. 76% Style (114 of 150); 'reached listing "
+                    "10' 24% Collectibles (48) vs. 46% Resold (69) vs. 48% Style (72); 'sustained "
+                    "(10+ listings AND >=1 new listing in trailing 90d)' 19% Collectibles (38) vs. "
+                    "40% Resold (60) vs. 42% Style (63). Explain the cohort precisely: the "
+                    "~500-seller new-seller stratum of the `dim_seller` panel, `application_date` "
+                    "populated, onboarded Q3FY26-Q4FY26 -- old enough (>=5.6 months' runway to "
+                    "'today') to fairly score on a completed funnel; sellers onboarded Q1FY27+ "
+                    "exist in the panel but are right-censored/too-new and excluded from these "
+                    "percentages. Cover the listing-quality signal too: early listings landing in "
+                    "`status='removed'` (quality/compliance) correlate with churn across all three "
+                    "categories, independent of the authentication story -- a second, separate "
+                    "input worth tracking. State plainly this is the direct, load-bearing "
+                    "quantitative source for the funnel numbers this round's ops review discussed "
+                    "narratively. Ordinary analysis-doc noise: a methodology appendix, a couple of "
+                    "open questions for the next cohort. End with a LEDGER 'metric_shift' event "
+                    "dated 2026-07-16, vertical MARKETPLACE, owner camille.duarte."
+                ),
+                "parallel_ok": False,
+            },
+            {
+                "path": "confluence/q2fy27__speed-otp-mix-shift-and-cost-per-order-retrospective.md",
+                "system": "confluence",
+                "adapter": "confluence_page",
+                "topic": "Confluence retrospective: Speed's blended on-time-to-promise mix-shift, and the separate cost-per-order efficiency story",
+                "focus": (
+                    "A retrospective analysis page, owned by tara.oduya (Director PM Speed & "
+                    "Fulfillment) with gabriel.stroud (Fulfillment Ops Lead) contributing, "
+                    "written now that the full Q1FY26-Q1FY27 window is safely closed history, "
+                    "pulling together two related-but-distinct Speed findings that keep coming up "
+                    "piecemeal. First, on-time-to-promise: blended OTP rose **91.65% (Q1FY26) -> "
+                    "92.38% (Q1FY27)**, +0.73pp -- a headline MBR win. But decomposed by "
+                    "fulfillment_type, ship-to-home (majority-GMV, hardest channel) actually "
+                    "DECLINED slightly, **89.50% -> 89.30%** (-0.20pp), over the identical window. "
+                    "The entire blended gain is mix-shift: BOPIS/curbside ('pickup') share rose "
+                    "**21.0% -> 29.0%** (+8.0pp), driven by the 'Pickup Perks' campaign (reference "
+                    "its earlier LEDGER launch event), and pickup orders hit their promise ~99.6% "
+                    "of the time near-automatically (same/next-day, customer-triggered). State "
+                    "plainly: on-time-to-promise did not really improve for the hardest channel; "
+                    "the blended number improved because the ORDER MIX changed. Second, "
+                    "separately: cost per order fell **$7.85 -> $7.30** across the 6 quarters, "
+                    "steepest single-quarter drop (-$1.05) landing Q4FY26->Q1FY27, coinciding with "
+                    "the DC sortation automation rollout at FON2/JOL1 (reference that earlier "
+                    "LEDGER event, the same rollout that confounded the Wider Promise Window "
+                    "experiment) -- but flag the caveat: Q4FY26 was itself the ONLY quarter with a "
+                    "QoQ INCREASE (+$0.90, ordinary peak/holiday cost pressure), so part of the "
+                    "following drop is normal post-holiday reversion, not automation alone; net of "
+                    "that seasonal noise, the full 6-quarter decline is still a genuine, durable "
+                    "efficiency gain. State EXPLICITLY that these are two different, real effects "
+                    "from the same rollout window -- do not conflate 'the DCs got more efficient' "
+                    "(true, cost) with 'delivery got more reliable' (not really true for the "
+                    "hardest channel; the OTP gain is mix, not rate). Ordinary Confluence noise: a "
+                    "comment thread, a follow-up-analysis TODO. End with a LEDGER 'metric_shift' "
+                    "event dated 2026-07-11, vertical SPEED, owner tara.oduya."
+                ),
+                "parallel_ok": True,
+            },
+            {
+                "path": "meetings/q2fy27__care-deflection-csat-confound-full-arc-review.md",
+                "system": "meetings",
+                "adapter": "meeting_notes",
+                "topic": "Care ops review: deflection's multi-quarter rise, read together with the CSAT-among-deflected dip and recovery",
+                "focus": (
+                    "Care ops review meeting notes, hannah.brennan (SVP Customer Care) with "
+                    "dominic.paquet (Care Ops Lead), pulling the full arc together now that all "
+                    "the quarters involved are closed history. Deflection rate: **45.0% (Q4FY26) "
+                    "-> 49.6% (Q1FY27) -> 52.1% (Q2FY27 QTD)**, coinciding with 'Ask Acme v2's "
+                    "rollout (live since 2025-09-15, reference that earlier LEDGER event) -- but "
+                    "state the attribution is INFERENTIAL, not holdback-proven: deflection was "
+                    "already climbing pre-bot (+2.3pp the prior quarter), the first full quarter "
+                    "after launch gained LESS (+2.2pp, Q3->Q4FY26) than the pre-launch quarter "
+                    "did, and the single largest jump (+4.6pp) lands Q4FY26->Q1FY27, four-plus "
+                    "months after launch, not at launch. Read this together with CSAT-among-"
+                    "deflected, which moved the OPPOSITE direction over the exact window the "
+                    "returns-processing/refund-delay staffing problem (reference the Q4FY26/"
+                    "Q1FY27 refund-delay LEDGER events already in this corpus) was live: "
+                    "**3.70 (Q4FY26) -> 3.42 (Q1FY27)**, then partially recovering to **3.55 "
+                    "(Q2FY27 QTD)** as the Ontario staffing backlog cleared. State the conclusion "
+                    "explicitly: a meaningful share of the Q1FY27 deflection number reflects "
+                    "return-status inquiries being pushed to self-serve tracking that couldn't "
+                    "actually tell the member when their refund was coming, not genuine self-"
+                    "service success -- rising deflection is directionally real progress AND was "
+                    "temporarily inflated by an unrelated ops failure, and the two must be read "
+                    "together, not the deflection rate alone. Ordinary meeting noise: attendance, "
+                    "action items. End with a LEDGER 'metric_shift' event dated 2026-07-09, "
+                    "vertical CARE, owner hannah.brennan."
+                ),
+                "parallel_ok": True,
+            },
+            {
+                "path": "confluence/q2fy27__q3fy27-planning-input-ranked-recommendations.md",
+                "system": "confluence",
+                "adapter": "confluence_page",
+                "topic": "Confluence planning input: ranked recommendations for Q3FY27, drawing on the quarter's cross-cutting findings",
+                "focus": (
+                    "A planning-input page, owned by carlos.figueroa (VP Data & Analytics -- the "
+                    "one role with standing visibility across every vertical), prepared ahead of "
+                    "the Q3FY27 planning cycle and framed explicitly as INPUT to that ritual, NOT "
+                    "a mandate or a verdict -- other leaders will weigh these against their own "
+                    "priorities. Present exactly three ranked recommendations, each with its own "
+                    "evidence chain and the metric it should move: (1) fund a cross-vertical "
+                    "'listing accuracy' initiative, owned by camille.duarte -- evidence: the "
+                    "`listing-accuracy-gap` VOC theme sits at Style 14% / Resold 12% / "
+                    "Collectibles 9% / B2B 22% (reference this round's cross-vertical VOC LEDGER "
+                    "event) with NONE of the four verticals' current, complete backlogs "
+                    "(reference this round's four per-vertical backlog-export documents) actually "
+                    "owning it -- expected to move Style/Resold/Collectibles return rate and the "
+                    "theme share itself; (2) kill or redesign 'Item Page Media Carousel Autoplay' "
+                    "(`exp_2618`, reference this round's LEDGER event, currently -1.5% on its "
+                    "exposed arm, real and concerning) -- expected to recover part of the "
+                    "real-degradation component identified in this round's WBR conversion-drop "
+                    "read (reference that LEDGER event) -- this is the concrete 'what to stop'; "
+                    "(3) launch a targeted streaming-benefit awareness push -- evidence: 93% "
+                    "annual renewal among the streaming-bundle-aware cohort vs. only 34% awareness "
+                    "(reference the existing benefit-adoption-CLTV analysis's LEDGER event) -- "
+                    "expected to move Acme+ annual renewal rate. Then flag a FOURTH item "
+                    "explicitly as a DECISION TO MAKE, not a recommendation already reached: the "
+                    "Collectibles new-seller authentication-friction trade-off (reference this "
+                    "round's seller-ops review and funnel-analysis LEDGER events) -- the Acme "
+                    "Verified/GradeSure requirement is simultaneously a proven buyer-trust win "
+                    "(return rate 11.2%->5.4%) and a proven seller-acquisition drag (24% vs. "
+                    "46-48% reaching listing 10) -- state plainly that removing it isn't free, and "
+                    "recommend the scoped pilot (expedited/subsidized authentication for a "
+                    "seller's first 10 listings) as the next step to bring to the planning "
+                    "conversation, WITHOUT silently resolving the trade-off either direction "
+                    "yourself in this document. Ordinary Confluence noise: a revision-history "
+                    "footer, a short list of attendees who'll review it. End with a LEDGER "
+                    "'decision' event dated 2026-07-20, vertical MARKETPLACE, owner "
+                    "carlos.figueroa, summary naming the three ranked recommendations and the "
+                    "flagged trade-off decision."
+                ),
+                "parallel_ok": False,
             },
         ],
     },

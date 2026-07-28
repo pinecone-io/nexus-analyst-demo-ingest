@@ -21,7 +21,7 @@ eval/
   acme/                        Acme retrieval eval sets (v3 + legacy)
 datasets/
   acme/manifest.yaml           per-dataset metadata (bq_reference, context slug)
-upload_to_nexus.py             Nexus REST uploader + curate/build triggers
+upload_to_nexus.py             Nexus REST uploader: upload + curate + stats
 index_pinecone.py              Pinecone semantic-index ingester
 LICENSES/                      upstream license texts
 NOTICE.md                      per-source attribution
@@ -68,18 +68,32 @@ export NEXUS_API_URL=https://<your-nexus-host>/api/v0   # or dev
 # Discover existing contexts
 python upload_to_nexus.py --list-contexts
 
-# Full one-shot: upload sources + build.md + eval, then curate
-python upload_to_nexus.py --context-id <slug-or-uuid> --dataset acme --all
+# Full one-shot: upload sources, then curate, then report stats
+python upload_to_nexus.py --context-slug <slug> --dataset acme --all
+
+# Preview exactly what --all would do, with no network calls
+python upload_to_nexus.py --context-slug <slug> --dataset acme --all --dry-run
 
 # Granular flags
-python upload_to_nexus.py --context-id <slug> --dataset acme --upload-sources
-python upload_to_nexus.py --context-id <slug> --upload-build-md --upload-eval
-python upload_to_nexus.py --context-id <slug> --trigger-curate
-python upload_to_nexus.py --context-id <slug> --trigger-build
-python upload_to_nexus.py --context-id <slug> --list-tasks
+python upload_to_nexus.py --context-slug <slug> --dataset acme --upload-sources
+python upload_to_nexus.py --context-slug <slug> --trigger-curate
+python upload_to_nexus.py --context-slug <slug> --report-stats
+python upload_to_nexus.py --context-slug <slug> --list-tasks
+
+# Force one-file-per-request instead of the default single-archive upload
+python upload_to_nexus.py --context-slug <slug> --dataset acme --upload-sources --per-file
 ```
 
-`--context-id` accepts either a UUID or a slug.
+`--context-slug` accepts either a slug or a UUID.
+
+`--upload-sources` zips the dataset and uploads it as one archive above 5
+files (one request, one import task); `--per-file`/`--archive` force the
+choice either way. Archive uploads land one directory level deeper than
+per-file uploads: a file at `<dataset>/dbt/x.md` lands at
+`uploads/<dataset>/dbt/x.md` via archive mode vs. `uploads/dbt/x.md` via
+`--per-file` — the import runtime nests every extracted archive under its own
+basename to disambiguate repeat uploads. `--report-stats` and
+`nexus source list` both show it.
 
 ## Ship to Pinecone (classic baseline)
 
