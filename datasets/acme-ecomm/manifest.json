@@ -1,0 +1,214 @@
+{
+  "curate": {
+    "chunks": {
+      "chunking": {
+        "target_size": 768,
+        "overlap": 96
+      }
+    },
+    "artifacts": {
+      "enabled": true,
+      "artifact_model": "standard",
+      "min_doc_count": 1,
+      "max_tokens": 2500,
+      "max_doc_chars": 400000,
+      "extraction_window_chars": 16000,
+      "mention_max_chars": 800,
+      "max_mentions_per_artifact": 64,
+      "mention_context_chars": 10000,
+      "artifact_types": [
+        {
+          "name": "Reported Figure",
+          "kind": "event",
+          "scope": "corpus",
+          "description": "One row per point-in-time number a source document actually states for a named metric: a quarterly series point, a weekly tracker point, or an FY-goal actual/target pair. This is the literal answer to 'what was X in period Y' - always prefer a matching row here over recomputing a figure from raw tables, or over citing a methodology document instead of the number itself.",
+          "coverage": [
+            "every point-in-time figure stated for a named metric - quarterly, weekly, or snapshot alike",
+            "FY goal targets and their tracked actual/pace/status as their own rows",
+            "figures from MBR decks, dashboards, calendar exports, and verbatim summaries, not only formal marts",
+            "never compute or round a figure yourself - extract only values the source states"
+          ],
+          "format": "sqlite",
+          "columns": [
+            { "name": "metric_name", "type": "TEXT", "description": "Exact name of the reported metric (e.g. US conversion rate, Marketplace GMV, Care CSAT deflected)." },
+            { "name": "vertical_code", "type": "TEXT", "description": "Internal vertical code this figure belongs to, verbatim, or blank if company-wide." },
+            { "name": "cut_dimension", "type": "TEXT", "description": "What the figure is broken out by, if anything: market, sub_vertical, fulfillment_type, benefit_count, theme, channel; blank for a top-line figure." },
+            { "name": "cut_value", "type": "TEXT", "description": "The specific value of cut_dimension this row reports (e.g. US, Style, ship_to_home, 2+), or blank." },
+            { "name": "fiscal_period", "type": "TEXT", "description": "The exact period this figure is as-of: a fiscal quarter label (e.g. Q2FY27) or a week-ending date, exactly as stated." },
+            { "name": "value", "type": "REAL", "description": "The reported numeric value itself, exactly as stated - never recomputed or rounded further." },
+            { "name": "unit", "type": "TEXT", "description": "Unit of value: pct, usd, usd_millions, count, days, score, or as stated." },
+            { "name": "yoy_or_qoq_pct", "type": "REAL", "description": "Year-over-year or quarter-over-quarter change percent, if the source states one alongside the figure." },
+            { "name": "target_value", "type": "REAL", "description": "The FY goal/target for this metric, only if this row is a goal-tracking figure; blank otherwise." },
+            { "name": "pct_of_goal", "type": "REAL", "description": "Percent of target achieved, only if this row tracks a goal; blank otherwise." },
+            { "name": "status", "type": "TEXT", "description": "AHEAD, BEHIND, BEAT, or ON_TRACK, only if this row tracks a goal and the source states a status; blank otherwise." },
+            { "name": "as_of_date", "type": "TEXT", "description": "The date this figure was reported or is accurate as-of, ISO format, if stated." },
+            { "name": "source_note", "type": "TEXT", "description": "Where this number came from: document type or system (MBR deck, marketing calendar, Compass dashboard, etc)." }
+          ],
+          "natural_key": ["metric_name", "vertical_code", "cut_dimension", "cut_value", "fiscal_period"]
+        },
+        {
+          "name": "Experiment Register",
+          "kind": "entity",
+          "scope": "corpus",
+          "description": "One row per experiment that ran an explicit control-vs-variant comparison: a true A/B test or holdout with a named control group, not merely a phased change. A staged or phased rollout with no control group is NOT an experiment - do not create a row for it. Extract from experiment trackers, Confluence PRDs, Jira tickets, Slack threads, and MBR notes alike. Never invent an experiment id or date the source does not state.",
+          "coverage": [
+            "every experiment with an explicit control vs. variant/treatment comparison, even a brief status mention",
+            "exclude phased rollouts, staged launches, or ramps with no control group - those belong in Event Timeline",
+            "the exact experiment id if the source gives one, never invented",
+            "whether any other launch, campaign, or redesign overlapped the same window and vertical or market"
+          ],
+          "format": "sqlite",
+          "columns": [
+            { "name": "experiment_id", "type": "TEXT", "description": "The source's own experiment id in its exp_NNNN form (e.g. exp_2214), verbatim, never paraphrased. Never a Jira ticket, epic key, or other tracking-system id; if the source states no exp_NNNN id, leave blank rather than substitute one." },
+            { "name": "experiment_name", "type": "TEXT", "description": "Exact experiment name/title as it appears in the source document." },
+            { "name": "vertical_code", "type": "TEXT", "description": "The internal vertical code the experiment belongs to (e.g. US_CONV, SPEED, CARE), verbatim." },
+            { "name": "hypothesis", "type": "TEXT", "description": "One-sentence hypothesis or goal of the test, as stated." },
+            { "name": "start_date", "type": "TEXT", "description": "Exact start date, ISO format YYYY-MM-DD, as stated in source." },
+            { "name": "end_date", "type": "TEXT", "description": "Exact end date, ISO format YYYY-MM-DD, or blank if still running." },
+            { "name": "status", "type": "TEXT", "description": "One of: running, shipped, killed, paused - exactly as the source states or clearly implies." },
+            { "name": "primary_metric", "type": "TEXT", "description": "The metric the experiment was judged on, named exactly." },
+            { "name": "owner", "type": "TEXT", "description": "Name of the person or team who owned or ran the experiment." },
+            { "name": "confound_or_clean", "type": "TEXT", "description": "Whether another launch/campaign/change overlapped this experiment's window and vertical/market; name it, or state 'no concurrent launch found - clean read' if the source says so explicitly." },
+            { "name": "decision_notes", "type": "TEXT", "description": "What was actually decided and on which number: shipped to what percent, on which readout figure, any caveat attached to the decision, as stated." }
+          ],
+          "natural_key": ["experiment_id"]
+        },
+        {
+          "name": "Experiment Readout",
+          "kind": "event",
+          "scope": "corpus",
+          "description": "One row per metric reading actually OBSERVED for an experiment, on that experiment's own primary_metric only - never a different experiment's or an unrelated topic's figure. A confounded/deconfounded pair or a holdback reading is multiple rows, not one. Never store a forward-looking target, goal, or projection here - those belong in Reported Figure's target_value/pct_of_goal columns. Only extract what a source document actually states; never compute or estimate a reading.",
+          "coverage": [
+            "every distinct OBSERVED reading for an experiment's own primary_metric, not only the headline one",
+            "a confounded/full-window reading AND a pre-confound or deconfounded reading when the source gives both",
+            "a holdback or control-only measurement as its own row",
+            "never a target, goal, or projected figure - those belong in Reported Figure, not here",
+            "never a reading that actually belongs to a different experiment or an unrelated topic in the same document"
+          ],
+          "format": "sqlite",
+          "columns": [
+            { "name": "experiment_id", "type": "TEXT", "description": "Matches the experiment_id in Experiment Register, verbatim. Never attribute a reading to this id when the source's surrounding context is a different experiment or an unrelated narrative." },
+            { "name": "variant", "type": "TEXT", "description": "Treatment/control/holdback arm name, exactly as stated." },
+            { "name": "metric_name", "type": "TEXT", "description": "Name of the metric this reading reports; must match this experiment_id's primary_metric in Experiment Register (e.g. conversion_lift, on_time_rate, benefit_awareness_30d) - omit the row if the source's reading is for a different metric." },
+            { "name": "metric_value", "type": "REAL", "description": "The numeric value of the reading, as stated (percent or point figure as given; do not convert units)." },
+            { "name": "unit", "type": "TEXT", "description": "Unit of metric_value: pct, pp, usd, score, or as stated." },
+            { "name": "window_label", "type": "TEXT", "description": "Exactly one of: full_window, pre_confound, deconfounded, holdback - pick the closest fit. Never a target/goal/projected label (e.g. target_Q4FY26); targets are not readouts." },
+            { "name": "as_of_date", "type": "TEXT", "description": "Date the reading was taken or reported, ISO format." },
+            { "name": "sample_size_units", "type": "INTEGER", "description": "Number of units (sessions/orders/members) the reading is based on, if stated." },
+            { "name": "is_significant", "type": "INTEGER", "description": "1 if the source states statistical significance, 0 if not significant or not stated." },
+            { "name": "notes", "type": "TEXT", "description": "Any caveat attached to this specific reading, e.g. what confounds it or what it isolates." }
+          ],
+          "natural_key": ["experiment_id", "variant", "metric_name", "window_label"]
+        },
+        {
+          "name": "Event Timeline",
+          "kind": "event",
+          "scope": "corpus",
+          "description": "One row per dated event that changed something a PM would care about: a launch, campaign, promo, budget change, org change, incident, restatement, or migration milestone. Extract from marketing-calendar exports, org announcements, Slack, postmortems, and meeting notes alike. The exact date is the point of this table - never estimate one.",
+          "coverage": [
+            "every dated event, launch, campaign, incident, org change, or migration milestone stated",
+            "events mentioned only in passing - a calendar export line, a Slack aside",
+            "the exact date as stated; never estimate one"
+          ],
+          "format": "sqlite",
+          "columns": [
+            { "name": "event_name", "type": "TEXT", "description": "Short exact name of the event/launch/change, as stated in source." },
+            { "name": "event_date", "type": "TEXT", "description": "Start or single date of the event, ISO format YYYY-MM-DD." },
+            { "name": "end_date", "type": "TEXT", "description": "End date if the event spans a range (a campaign, a phased rollout); blank for a single-day event." },
+            { "name": "event_type", "type": "TEXT", "description": "One of: campaign, launch, promo, holiday, budget_change, experiment_start, experiment_end, incident, org_change, restatement, migration, or the closest fit." },
+            { "name": "vertical_code", "type": "TEXT", "description": "Internal vertical code affected, if any, verbatim (e.g. SPEED, CARE)." },
+            { "name": "market", "type": "TEXT", "description": "Market affected: US, CA, MX, or blank if company-wide/not market-specific." },
+            { "name": "owner", "type": "TEXT", "description": "Person or team named as owner/driver of the event." },
+            { "name": "planned_spend_usd", "type": "REAL", "description": "Planned spend in USD if the event is a campaign/budget item and a figure is stated." },
+            { "name": "actual_spend_usd", "type": "REAL", "description": "Actual spend in USD if stated." },
+            { "name": "notes", "type": "TEXT", "description": "One line on why this event matters or what it caused/coincided with, as stated." }
+          ],
+          "natural_key": ["event_name", "event_date"]
+        },
+        {
+          "name": "Metric Definition Register",
+          "kind": "entity",
+          "scope": "corpus",
+          "description": "One row per named business metric or KPI. formula, canonical_value, and common_mistake are each VERBATIM-OR-BLANK: quote the source's exact words, or leave the cell BLANK if the source never states one - blank is correct, not a gap to fill. NEVER reconstruct, infer, or hedge (\"not explicitly stated, but...\", \"presumably\", \"computed as\") a value the text doesn't give. A row with a blank formula is still valid when other columns hold real stated content. Pair with Reported Figure for the actual number.",
+          "coverage": [
+            "every named business metric or KPI the source defines or explains the calculation of",
+            "the precedence rule when two definitions or two systems disagree, if stated",
+            "formula, canonical_value, and common_mistake are each verbatim-or-blank - quote exact wording, never infer",
+            "a metric with a stated baseline/target but no stated method: blank formula, real canonical_value only",
+            "never a hedged formula (\"not explicitly stated, but...\", \"presumably\", \"computed as\") - blank beats a guess"
+          ],
+          "format": "sqlite",
+          "columns": [
+            { "name": "metric_name", "type": "TEXT", "description": "Canonical metric name, exactly as commonly referenced (e.g. blended on-time-to-promise, conversion rate, member CLTV)." },
+            { "name": "formula", "type": "TEXT", "description": "The exact calculation, as stated: the formula, ratio, or join logic in plain terms." },
+            { "name": "source_tables", "type": "TEXT", "description": "The table(s) or mart(s) the metric is computed from, comma-separated, exact names." },
+            { "name": "grain", "type": "TEXT", "description": "The row grain the metric is computed at (e.g. date x market x vertical x device)." },
+            { "name": "canonical_value", "type": "TEXT", "description": "The current correct reported value if the source states one, with its period." },
+            { "name": "common_mistake", "type": "TEXT", "description": "The wrong way to compute or read this metric that the source warns against, stated concretely, with the wrong number if given." },
+            { "name": "notes", "type": "TEXT", "description": "Any other caveat: which definition wins when sources disagree, related metrics, or a precedence rule." }
+          ],
+          "natural_key": ["metric_name"]
+        },
+        {
+          "name": "Warehouse Table Register",
+          "kind": "entity",
+          "scope": "corpus",
+          "description": "One row per base, dimension, or mart table documented in a schema doc or data dictionary: what it holds, and critically, whether its rows ARE the full real-world population or only a representative sample/panel of a larger true total. Get this wrong and every count on the table is wrong.",
+          "coverage": [
+            "every base, dimension, and mart table named in a schema doc or data dictionary",
+            "whether it is a full population or a representative sample/panel, and of what true total"
+          ],
+          "format": "sqlite",
+          "columns": [
+            { "name": "table_name", "type": "TEXT", "description": "Exact table name as it appears in source (e.g. dim_member, fact_orders, member_cltv)." },
+            { "name": "table_category", "type": "TEXT", "description": "One of: dimension, base_fact, derived_mart." },
+            { "name": "grain", "type": "TEXT", "description": "What one row of this table represents, stated plainly." },
+            { "name": "row_count_in_table", "type": "TEXT", "description": "The row count or scale of the table ITSELF as stated (e.g. '120,000', '~730', '~2,500'), not the true population." },
+            { "name": "population_type", "type": "TEXT", "description": "Exactly one of: full_population, representative_panel - whether this table's rows ARE the complete real-world set or a sample of a larger true population." },
+            { "name": "true_population_estimate", "type": "TEXT", "description": "If population_type is representative_panel, the true real-world total this table samples from, as stated (e.g. '~14.2-14.6M active members'); blank if full_population." },
+            { "name": "notes", "type": "TEXT", "description": "Any warning about misusing this table, e.g. never COUNT(*) or SUM() it for a company-level total; where the true total comes from instead." }
+          ],
+          "natural_key": ["table_name"]
+        },
+        {
+          "name": "Roadmap Item",
+          "kind": "entity",
+          "scope": "corpus",
+          "description": "One row per roadmap card or ticket, from EITHER the legacy or the current tracking system - a query that only covers one system silently returns a partial roadmap. Extract from Aitable cards, Jira tickets, and Confluence PRDs alike.",
+          "coverage": [
+            "every item from BOTH the legacy and the current ticketing system, never only one",
+            "the opened_date exactly as stated - it determines which system the item belongs in",
+            "cross-reference against any PRD naming the same item, if present"
+          ],
+          "format": "sqlite",
+          "columns": [
+            { "name": "item_title", "type": "TEXT", "description": "Exact title of the roadmap card/ticket, as stated." },
+            { "name": "system", "type": "TEXT", "description": "Which tracking system holds this item: aitable or jira, exactly as the source names it." },
+            { "name": "vertical_code", "type": "TEXT", "description": "Internal vertical code this item belongs to, verbatim." },
+            { "name": "status", "type": "TEXT", "description": "Current status as stated (e.g. planned, in_progress, shipped, blocked)." },
+            { "name": "opened_date", "type": "TEXT", "description": "Date the item was opened/created, ISO format, if stated." },
+            { "name": "owner", "type": "TEXT", "description": "Person or team named as owner of this roadmap item." },
+            { "name": "one_line_description", "type": "TEXT", "description": "One-sentence description of what the item is/does." }
+          ],
+          "natural_key": ["item_title", "system"]
+        },
+        {
+          "name": "Signal",
+          "kind": "topic",
+          "scope": "corpus",
+          "icon": "",
+          "description": "A documented correction, precedence rule, or buried truth that changes how a headline metric, experiment readout, roadmap claim, or reported figure should be read. Name the metric/claim/table affected, the naive/headline reading, the corrected reading with exact figures and dates as stated, and the mechanism. Consolidate every mention of the same correction across all documents into one record; never invent a correction the source does not state.",
+          "coverage": [
+            "the metric, table, experiment, or claim this correction affects, named exactly",
+            "the naive or headline reading, stated verbatim if the source gives one",
+            "the corrected reading, with exact figures and dates as stated",
+            "the mechanism: confound, definition change, mix-shift, join or sampling error, escalation lag, or precedence rule",
+            "which source or system wins when two systems disagree, if the source states a rule",
+            "any stale, draft, or superseded claim this corrects - state it must not be reported as current"
+          ],
+          "format": "markdown"
+        }
+      ]
+    }
+  }
+}
