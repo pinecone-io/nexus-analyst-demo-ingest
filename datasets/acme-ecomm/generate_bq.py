@@ -310,6 +310,8 @@ NAMED_ASSOCIATES = [
     ("assoc_100141", "Leo Brandt", "Sr PM Delivery Promise", "Fulfillment", "assoc_100140", date(2023, 9, 1)),
     ("assoc_100150", "Simone Laurent", "Director PM Membership (Acme+)", "Membership", "assoc_100040", date(2023, 5, 1)),
     ("assoc_100151", "Derek Holloway", "Sr PM Membership Benefits & CLTV", "Membership", "assoc_100150", date(2023, 9, 1)),
+    ("assoc_100123", "Camille Duarte", "Sr PM Marketplace Seller Experience (Listings & Optimization)", "Marketplace", "assoc_100030", date(2026, 4, 8)),
+    ("assoc_100160", "Malik Hendon", "Sr PM Acme Business (B2B/Wholesale)", "B2B", "assoc_100010", date(2025, 6, 15)),
     ("assoc_100210", "Wei Hartono", "Analytics Engineer (owns core marts)", "Data", "assoc_100060", date(2023, 6, 1)),
     ("assoc_100211", "Amara Shah", "Data Analyst (Finance/MBR)", "Data", "assoc_100060", date(2023, 7, 1)),
     ("assoc_100212", "Connor Blake", "Data Engineer (pipeline/freshness)", "Data", "assoc_100060", date(2023, 8, 1)),
@@ -389,6 +391,12 @@ NAMED_EXPERIMENTS = [
     ("exp_2556", "Benefit Onboarding Carousel", "MEMBERSHIP", "assoc_100151",
      "An onboarding carousel highlighting Acme+ benefits raises 30-day benefit awareness.",
      date(2026, 5, 1), date(2026, 6, 15), "shipped", "benefit_awareness_pct"),
+    ("exp_2601", "Search Relevance Re-ranking", "US_CONV", "assoc_100111",
+     "A re-ranked search relevance model surfaces better-matched results and lifts conversion.",
+     date(2026, 6, 8), None, "running", "conversion_rate"),
+    ("exp_2618", "Item Page Media Carousel Autoplay", "US_CONV", "assoc_100110",
+     "Autoplaying the item-page media carousel increases engagement and lifts conversion.",
+     date(2026, 6, 8), None, "running", "conversion_rate"),
 ]
 
 NAMED_MARKETING_EVENTS = [
@@ -419,6 +427,20 @@ NAMED_MARKETING_EVENTS = [
      date(2026, 5, 20), None, "assoc_100130", "Non-billing categories only."),
     ("camp_000013", "Acme+ Streaming Perk Partner Switch: Vidora -> Reelstream", "launch", "MEMBERSHIP", None,
      date(2026, 6, 1), None, "assoc_100040", "Streaming bundle benefit re-platformed."),
+    ("camp_000014", "Item Page Iteration v1 (above-fold price/CTA reflow)", "launch", "US_CONV", "US",
+     date(2026, 2, 5), date(2026, 2, 5), "assoc_100110", "First of 6 Item Page Iteration Program launches this quarter, pre-cutover (sessions_definition_version 1)."),
+    ("camp_000015", "Item Page Iteration v2 (reviews section reorder)", "launch", "US_CONV", "US",
+     date(2026, 2, 19), date(2026, 2, 19), "assoc_100110", "Pre-cutover (sessions_definition_version 1)."),
+    ("camp_000016", "Item Page Iteration v3 (image gallery zoom/swipe)", "launch", "US_CONV", "US",
+     date(2026, 3, 5), date(2026, 3, 5), "assoc_100110", "First iteration on sessions_definition_version 2 (post session-counting fix)."),
+    ("camp_000017", "Item Page Iteration v4 (size/fit guidance module)", "launch", "US_CONV", "US",
+     date(2026, 3, 19), date(2026, 3, 19), "assoc_100110", "Post-cutover (sessions_definition_version 2)."),
+    ("camp_000018", "Item Page Iteration v5 (cross-sell module placement)", "launch", "US_CONV", "US",
+     date(2026, 4, 2), date(2026, 4, 2), "assoc_100110", "Post-cutover (sessions_definition_version 2)."),
+    ("camp_000019", "Item Page Iteration v6 (sticky add-to-cart bar, mobile)", "launch", "US_CONV", "US",
+     date(2026, 4, 16), date(2026, 4, 16), "assoc_100110", "Last of 6 Item Page Iteration Program launches this quarter."),
+    ("camp_000020", "Homepage Hero Banner Refresh", "launch", "US_CONV", "US",
+     date(2026, 7, 13), date(2026, 7, 13), "assoc_100110", "Homepage-only; no item-page or search overlap -- coincidental-timing distractor for the Q2FY27 WoW conversion dip."),
 ]
 
 
@@ -577,13 +599,224 @@ def gen_dim_fulfillment_node(n_total: int = 180) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def gen_dim_seller(n_total: int = 2560) -> pd.DataFrame:
+APPLICATION_DATE_CUTOVER = date(2025, 8, 1)  # Q3FY26 start -- application_date starts being captured
+
+
+def _application_date_for(onboarded: date, lo: int = 3, hi: int = 45) -> date | None:
+    """General rule (not one of the 3 pinned archetypes): application_date is
+    populated only from Q3FY26 onward (when Acme started capturing it) -- NULL
+    for earlier/legacy panel rows where it was never captured."""
+    if onboarded < APPLICATION_DATE_CUTOVER:
+        return None
+    return onboarded - timedelta(days=random.randint(lo, hi))
+
+
+# --------------------------------------------------------------------------
+# New-seller onboarding funnel cohort (customer story US-7) -- ~500 sellers
+# (200 Collectibles + 150 Resold + 150 Style, onboarded Q3FY26-Q4FY26) + the 3
+# pinned archetypes (sel_500241-243, CANONICAL NEW-SELLER ARCHETYPES). This
+# cohort is one of dim_seller's three deliberate strata (top sellers + random
+# tail + this funnel cohort) -- NOT additional rows on top -- so gen_dim_seller
+# shrinks its random-filler count by the same amount, keeping the panel at the
+# canon-stated ~2,560. Drives the exact listing-count funnel percentages + the
+# verification-timing split consumed by gen_new_seller_cohort_listings()
+# (SIGNAL [seller-auth-friction]).
+# --------------------------------------------------------------------------
+NEW_SELLER_PINNED = [
+    # seller_id, seller_name, category, application_date, onboarded_date, verified_fast, stage, sustained
+    ("sel_500241", "Thistledown Card Co.", "collectibles", date(2025, 11, 3), date(2025, 11, 10), False, "never5", False),
+    ("sel_500242", "Wrenfield Collectibles", "collectibles", date(2025, 10, 2), date(2025, 10, 8), True, "reach10", True),
+    ("sel_500243", "Larkspur Apparel Co.", "style", date(2025, 12, 1), date(2025, 12, 5), None, "reach10", False),
+]
+NEW_SELLER_PINNED_IDS = {r[0] for r in NEW_SELLER_PINNED}
+
+# category -> (n_total INCLUDING the pinned archetypes, n_reach5 [>=5, cumulative],
+# n_reach10 [>=10, cumulative], n_sustained [subset of n_reach10])
+NEW_SELLER_FUNNEL = {
+    "collectibles": (200, 92, 48, 38),
+    "resold": (150, 111, 69, 60),
+    "style": (150, 114, 72, 63),
+}
+# Collectibles-only verification-speed split (debut listing GradeSure-verified within 7
+# days or not), each bucket with its OWN listing-10 clear rate -- SIGNAL [seller-auth-friction].
+COLLECTIBLES_VERIFIED_SPLIT = {"fast_n": 120, "slow_n": 80, "fast_reach10": 36, "slow_reach10": 12}
+
+
+def _assign_cohort_stages(n_total: int, n_reach10: int, n_reach5: int, n_sustained: int,
+                            fast_n: int | None = None, fast_reach10: int | None = None
+                            ) -> tuple[list[str], list[bool], list[bool | None]]:
+    """Deterministic-count, randomly-shuffled bucket assignment for n_total
+    GENERIC (non-pinned) cohort sellers. Returns parallel lists (stage,
+    sustained, verified_fast) of length n_total, stage in
+    {"never5","reach5","reach10"}. The reach5/never5 split is intentionally
+    NOT correlated with the fast/slow verification bucket beyond the stated
+    reach10 sub-rates -- canon gives no basis for correlating the earlier
+    stages to verification speed, only the listing-10 clear rate."""
+    idx = list(range(n_total))
+    random.shuffle(idx)
+    if fast_n is not None:
+        fast_idx = set(idx[:fast_n])
+        fast_list = [i for i in idx if i in fast_idx]
+        slow_list = [i for i in idx if i not in fast_idx]
+        reach10_idx = set(random.sample(fast_list, fast_reach10) + random.sample(slow_list, n_reach10 - fast_reach10))
+        fast_flags = {i: (i in fast_idx) for i in idx}
+    else:
+        reach10_idx = set(random.sample(idx, n_reach10))
+        fast_flags = {i: None for i in idx}
+    remaining = [i for i in idx if i not in reach10_idx]
+    reach5only_idx = set(random.sample(remaining, n_reach5 - n_reach10))
+    sustained_idx = set(random.sample(sorted(reach10_idx), n_sustained))
+
+    stages, sustained, fast = [], [], []
+    for i in range(n_total):
+        if i in reach10_idx:
+            stages.append("reach10")
+        elif i in reach5only_idx:
+            stages.append("reach5")
+        else:
+            stages.append("never5")
+        sustained.append(i in sustained_idx)
+        fast.append(fast_flags[i])
+    return stages, sustained, fast
+
+
+def _cohort_listing_count(stage: str, sustained: bool) -> int:
+    if stage == "never5":
+        # steepest relative drop happens earliest (listing 1->5) -- skew low
+        return random.choices([1, 2, 3, 4], weights=[0.40, 0.30, 0.20, 0.10])[0]
+    if stage == "reach5":
+        return random.randint(5, 9)
+    return random.randint(12, 25) if sustained else random.randint(10, 14)
+
+
+def _cohort_listing_schedule(onboarded: date, n_listings: int, sustained: bool) -> list[date]:
+    """Spread n_listings dates from onboarding. Non-sustained sellers stop
+    well before the trailing-90d window (TODAY-90); sustained sellers get
+    >=1 listing inside it -- the observable proxy for "10+ listings AND >=1
+    new listing in trailing 90d" since there's no separate activity-date
+    column on fact_marketplace_listings."""
+    if n_listings <= 0:
+        return []
+    recent_cutoff = TODAY - timedelta(days=90)
+    if sustained:
+        tail = TODAY - timedelta(days=random.randint(2, 80))
+        if n_listings == 1:
+            return [tail]
+        span_end = max(recent_cutoff - timedelta(days=random.randint(0, 20)), onboarded + timedelta(days=1))
+        span = max((span_end - onboarded).days, 1)
+        head = sorted(onboarded + timedelta(days=random.randint(0, span)) for _ in range(n_listings - 1))
+        return head + [tail]
+    stop_days = random.randint(30, 150)
+    cap = min(onboarded + timedelta(days=stop_days), recent_cutoff - timedelta(days=random.randint(1, 30)))
+    cap = max(cap, onboarded + timedelta(days=1))
+    span = max((cap - onboarded).days, 1)
+    return sorted(onboarded + timedelta(days=random.randint(0, span)) for _ in range(n_listings))
+
+
+def _cohort_listing_rows(seller_id: str, cat: str, stage: str, verified_fast: bool | None,
+                          dates: list[date], listing_seq: list[int]) -> list[dict]:
+    price_mu = {"collectibles": 70, "resold": 35, "style": 55}[cat]
+    base_verified_p = {"resold": 0.20, "style": 0.15}.get(cat)
+    removed_w = [0.75, 0.20, 0.05] if stage == "never5" else [0.93, 0.05, 0.02]
+    out = []
+    for li, ldate in enumerate(dates):
+        listing_seq[0] += 1
+        price = float(np.random.lognormal(np.log(price_mu), 0.9 if cat == "collectibles" else 0.6))
+        if cat == "collectibles":
+            if li == 0:
+                verified = (random.random() < 0.95) if verified_fast else (random.random() < 0.35)
+            else:
+                verified = random.random() < 0.90
+        else:
+            verified = random.random() < base_verified_p
+        out.append({
+            "listing_id": rid("lst", 900_000 + listing_seq[0], width=7), "seller_id": seller_id,
+            "category": cat, "listed_date": ldate, "price_usd": round(price, 2),
+            "status": random.choices(["active", "removed", "suspended"], weights=removed_w)[0],
+            "authenticity_verified": verified,
+        })
+    return out
+
+
+def gen_new_seller_cohort() -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Returns (dim_seller-shaped rows w/ bookkeeping cols, fact_marketplace_listings
+    -shaped rows) for the ~500-seller new-seller onboarding funnel cohort + the 3
+    pinned archetypes (sel_500241-243)."""
+    seller_rows: list[dict] = []
+    listing_rows: list[dict] = []
+    listing_seq = [0]
+    next_id = 500244
+    name_suffixes = ["Trading Co.", "Goods", "Supply", "Collective", "Studio", "Outfitters", "Market", "House"]
+    onboard_lo, onboard_hi = date(2025, 8, 1), date(2026, 1, 31)
+
+    # per-category generic (non-pinned) bucket targets, after deducting the 3 pinned slots
+    generic_targets = {
+        "collectibles": dict(n_total=198, n_reach5=91, n_reach10=47, n_sustained=37, fast_n=119, fast_reach10=35),
+        "resold": dict(n_total=150, n_reach5=111, n_reach10=69, n_sustained=60, fast_n=None, fast_reach10=None),
+        "style": dict(n_total=149, n_reach5=113, n_reach10=71, n_sustained=63, fast_n=None, fast_reach10=None),
+    }
+
+    for cat, tgt in generic_targets.items():
+        stages, sustained_flags, fast_flags = _assign_cohort_stages(
+            tgt["n_total"], tgt["n_reach10"], tgt["n_reach5"], tgt["n_sustained"],
+            fast_n=tgt["fast_n"], fast_reach10=tgt["fast_reach10"])
+        for i in range(tgt["n_total"]):
+            seller_id = rid("sel", next_id, width=6)
+            next_id += 1
+            onboarded = onboard_lo + timedelta(days=random.randint(0, (onboard_hi - onboard_lo).days))
+            stage, sustained, verified_fast = stages[i], sustained_flags[i], fast_flags[i]
+            if verified_fast is True:
+                application_date = onboarded - timedelta(days=random.randint(1, 6))
+            elif verified_fast is False:
+                application_date = onboarded - timedelta(days=random.randint(7, 30))
+            else:
+                application_date = onboarded - timedelta(days=random.randint(3, 14))
+            name = f"{fake.last_name()} {random.choice(name_suffixes)}"
+            seller_rows.append({
+                "seller_id": seller_id, "seller_name": name, "category_focus": cat,
+                "onboarded_date": onboarded, "application_date": application_date, "status": "active",
+                "fulfillment_method": random.choices(["seller_fulfilled", "ship_with_acme"], weights=[0.70, 0.30])[0],
+                "home_country": random.choices(["US", "CA", "MX"], weights=[0.85, 0.10, 0.05])[0],
+                "_gmv_tier": "small",
+            })
+            n_listings = _cohort_listing_count(stage, sustained)
+            dates = _cohort_listing_schedule(onboarded, n_listings, sustained)
+            listing_rows += _cohort_listing_rows(seller_id, cat, stage, verified_fast, dates, listing_seq)
+
+    for sid, name, cat, app_date, onboarded, verified_fast, stage, sustained in NEW_SELLER_PINNED:
+        seller_rows.append({
+            "seller_id": sid, "seller_name": name, "category_focus": cat,
+            "onboarded_date": onboarded, "application_date": app_date, "status": "active",
+            "fulfillment_method": "seller_fulfilled", "home_country": "US", "_gmv_tier": "small",
+        })
+        n_listings = 3 if sid == "sel_500241" else (12 if sid == "sel_500242" else 10)
+        if sid == "sel_500243":
+            # "reached listing 10 within 10 weeks" -- force all 10 inside that window
+            span = 70
+            dates = sorted(onboarded + timedelta(days=random.randint(0, span)) for _ in range(n_listings))
+        else:
+            dates = _cohort_listing_schedule(onboarded, n_listings, sustained)
+        listing_rows += _cohort_listing_rows(sid, cat, stage, verified_fast, dates, listing_seq)
+
+    return pd.DataFrame(seller_rows), pd.DataFrame(listing_rows)
+
+
+def gen_dim_seller(n_total: int = 2560) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Returns (dim_seller, cohort_listings) -- the second element is the
+    pre-built fact_marketplace_listings rows for the new-seller cohort, which
+    must be merged into the final fact_marketplace_listings table by the
+    caller (see gen_fact_marketplace_listings's exclude_seller_ids param)."""
     rows = []
     for sid, name, cat, tier, onboard, status, fmethod, country in PINNED_SELLERS + SHARED_CAST_SELLERS:
         rows.append({
             "seller_id": sid, "seller_name": name, "category_focus": cat, "onboarded_date": onboard,
+            "application_date": _application_date_for(onboard),
             "status": status, "fulfillment_method": fmethod, "home_country": country, "_gmv_tier": tier,
         })
+
+    cohort_sellers, cohort_listings = gen_new_seller_cohort()
+    rows += cohort_sellers.to_dict("records")
+
     n_filler = n_total - len(rows)
     cats = ["collectibles", "resold", "style", "other"]
     cat_w = [0.20, 0.28, 0.40, 0.12]
@@ -591,7 +824,7 @@ def gen_dim_seller(n_total: int = 2560) -> pd.DataFrame:
     tier_w = [0.01, 0.04, 0.25, 0.70]
     countries = ["US", "CA", "MX"]
     country_w = [0.80, 0.12, 0.08]
-    next_num = 500240
+    next_num = 501000  # past the new-seller cohort's reserved 500244-500740 range
     for i in range(n_filler):
         cat = random.choices(cats, weights=cat_w)[0]
         onboard = date(2024, 1, 1) + timedelta(days=random.randint(0, (TODAY - date(2024, 1, 1)).days))
@@ -599,14 +832,14 @@ def gen_dim_seller(n_total: int = 2560) -> pd.DataFrame:
         name = f"{fake.last_name()} {random.choice(['& Co.', 'Trading Co.', 'Goods', 'Supply', 'Collective', 'Studio', 'Works', 'Outfitters'])}"
         rows.append({
             "seller_id": rid("sel", next_num, width=6), "seller_name": name, "category_focus": cat,
-            "onboarded_date": onboard, "status": status,
+            "onboarded_date": onboard, "application_date": _application_date_for(onboard), "status": status,
             "fulfillment_method": random.choices(["seller_fulfilled", "ship_with_acme"], weights=[0.65, 0.35])[0],
             "home_country": random.choices(countries, weights=country_w)[0],
             "_gmv_tier": random.choices(tiers, weights=tier_w)[0],
         })
         next_num += 1
     df = pd.DataFrame(rows)
-    return df
+    return df, cohort_listings
 
 
 def gen_dim_experiment(n_total: int = 85) -> pd.DataFrame:
@@ -929,6 +1162,80 @@ LIGHT_VERTICAL_BASE_SESSIONS = {
     "SPLITS": 220, "CSI": 150, "REVIEWS": 600, "FS_LATER": 380,
 }
 
+# Item Page surface (SIGNAL [item-page-metric-choice]): product_view_sessions holds
+# to ~62% of US_CONV sessions everywhere; add_to_cart_sessions/product_view_sessions
+# jumps at the SAME sessions_definition_version cutover as the site-wide conversion
+# rate (SIGNAL [session-definition]) -- 18.0% pre-cutover -> 19.9% post, the exact
+# Q1FY27 raw move canon states (the two version-bases apply uniformly, not just
+# within Q1FY27, since the cutover only ever occurs once in the modeled window).
+PV_SHARE_OF_SESSIONS = 0.62
+VIEW_TO_CART_RATE = {1: 0.180, 2: 0.199}
+
+# US Conversion -- weekly detail (Q2FY27, the live WoW question): the only two days
+# spans in the whole dataset where device carries a DIFFERENTIATED conversion rate
+# (elsewhere device is a flat proportional split of the blended day rate). US market
+# only. Week-over-week: 3.24% -> 2.86%, decomposing into -0.24pp device-mix shift
+# (app share 28.0%->37.6%) and -0.14pp real web-conversion softening.
+WOW_WEEK_STARTS = [date(2026, 7, 5), date(2026, 7, 12)]  # Sun-Sat weeks ending 07-11 / 07-18
+WOW_WEEKS = {
+    date(2026, 7, 5): dict(sessions_m=26.80, orders=868_320,
+                            device_share={"web": 0.690, "app": 0.280, "store_kiosk": 0.030},
+                            device_conv={"web": 0.0400, "app": 0.0150, "store_kiosk": 0.0200}),
+    date(2026, 7, 12): dict(sessions_m=26.40, orders=755_038,
+                             device_share={"web": 0.594, "app": 0.376, "store_kiosk": 0.030},
+                             device_conv={"web": 0.0376, "app": 0.0150, "store_kiosk": 0.0200}),
+}
+
+
+def _pv_atc_daily(dates: list[date], sessions_daily: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    """Exact-reconciling product_view_sessions / add_to_cart_sessions per day,
+    aligned with `sessions_daily` (allocate_int against the day's ACTUAL
+    allocated sessions, not the nominal quarter target, so pv <= sessions
+    always holds)."""
+    n = len(dates)
+    pv_jitter = np.random.normal(1.0, 0.015, size=n)
+    pv_total = int(round(sessions_daily.sum() * PV_SHARE_OF_SESSIONS))
+    pv_daily = allocate_int(pv_total, np.maximum(sessions_daily * pv_jitter, 1e-6))
+
+    is_v2 = np.array([d >= SESSION_CUTOVER for d in dates])
+    atc_daily = np.zeros(n, dtype=np.int64)
+    atc_jitter = np.random.normal(1.0, 0.02, size=n)
+    for mask, rate in ((~is_v2, VIEW_TO_CART_RATE[1]), (is_v2, VIEW_TO_CART_RATE[2])):
+        if not mask.any():
+            continue
+        sub_pv = pv_daily[mask]
+        sub_total = int(round(sub_pv.sum() * rate))
+        atc_daily[mask] = allocate_int(sub_total, np.maximum(sub_pv * atc_jitter[mask], 1e-6))
+    return pv_daily, atc_daily
+
+
+def _wow_week_series(wk_start: date, info: dict) -> list[tuple[date, int, int, dict, dict]]:
+    """One named Q2FY27 WoW week -> per-day (date, sessions, orders,
+    device_sessions, device_orders), exact to the week's stated sessions/order
+    totals and device mix/conversion rates (convention 1: the stated ORDER
+    total is authoritative -- recomputing from the rounded device conv rates
+    may drift by a rounding hair, expected, not "corrected" back)."""
+    week_dates = [wk_start + timedelta(days=k) for k in range(7)]
+    day_w = daily_weight_curve(week_dates, weekend_boost=1.05, noise_sd=0.03)
+    sess_by_day = allocate_int(round(info["sessions_m"] * 1_000_000), day_w)
+
+    device_sessions_by_day = []
+    devices = list(info["device_share"].keys())
+    shares = np.array(list(info["device_share"].values()))
+    for s_day in sess_by_day:
+        dev_counts = allocate_int(int(s_day), shares)
+        device_sessions_by_day.append(dict(zip(devices, (int(x) for x in dev_counts))))
+
+    cells = [(i, dev) for i in range(7) for dev in devices]
+    raw_w = np.array([max(device_sessions_by_day[i][dev] * info["device_conv"][dev], 1e-6) for i, dev in cells])
+    counts = allocate_int(info["orders"], raw_w)
+    device_orders_by_day = [dict() for _ in range(7)]
+    for (i, dev), c in zip(cells, counts):
+        device_orders_by_day[i][dev] = int(c)
+
+    return [(d, int(sess_by_day[i]), sum(device_orders_by_day[i].values()),
+             device_sessions_by_day[i], device_orders_by_day[i]) for i, d in enumerate(week_dates)]
+
 
 def _us_conv_rates_for_quarter(dates: list[date], sessions_total_m: float, orders_total_m: float) -> tuple[np.ndarray, np.ndarray]:
     """Per-day (sessions, conversion-rate) for one market x quarter slice.
@@ -968,28 +1275,66 @@ def gen_fact_traffic_daily() -> pd.DataFrame:
             sessions_total = US_CONV[market]["sessions_m"][qi]
             orders_total = US_CONV[market]["orders_m"][qi]
             gmv_total = US_CONV[market]["gmv_m"][qi]
-            sessions_daily, orders_daily = _us_conv_rates_for_quarter(dates, sessions_total, orders_total)
+
+            # US Conversion weekly detail: the two named Q2FY27 WoW weeks get an
+            # exact device mix/conversion override, US market only. Generate them
+            # from their OWN stated totals, subtract that budget from the normal
+            # quarter-level allocation, then stitch both back into calendar order
+            # -- so the quarter grand total is untouched (no regression).
+            wow_daily: dict[date, tuple[int, int, dict, dict]] = {}
+            if market == "US" and q.label == "Q2FY27":
+                for wk in WOW_WEEK_STARTS:
+                    for d, sess, ordr, dev_sess, dev_ord in _wow_week_series(wk, WOW_WEEKS[wk]):
+                        wow_daily[d] = (sess, ordr, dev_sess, dev_ord)
+                override_dates = set(wow_daily.keys())
+                other_dates = [d for d in dates if d not in override_dates]
+                override_sessions_m = sum(v[0] for v in wow_daily.values()) / 1_000_000
+                override_orders_m = sum(v[1] for v in wow_daily.values()) / 1_000_000
+                sess_other, ord_other = _us_conv_rates_for_quarter(
+                    other_dates, sessions_total - override_sessions_m, orders_total - override_orders_m)
+                other_map = {d: (int(sess_other[j]), int(ord_other[j])) for j, d in enumerate(other_dates)}
+                sessions_daily = np.array([other_map[d][0] if d in other_map else wow_daily[d][0] for d in dates])
+                orders_daily = np.array([other_map[d][1] if d in other_map else wow_daily[d][1] for d in dates])
+            else:
+                sessions_daily, orders_daily = _us_conv_rates_for_quarter(dates, sessions_total, orders_total)
+
             aov_noise = np.random.normal(1.0, 0.05, size=len(dates))
             gmv_daily = allocate_float(gmv_total * 1_000_000, np.maximum(orders_daily * aov_noise, 1e-6), decimals=2)
             units_mult = np.random.normal(1.5, 0.15, size=len(dates))
+            pv_daily, atc_daily = _pv_atc_daily(dates, sessions_daily)
 
             for i, d in enumerate(dates):
                 s, o, g = int(sessions_daily[i]), int(orders_daily[i]), float(gmv_daily[i])
-                pv = int(round(s * np.random.normal(0.82, 0.02)))
-                atc = int(round(pv * np.random.normal(0.34, 0.02)))
+                pv, atc = int(pv_daily[i]), int(atc_daily[i])
                 cos = int(round(atc * np.random.normal(0.55, 0.03)))
                 cos = max(cos, o)
-                for dev, dw in DEVICE_SHARE.items():
-                    rows.append({
-                        "date": d, "market": market, "vertical_code": "US_CONV", "sub_vertical_code": None,
-                        "device": dev, "sessions": max(int(round(s * dw)), 0),
-                        "sessions_definition_version": versions[i],
-                        "product_view_sessions": max(int(round(pv * dw)), 0),
-                        "add_to_cart_sessions": max(int(round(atc * dw)), 0),
-                        "checkout_started_sessions": max(int(round(cos * dw)), 0),
-                        "orders": max(int(round(o * dw)), 0), "units": max(int(round(o * dw * units_mult[i])), 0),
-                        "gmv_usd": round(g * dw, 2),
-                    })
+                if d in wow_daily:
+                    _, _, dev_sess, dev_ord = wow_daily[d]
+                    for dev, dsess in dev_sess.items():
+                        frac = dsess / s if s > 0 else 0.0
+                        dord = dev_ord.get(dev, 0)
+                        rows.append({
+                            "date": d, "market": market, "vertical_code": "US_CONV", "sub_vertical_code": None,
+                            "device": dev, "sessions": dsess,
+                            "sessions_definition_version": versions[i],
+                            "product_view_sessions": max(int(round(pv * frac)), 0),
+                            "add_to_cart_sessions": max(int(round(atc * frac)), 0),
+                            "checkout_started_sessions": max(int(round(cos * frac)), dord),
+                            "orders": dord, "units": max(int(round(dord * units_mult[i])), 0),
+                            "gmv_usd": round(g * frac, 2),
+                        })
+                else:
+                    for dev, dw in DEVICE_SHARE.items():
+                        rows.append({
+                            "date": d, "market": market, "vertical_code": "US_CONV", "sub_vertical_code": None,
+                            "device": dev, "sessions": max(int(round(s * dw)), 0),
+                            "sessions_definition_version": versions[i],
+                            "product_view_sessions": max(int(round(pv * dw)), 0),
+                            "add_to_cart_sessions": max(int(round(atc * dw)), 0),
+                            "checkout_started_sessions": max(int(round(cos * dw)), 0),
+                            "orders": max(int(round(o * dw)), 0), "units": max(int(round(o * dw * units_mult[i])), 0),
+                            "gmv_usd": round(g * dw, 2),
+                        })
 
         # ---- Marketplace: deep, per-sub-vertical GMV targets (invented AOV backs out orders) ----
         for sv in MARKETPLACE_SUBVERTS:
@@ -1158,6 +1503,14 @@ EXPERIMENT_READOUTS_NAMED = {
         {"as_of_date": date(2026, 6, 15), "metric_name": "benefit_awareness_pct", "lift_pct": 9.0,
          "is_significant": True, "notes": "+9pp 30-day benefit awareness (percentage points). Renewal-rate readout not yet valid -- needs ~12mo/cohort, revisit ~Q2FY28."},
     ],
+    "exp_2601": [
+        {"as_of_date": date(2026, 7, 20), "metric_name": "conversion_rate", "lift_pct": 1.6,
+         "is_significant": True, "notes": "Interim readout, still running (started 2026-06-08). SIGNAL [offsetting-experiments]: equal-weighted with exp_2618's -1.5% nets to a ~+0.05% topline wash."},
+    ],
+    "exp_2618": [
+        {"as_of_date": date(2026, 7, 20), "metric_name": "conversion_rate", "lift_pct": -1.5,
+         "is_significant": True, "notes": "Interim readout, still running (started 2026-06-08). Well-meaning autoplay feature backfired -- see SIGNAL [offsetting-experiments]."},
+    ],
 }
 # SIGNAL [assigned-vs-exposed]: ~16% of Checkout Simplify's assigned sessions were never exposed.
 EXPOSURE_RATE_OVERRIDE = {"exp_2214": 0.84}
@@ -1302,6 +1655,14 @@ def _order_context(channel: str, market: str, qi: int, pick_seller_fn):
         aov = MARKETPLACE_AOV[sub_vc][qi] if sub_vc in MARKETPLACE_AOV else 55.0
         gmv = round(float(np.random.lognormal(np.log(max(aov, 5)), 0.5)), 2)
         return seller_id, sub_vc, "MARKETPLACE", "ship_to_home", gmv
+    if random.random() < 0.03:
+        # small B2B presence -- light vertical, "no 3P sellers" (canon), so B2B only ever
+        # shows up as a 1P order. Without this, fact_orders never emits vertical_code='B2B'
+        # at all, which would make SIGNAL [listing-accuracy-blind-spot]'s B2B cut (22% of
+        # B2B post-purchase verbatims) unreachable via the order_id join fact_voc_responses
+        # relies on (it has no sub_vertical_code column of its own).
+        gmv = round(float(np.random.uniform(500, 2500)), 2)
+        return None, None, "B2B", "ship_to_home", gmv
     aov = US_CONV[market]["gmv_m"][qi] * 1_000_000 / max(US_CONV[market]["orders_m"][qi] * 1_000_000, 1)
     gmv = round(float(np.random.lognormal(np.log(max(aov, 5)), 0.4)), 2)
     return None, None, "US_CONV", _pick_fulfillment_type(qi), gmv
@@ -1540,9 +1901,15 @@ def gen_fact_care_contacts(dim_member: pd.DataFrame, dim_associate: pd.DataFrame
 # is what makes the Collectibles return-rate signal (9.8%->11.2%->5.4%)
 # plausible at the listing level.
 # --------------------------------------------------------------------------
-def gen_fact_marketplace_listings(dim_seller: pd.DataFrame, n_total: int = 35_000) -> pd.DataFrame:
+def gen_fact_marketplace_listings(dim_seller: pd.DataFrame, n_total: int = 31_000,
+                                    exclude_seller_ids: set[str] | None = None) -> pd.DataFrame:
     tier_weight = {"top": 25.0, "large": 12.0, "mid": 4.0, "small": 1.0}
     ds = dim_seller.copy()
+    if exclude_seller_ids:
+        # the new-seller cohort gets its OWN precisely-authored listings (exact
+        # funnel-stage counts, gen_new_seller_cohort) -- excluded here so the
+        # general/uncontrolled sampler below doesn't dilute those exact counts.
+        ds = ds[~ds["seller_id"].isin(exclude_seller_ids)]
     ds["_w"] = ds["_gmv_tier"].map(tier_weight)
     sellers = ds.sample(n=n_total, replace=True, weights=ds["_w"], random_state=SEED).reset_index(drop=True)
 
@@ -1584,6 +1951,13 @@ THEME_TAGS_OTHER = ["shipping_speed", "product_quality", "pricing", "customer_se
                     "checkout_experience", "app_bugs", "return_process", "membership_value", None]
 THEME_WEIGHTS_OTHER = [0.12, 0.10, 0.08, 0.10, 0.08, 0.06, 0.08, 0.08, 0.30]
 
+# SIGNAL [listing-accuracy-blind-spot]: a steady-state (not rising) theme share of each
+# vertical's post-purchase verbatims -- keyed off the LINKED ORDER's sub_vertical_code
+# (Marketplace) or vertical_code (B2B), since fact_voc_responses itself carries no
+# sub_vertical_code column (CROSS-VERTICAL BACKLOG SNAPSHOT in CANON.md).
+LISTING_ACCURACY_GAP_RATE = {"STYLE": 0.14, "RESOLD": 0.12, "COLLECTIBLES": 0.09}
+LISTING_ACCURACY_GAP_RATE_B2B = 0.22
+
 
 def _refund_delay_theme_share(d: date) -> float:
     baseline = 0.035
@@ -1620,10 +1994,12 @@ def gen_fact_voc_responses(dim_member: pd.DataFrame, fact_orders: pd.DataFrame,
     for i, d in enumerate(date_choices):
         survey_type = random.choices(["post_purchase", "post_care_contact", "nps"], weights=[0.45, 0.35, 0.20])[0]
         order_id = member_id = vertical_code = None
+        sub_vertical_code = None
         market = random.choice(MARKETS)
         if survey_type == "post_purchase" and len(order_sample):
             o = order_sample.iloc[random.randrange(len(order_sample))]
             order_id, member_id, vertical_code, market = o["order_id"], o["member_id"], o["vertical_code"], o["market"]
+            sub_vertical_code = o["sub_vertical_code"]
         elif survey_type == "post_care_contact" and len(care_sample):
             c = care_sample.iloc[random.randrange(len(care_sample))]
             member_id, market = c["member_id"], c["market"]
@@ -1634,10 +2010,17 @@ def gen_fact_voc_responses(dim_member: pd.DataFrame, fact_orders: pd.DataFrame,
 
         score_type = {"nps": "nps_0_10", "post_care_contact": "csat_1_5", "post_purchase": "ces_1_7"}[survey_type]
 
+        if survey_type == "post_purchase" and vertical_code == "MARKETPLACE":
+            accuracy_gap_p = LISTING_ACCURACY_GAP_RATE.get(sub_vertical_code, 0.0)
+        elif survey_type == "post_purchase" and vertical_code == "B2B":
+            accuracy_gap_p = LISTING_ACCURACY_GAP_RATE_B2B
+        else:
+            accuracy_gap_p = 0.0
         refund_p = _refund_delay_theme_share(d)
-        w_other = np.array(THEME_WEIGHTS_OTHER) / sum(THEME_WEIGHTS_OTHER) * (1 - refund_p)
-        tag_pool = ["refund_delay"] + THEME_TAGS_OTHER
-        tag_w = [refund_p] + w_other.tolist()
+        remaining = max(0.0, 1 - refund_p - accuracy_gap_p)
+        w_other = np.array(THEME_WEIGHTS_OTHER) / sum(THEME_WEIGHTS_OTHER) * remaining
+        tag_pool = ["refund_delay", "listing-accuracy-gap"] + THEME_TAGS_OTHER
+        tag_w = [refund_p, accuracy_gap_p] + w_other.tolist()
         theme_tag = random.choices(tag_pool, weights=tag_w)[0]
 
         if theme_tag == "refund_delay":
@@ -1646,6 +2029,14 @@ def gen_fact_voc_responses(dim_member: pd.DataFrame, fact_orders: pd.DataFrame,
                 "Still waiting on my refund -- it's been over a week since the item scanned as received.",
                 "Return shows received but the refund hasn't posted yet, getting frustrating.",
                 "Refund is taking way longer than the app originally estimated.",
+            ])
+        elif theme_tag == "listing-accuracy-gap":
+            sentiment = random.choices(["negative", "neutral"], weights=[0.75, 0.25])[0]
+            verbatim = random.choice([
+                "Item arrived way smaller than the photos made it look -- listing didn't mention actual scale.",
+                "Description said 'excellent condition' but there was a scratch not shown in any photo.",
+                "The spec sheet didn't match what showed up -- wrong pallet configuration for this SKU.",
+                "Photos don't represent the true condition/size of the item at all.",
             ])
         elif theme_tag is None:
             sentiment = random.choices(["positive", "neutral", "negative"], weights=[0.55, 0.30, 0.15])[0]
@@ -1854,6 +2245,202 @@ def gen_mart_marketplace_seller_performance(dim_seller: pd.DataFrame, fact_marke
                "avg_days_to_ship", "authenticity_flag_count", "avg_buyer_rating"]]
 
 
+NEW_SELLER_COHORT_ID_MAX = 500740  # generic cohort IDs are sel_500244..sel_500740 (497 = 200+150+150-3 pinned)
+
+
+def _is_new_seller_cohort_id(seller_id: str) -> bool:
+    if seller_id in NEW_SELLER_PINNED_IDS:
+        return True
+    try:
+        num = int(seller_id.split("_")[1])
+    except (IndexError, ValueError):
+        return False
+    return 500244 <= num <= NEW_SELLER_COHORT_ID_MAX
+
+
+# --------------------------------------------------------------------------
+# fact_seller_voc_responses -- NEW TABLE (24th). Representative panel, ~4,000
+# rows. Seller-side VOC ("Seller Pulse", launched 2026-04-20) -- a fully
+# separate stream from buyer-side fact_voc_responses/Medallia: own survey
+# types, own score types, own theme vocabulary. Quarterly NPS draws from the
+# WHOLE active seller panel; the onboarding-pulse types (L1/L5/L10) are only
+# meaningful for sellers actually moving through the onboarding funnel, so
+# they're scoped to the new-seller cohort (SIGNAL [seller-auth-friction]).
+# --------------------------------------------------------------------------
+SELLER_PULSE_LAUNCH = date(2026, 4, 20)
+AUTH_FRICTION_RATE = {"collectibles": 0.38, "style": 0.05, "resold": 0.06}
+SELLER_VOC_THEMES_OTHER = ["pricing-confusion", "payout-timing", "support-responsiveness",
+                           "category-fit", "shipping-labels", None]
+SELLER_VOC_WEIGHTS_OTHER = [0.10, 0.08, 0.08, 0.06, 0.06, 0.42]
+
+
+def _seller_voc_row(i: int, seller_id: str, cat: str, survey_type: str) -> dict:
+    onboarding_pulse = survey_type in ("onboarding_pulse_l1", "onboarding_pulse_l5", "onboarding_pulse_l10")
+    auth_p = setup_p = perf_p = 0.0
+    if onboarding_pulse:
+        if survey_type in ("onboarding_pulse_l1", "onboarding_pulse_l5"):
+            auth_p = AUTH_FRICTION_RATE.get(cat, 0.0)
+            setup_p = 0.18  # category-agnostic, hits hardest listing 1->5
+        if survey_type in ("onboarding_pulse_l5", "onboarding_pulse_l10"):
+            perf_p = 0.15  # category-agnostic, concentrated listing 5->10
+
+    remaining = max(0.0, 1 - auth_p - setup_p - perf_p)
+    w_other = np.array(SELLER_VOC_WEIGHTS_OTHER) / sum(SELLER_VOC_WEIGHTS_OTHER) * remaining
+    pool = ["authentication-friction", "listing-setup-complexity", "no-performance-visibility"] + SELLER_VOC_THEMES_OTHER
+    weights = [auth_p, setup_p, perf_p] + w_other.tolist()
+    theme_tag = random.choices(pool, weights=weights)[0]
+
+    if theme_tag == "authentication-friction":
+        sentiment = "negative"
+        verbatim = random.choice([
+            "GradeSure turnaround is the bottleneck -- I can't list faster than they can verify.",
+            "Every new listing sits pending authentication for days before it's even visible to buyers.",
+            "Wish there was a way to pre-verify a batch instead of waiting per-listing.",
+        ])
+    elif theme_tag == "listing-setup-complexity":
+        sentiment = random.choices(["negative", "neutral"], weights=[0.65, 0.35])[0]
+        verbatim = random.choice([
+            "No way to bulk-upload -- I'm re-typing nearly the same listing over and over.",
+            "Wish there was a duplicate-listing button, setup for each new item takes forever.",
+            "The listing form has too many required fields for a simple item.",
+        ])
+    elif theme_tag == "no-performance-visibility":
+        sentiment = random.choices(["negative", "neutral"], weights=[0.60, 0.40])[0]
+        verbatim = random.choice([
+            "I can see my listing is live but no idea why it isn't converting.",
+            "No visibility into how my listing compares to similar ones that ARE selling.",
+            "Wish I could see views vs. buys per listing so I know what to fix next.",
+        ])
+    elif theme_tag is None:
+        sentiment = random.choices(["positive", "neutral", "negative"], weights=[0.50, 0.30, 0.20])[0]
+        verbatim = "General seller experience feedback, nothing specific called out."
+    else:
+        sentiment = random.choices(["positive", "neutral", "negative"], weights=[0.35, 0.30, 0.35])[0]
+        verbatim = f"Feedback related to {theme_tag.replace('-', ' ')}."
+
+    score_type = "seller_nps_0_10" if survey_type == "quarterly_seller_nps" else "ces_1_7"
+    if score_type == "seller_nps_0_10":
+        score = {"positive": random.choice([9, 10]), "neutral": random.choice([7, 8]),
+                  "negative": random.choice([0, 2, 4, 5, 6])}[sentiment]
+    else:  # ces_1_7 (customer effort score, lower is better -- negative sentiment = high effort)
+        score = {"positive": random.choice([1, 2]), "neutral": random.choice([3, 4]),
+                  "negative": random.choice([5, 6, 7])}[sentiment]
+
+    span = max((TODAY - SELLER_PULSE_LAUNCH).days, 0)
+    responded_at = datetime.combine(SELLER_PULSE_LAUNCH + timedelta(days=random.randint(0, span)),
+                                     datetime.min.time()) + timedelta(hours=random.randint(8, 20))
+    return {
+        "response_id": rid("svoc", i, width=7), "seller_id": seller_id, "survey_type": survey_type,
+        "responded_at": responded_at, "score": float(score), "score_type": score_type,
+        "verbatim_text": verbatim, "theme_tag": theme_tag, "sentiment": sentiment,
+    }
+
+
+def gen_fact_seller_voc_responses(dim_seller: pd.DataFrame, n_total: int = 4_000) -> pd.DataFrame:
+    active = dim_seller[dim_seller["status"] == "active"].copy()
+    tier_weight = {"top": 3.0, "large": 2.0, "mid": 1.3, "small": 1.0}
+
+    n_onboarding = int(round(n_total * 0.55))
+    n_quarterly = n_total - n_onboarding
+
+    cohort = active[active["seller_id"].apply(_is_new_seller_cohort_id)]
+    rows = []
+    seq = 0
+    pulse_types = ["onboarding_pulse_l1", "onboarding_pulse_l5", "onboarding_pulse_l10"]
+    pulse_w = [0.30, 0.40, 0.30]
+    cohort_sample = cohort.sample(n=n_onboarding, replace=True, random_state=SEED).reset_index(drop=True)
+    for s in cohort_sample.itertuples(index=False):
+        seq += 1
+        survey_type = random.choices(pulse_types, weights=pulse_w)[0]
+        rows.append(_seller_voc_row(seq, s.seller_id, s.category_focus, survey_type))
+
+    w = active["_gmv_tier"].map(tier_weight).fillna(1.0).to_numpy(dtype=float)
+    quarterly_sample = active.sample(n=n_quarterly, replace=True, weights=w, random_state=SEED).reset_index(drop=True)
+    for s in quarterly_sample.itertuples(index=False):
+        seq += 1
+        rows.append(_seller_voc_row(seq, s.seller_id, s.category_focus, "quarterly_seller_nps"))
+
+    return pd.DataFrame(rows)
+
+
+# --------------------------------------------------------------------------
+# Sell-through top-up (Collectibles new-vs-tenured contrast, 1.8 vs 3.6 orders
+# per active listing per quarter -- "illustrative" per CANON.md, seller-side
+# conversion is a DIFFERENT metric than buyer-side conversion). Deliberately
+# engineered ON TOP of the emergent general/guest 3P order pool -- never
+# subtracted -- so this never disturbs Marketplace GMV (built independently
+# off fact_traffic_daily/marketplace_gmv_summary, convention 5).
+# --------------------------------------------------------------------------
+def _seller_3p_order_row(seq: int, order_date_: date, seller_id: str, sub_vc: str, gmv: float) -> dict:
+    units = max(1, int(round(np.random.lognormal(np.log(1.4), 0.4))))
+    is_returned, return_date_, reason, refund_amt, refund_issued = _maybe_return(order_date_, gmv, 0.054)
+    return {
+        "order_id": rid("ord", seq, width=8), "order_date": order_date_, "member_id": None,
+        "market": "US", "vertical_code": "MARKETPLACE", "sub_vertical_code": sub_vc,
+        "channel": "3P", "seller_id": seller_id, "fulfillment_type": "ship_to_home",
+        "gmv_usd": gmv, "units": units,
+        "device": random.choices(["web", "app", "store_kiosk"], weights=[0.55, 0.42, 0.03])[0],
+        "is_returned": is_returned, "return_date": return_date_, "return_reason_code": reason,
+        "refund_usd": refund_amt, "refund_issued_date": refund_issued,
+    }
+
+
+def gen_sell_through_topup_orders(dim_seller: pd.DataFrame, listings: pd.DataFrame,
+                                    fact_orders_general: pd.DataFrame) -> pd.DataFrame:
+    active_by_seller = listings[listings["status"] == "active"].groupby("seller_id").size()
+    orders_3p = fact_orders_general.loc[fact_orders_general["channel"] == "3P", ["seller_id", "order_date"]]
+    seq = [9_000_000]
+    rows: list[dict] = []
+    stats: list[str] = []
+
+    def topup(sellers: pd.DataFrame, windows: dict, target_rate: float, label: str) -> None:
+        if len(sellers) == 0:
+            return
+        active_total = int(active_by_seller.reindex(sellers["seller_id"]).fillna(0).sum())
+        target_total = int(round(target_rate * max(active_total, 1)))
+        win_df = pd.DataFrame({"seller_id": list(windows.keys()),
+                                "lo": [w[0] for w in windows.values()], "hi": [w[1] for w in windows.values()]})
+        merged = orders_3p[orders_3p["seller_id"].isin(windows.keys())].merge(win_df, on="seller_id", how="inner")
+        existing = 0
+        if len(merged):
+            existing = int(sum(1 for lo, od, hi in zip(merged["lo"], merged["order_date"], merged["hi"]) if lo <= od <= hi))
+        delta = max(target_total - existing, 0)
+        added = 0
+        if delta > 0 and active_total > 0:
+            weights_map = active_by_seller.reindex(sellers["seller_id"]).fillna(0)
+            w = np.maximum(weights_map.to_numpy(dtype=float) * np.random.normal(1.0, 0.1, size=len(sellers)), 0.01)
+            counts = allocate_int(delta, w)
+            for sid, n in zip(sellers["seller_id"], counts):
+                lo, hi = windows[sid]
+                span = max((hi - lo).days, 1)
+                for _ in range(int(n)):
+                    seq[0] += 1
+                    od = lo + timedelta(days=random.randint(0, span))
+                    gmv = round(float(np.random.lognormal(np.log(85), 0.5)), 2)
+                    rows.append(_seller_3p_order_row(seq[0], od, sid, "COLLECTIBLES", gmv))
+                    added += 1
+        stats.append(f"{label}: active_listings={active_total} target_ratio={target_rate} "
+                      f"target_orders~{target_total} existing_emergent={existing} topped_up={added}")
+
+    cohort_ids = {sid for sid in dim_seller["seller_id"] if _is_new_seller_cohort_id(sid)}
+    new_sellers = dim_seller[dim_seller["seller_id"].isin(cohort_ids) & (dim_seller["category_focus"] == "collectibles")]
+    new_windows = {r.seller_id: (r.onboarded_date, min(r.onboarded_date + timedelta(days=90), TODAY))
+                   for r in new_sellers.itertuples(index=False)}
+    topup(new_sellers, new_windows, 1.8, "new (first 90d)")
+
+    tenure_cutoff = TODAY - timedelta(days=365)
+    tenured = dim_seller[(dim_seller["category_focus"] == "collectibles") & (dim_seller["status"] == "active")
+                          & (~dim_seller["seller_id"].isin(cohort_ids))
+                          & (dim_seller["onboarded_date"] <= tenure_cutoff)]
+    t_lo, t_hi = TODAY - timedelta(days=90), TODAY
+    tenured_windows = {sid: (t_lo, t_hi) for sid in tenured["seller_id"]}
+    topup(tenured, tenured_windows, 3.6, "tenured (12mo+)")
+
+    for line in stats:
+        print(f"  sell-through topup -- {line}")
+    return pd.DataFrame(rows)
+
+
 # ----------------------------- main -----------------------------------
 def _write(df: pd.DataFrame, name: str) -> None:
     df.to_parquet(OUT / f"{name}.parquet", index=False)
@@ -1877,8 +2464,9 @@ def main() -> None:
     print("dim_fulfillment_node ...")
     _write(gen_dim_fulfillment_node(), "dim_fulfillment_node")
 
-    print("dim_seller ...")
-    dim_seller = gen_dim_seller()
+    print("dim_seller (+ new-seller onboarding funnel cohort) ...")
+    dim_seller, cohort_listings = gen_dim_seller()
+    cohort_ids = {sid for sid in dim_seller["seller_id"] if _is_new_seller_cohort_id(sid)}
     _write(dim_seller.drop(columns=["_gmv_tier"]), "dim_seller")
 
     print("dim_experiment ...")
@@ -1910,18 +2498,27 @@ def main() -> None:
 
     print("fact_orders (this one takes a bit) ...")
     fact_orders = gen_fact_orders(dim_member, dim_seller)
+
+    print("fact_marketplace_listings (general + new-seller cohort) ...")
+    fact_marketplace_listings_general = gen_fact_marketplace_listings(dim_seller, exclude_seller_ids=cohort_ids)
+    fact_marketplace_listings = pd.concat([fact_marketplace_listings_general, cohort_listings], ignore_index=True)
+
+    print("sell-through top-up orders (Collectibles new-vs-tenured, 1.8 vs 3.6) ...")
+    topup_orders = gen_sell_through_topup_orders(dim_seller, fact_marketplace_listings, fact_orders)
+    fact_orders = pd.concat([fact_orders, topup_orders], ignore_index=True)
+
     _write(fact_orders, "fact_orders")
+    _write(fact_marketplace_listings, "fact_marketplace_listings")
 
     print("fact_care_contacts ...")
     fact_care_contacts = gen_fact_care_contacts(dim_member, dim_associate, fact_orders)
     _write(fact_care_contacts, "fact_care_contacts")
 
-    print("fact_marketplace_listings ...")
-    fact_marketplace_listings = gen_fact_marketplace_listings(dim_seller)
-    _write(fact_marketplace_listings, "fact_marketplace_listings")
-
     print("fact_voc_responses ...")
     _write(gen_fact_voc_responses(dim_member, fact_orders, fact_care_contacts), "fact_voc_responses")
+
+    print("fact_seller_voc_responses (NEW TABLE) ...")
+    _write(gen_fact_seller_voc_responses(dim_seller), "fact_seller_voc_responses")
 
     print("mart: traffic_conversion_summary ...")
     _write(gen_mart_traffic_conversion_summary(fact_traffic_daily), "traffic_conversion_summary")
