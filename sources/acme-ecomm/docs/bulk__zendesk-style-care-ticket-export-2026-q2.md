@@ -235,6 +235,6 @@ To satisfy the system requirement for heavy, realistic operational noise, below 
    Following the May 15 readout showing a +3pp deflection lift accompanied by a -0.15 CSAT drop among late-escalated users, aisha.rahman executed a partial ship on May 20 restricted exclusively to non-billing categories. Tickets such as `case_8888500` illustrate successful zero-human-touch deflection under this constrained rule.
 3. **Member-Care Archival Flags (`mem_1000390` & `mem_1000512`)**:  
    * **Jamal (`mem_1000390`)**: Currently carries 2 open P1 tickets (`case_8892011`, `case_8891984`) and an active churn-risk flag following missed delivery windows and an NPS detractor score. Handled via senior care queue (`assoc_100310`).
-   * **Grethe (`mem_1000512`)**: Formally churned following two late ship-to-home deliveries in Q2. Exit survey metadata (`case_8890422`) confirms total lack of awareness regarding the Reelstream streaming perk—reinforcing derek.holloway's finding that low awareness (only 34% of members know of the benefit) remains the primary barrier to maximizing CLTV, even though members using the benefit exhibit a 93% annual renewal rate.
+   * **Grethe (`mem_1000512`)**: Formally churned following two late ship-to-home deliveries in Q2. Exit survey metadata (`case_8890422`) confirms total lack of awareness regarding the Reelstream streaming perk — one data point against the broader 34%-awareness / 93%-renewal-among-users figures derek.holloway's team tracks.
 
 ---

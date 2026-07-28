@@ -1,5 +1,5 @@
 ---
-title: "Slack thread: a PM checks 'anything running in US_CONV' and reads the blended net experiment effect as ~nothing"
+title: "Slack thread: a PM checks 'anything running in US_CONV' and treats two already-known in-flight experiments as nothing new to flag"
 source_url: "internal://acme-ecomm/slack/q2fy27__us-conv-experiment-check-blended-net-wash"
 license: "synthetic-demo"
 attribution: "Synthetic content, Acme internal demo. Acme is a fictitious company."
@@ -30,16 +30,16 @@ Yeah, exactly. Grab `dim_experiment` joined with `fact_experiment_readouts` for 
 - `exp_2601` (Search Re-ranking): sitting around `+1.6%` lift on the exposed arm.
 - `exp_2618` (Media Carousel Autoplay): tracking around `-1.5%` drag on the exposed arm.
 
-If I just blend those two together roughly equal-weighted, the net effect is basically ~+0.05%. Total wash. 
+Neither one just spun up out of nowhere, though — both have been running since June 8th, so I don't think either one explains a *fresh* swing this week specifically. I'll footnote both as known/live in the deck and leave it there.
 
 **[10:26 AM] maya.lindqvist**:
-lol classic. They just eat each other for breakfast. 
+lol classic, those two have been chugging along forever, feels like old news at this point.
 
 **[10:27 AM] owen.faust**:
-That tracks. Perfectly balanced, as all things should be :thanos:
+Yeah, figures.
 
 **[10:27 AM] tyler.vance**:
-Awesome, perfect. So essentially nothing moving the needle net-net from an experimentation standpoint. Good to know. I'll drop a note in the MBR prep doc that in-flight experiments are roughly a net-zero wash and won't dwell on them. Thanks!
+Awesome, perfect — good to know nothing there is new. I'll drop a note in the MBR prep doc that experimentation doesn't look like it's obviously moving the headline this week and won't dwell on it further. Thanks!
 
 **[10:28 AM] maya.lindqvist**:
 Yeah, nothing to see there. By the way, is anyone else having issues with the Compass dashboard today? My PDT view is still showing the old Q4FY26 Marketplace GMV numbers ($952.4M instead of the restated $975.0M) and it's driving me nuts when I try to cross-reference category share.

@@ -104,7 +104,7 @@ Thanks Giulia. Let me check with fulfillment. We knew peak volume was going to s
 ### [2026-01-06]
 
 **hannah.brennan** [09:15 AM]
-@giulia.romano Following up on your Medallia alert from last month—our quantitative 4-week-rolling `avg_refund_cycle_days` metric just crossed the 5.0-day SLA alert threshold this week (hitting 5.03 days). It's taking us about three weeks for the VOC leading indicator to show up in the hard operational numbers, but the lag is real.
+@giulia.romano Following up on your Medallia alert from last month—our quantitative 4-week-rolling `avg_refund_cycle_days` metric just crossed the 5.0-day SLA alert threshold this week (hitting 5.03 days).
 
 **gabriel.stroud** [09:22 AM]
 And I just got the root-cause readout from the Ontario, CA returns center (`returns_center`). They're running about 22% understaffed because an HR hiring-freeze exception we requested for seasonal temp staff never got pushed through properly. Total bureaucratic foul-up. We're scrambling to fix it now.
@@ -147,7 +147,7 @@ Checked the query this morning, Owen. It looks solid. Remember that roughly 16% 
 **ANNOUNCEMENT:** Just pushed the `sessions_definition_version` 1→2 cutover in `fact_traffic_daily` and `traffic_conversion_summary`. Bot and crawler filtering plus multi-tab de-duplication are now live. Conversion rates across the board are going to jump by roughly 0.5% to 1.0% mechanically today. Note it in your reports!
 
 **tara.oduya** [08:45 AM]
-Thanks Wei. And on the Speed side, we just made the call to kill the "Wider Promise Window" experiment (`exp_1187`). Once we deconfounded it from the FON2 and JOL1 DC sortation automation rollout that happened at the same time, the isolated promise-window lift (+1.5pp OTP) was completely wiped out by a -0.6% conversion drag from shoppers seeing less attractive delivery estimates. Net-negative, so it's dead.
+Thanks Wei. And on the Speed side, we just made the call to kill the "Wider Promise Window" experiment (`exp_1187`). It ran at the same FON2/JOL1 nodes and window as the DC sortation automation rollout, and it also carried a -0.6% conversion drag from shoppers seeing less attractive delivery estimates. Net call is negative once you weigh that against the confound, so it's dead.
 
 ---
 
@@ -164,7 +164,7 @@ Awesome, Maya. That makes interpreting the Checkout Simplify (`exp_2214`) readou
 ### [2026-04-07]
 
 **owen.faust** [09:40 AM]
-We made the call to ship Checkout Simplify (`exp_2214`) to 100% of US traffic yesterday. The full-window readout showed a +2.1% lift (though we know it's confounded by the Nav Refresh rollout), and even the clean pre-confound Feb 16-28 slice was showing +0.8%. Management was comfortable moving forward.
+We made the call to ship Checkout Simplify (`exp_2214`) to 100% of US traffic yesterday. The full-window readout showed a +2.1% lift, though we know it's confounded by the Nav Refresh rollout landing mid-window. Management was comfortable moving forward on the headline number regardless.
 
 ---
 
@@ -181,7 +181,7 @@ Thanks Victor! Super excited to be here. I've already started digging into the n
 ### [2026-04-11]
 
 **victor.okonkwo** [04:15 PM]
-Closing the loop on that old Confluence draft from March ("Style Conversion Recovery Plan" which proposed moving T&S headcount off Collectibles onto Style): we discussed it in leadership and decided against any headcount reallocations. Confluence synthesis confirms the Style deceleration (+6.1% YoY in Q1) isn't a demand loss or a Style-specific quality crisis—it's simply a healthy internal wallet-share shift toward Resold (+90.9% YoY). No changes needed.
+Closing the loop on that old Confluence draft from March ("Style Conversion Recovery Plan" which proposed moving T&S headcount off Collectibles onto Style): we discussed it in leadership and decided against any headcount reallocations for now. The Confluence review put the Style deceleration (+6.1% YoY in Q1) next to Resold's acceleration (+90.9% YoY) rather than looking at Style in isolation, which is enough to make us want a fuller read before reallocating anyone off Collectibles.
 
 ---
 
@@ -212,7 +212,7 @@ Benefit Onboarding Carousel experiment (`exp_2556`) wrapped up yesterday with a 
 ### [2026-07-06]
 
 **derek.holloway** [10:05 AM]
-Following up on the benefit onboarding carousel win, my recommendation for our next concrete CLTV lever is launching a dedicated streaming-bundle awareness campaign targeting our existing single-benefit members. Since streaming users renew at 93% but overall awareness is only sitting at 34%, that's low-hanging fruit.
+Following up on the benefit onboarding carousel win, I'm floating a dedicated streaming-bundle awareness campaign targeting our existing single-benefit members as one candidate for our next CLTV push. Streaming users renew at 93% on their own, and overall awareness is only sitting at 34% — worth putting next to our other options before we commit to it as the lever.
 
 ---
 

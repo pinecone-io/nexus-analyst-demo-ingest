@@ -23,7 +23,7 @@ Following this week’s MBR deck presentations and continuing our deep-dive revi
 
 To ensure these percentages reflect completed lifecycles rather than short-term noise, we have scoped this analysis precisely to the ~500-seller new-seller stratum of the `dim_seller` panel where `application_date` is fully populated, focusing exclusively on cohorts onboarded between **Q3FY26 and Q4FY26**. This guarantees every seller in the analysis window has enjoyed at least ~5.6 months of runway to "today" (July 20, 2026), giving them ample time to clear or churn out of the core milestones. Sellers onboarded in Q1FY27 and Q2FY27 remain active in the panel and appear in operational feeds, but they are excluded from these specific percentage conversion tables as right-censored/still-maturing cohorts.
 
-As we observed when reviewing the seller-side VOC data (`fact_seller_voc_responses`), authentication overhead heavily skews the Collectibles funnel, while Resold and Style progress much more fluidly through the early listing thresholds. Below is the full dataset, methodology, and the secondary listing-quality signals we must monitor in tandem.
+Below is the full stage-by-stage dataset, methodology, and the seller-side VOC (`fact_seller_voc_responses`) theme breakdown alongside it, plus the secondary listing-quality signals worth monitoring in tandem.
 
 ---
 
@@ -43,13 +43,13 @@ Unlike traditional calendar-tenure analyses, this funnel is defined strictly by 
 ### Key Observations on the Funnel Shape:
 1. **The Collectibles Divergence:** While Style and Resold mirror each other closely—dropping off gradually between listing 1 and listing 5, then stabilizing somewhat through listing 10—Collectibles suffers a catastrophic drop-off immediately following onboarding. More than half of all new Collectibles sellers ($54\%$) fail to even reach their 5th listing, and only **$24\%$** ever cross the 10-listing threshold.
 2. **The Verification-Speed Split:** Drilling deeper into the Collectibles cohort reveals why some survive while others stall. Of the 200 Collectibles sellers in the cohort, exactly 120 ($60\%$) managed to get their debut listing authenticated by GradeSure within 7 days. That "fast verification" subgroup reaches listing 10 at **$30\%$** ($36$ sellers). Conversely, the remaining 80 sellers ($40\%$) who experienced slower initial verifications reach listing 10 at only **$15\%$** ($12$ sellers). Combined ($36 + 12 = 48$), this reconciles perfectly to the overall $24\%$ cohort figure. 
-3. **The Two-Sided Tension:** As `lucia.ferreira` and our Trust & Safety teams have noted, the "Acme Verified" program (GradeSure partnership) is a massive win for buyer trust—driving Collectibles return rates down from an alarming $11.2\%$ peak in Q3FY26 to a healthy $5.4\%$ in Q2FY27 QTD. However, it imposes severe friction on new sellers who have not yet optimized their submission workflows, directly suppressing early-stage retention in that category.
+3. **The Two-Sided Tension:** As `lucia.ferreira` and our Trust & Safety teams have noted, the "Acme Verified" program (GradeSure partnership) is a massive win for buyer trust—driving Collectibles return rates down from an alarming $11.2\%$ peak in Q3FY26 to a healthy $5.4\%$ in Q2FY27 QTD. It also imposes real friction on new sellers who have not yet optimized their submission workflows; the funnel and verification-speed numbers above are what anyone weighing that trade-off should start from.
 
 ---
 
 ## 3. Qualitative Signals & Seller-Side VOC Correlation
 
-To triangulate these quantitative drop-offs, `wei.hartono` pulled verbatim extracts from `fact_seller_voc_responses` (our separate survey stream using the Seller Pulse instrument, distinct from buyer-side Medallia data). The theme distribution across onboarding pulse respondents confirms our operational hypotheses:
+Alongside the funnel numbers above, `wei.hartono` also pulled verbatim extracts from `fact_seller_voc_responses` (our separate survey stream using the Seller Pulse instrument, distinct from buyer-side Medallia data). The theme distribution across onboarding pulse respondents, for whoever wants to read it next to the funnel table:
 
 - **`authentication-friction`** dominates Collectibles onboarding surveys at **~38%** of all verbatims, compared to just ~5% for Style and ~6% for Resold (neither of which requires pre-listing authentication).
 - **`listing-setup-complexity`** appears uniformly across all three categories at **15%–20%**, hitting sellers hardest between listing 1 and listing 5 due to the current lack of robust bulk-upload and duplicate-listing tools.

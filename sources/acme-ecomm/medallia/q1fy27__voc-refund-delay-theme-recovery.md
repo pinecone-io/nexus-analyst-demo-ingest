@@ -19,7 +19,7 @@ adapter: medallia_verbatim
 
 Following up on our Q4FY26 escalations and the operational crisis that peaked around the turn of the fiscal year, this report tracks the longitudinal trajectory of the **`refund delay`** verbatim theme within our Medallia buyer-side VOC stream (`fact_voc_responses`). 
 
-As established in our historical tracking and reviewed during the turbulent 2026-02-02 MBR escalation (where hannah.brennan and fulfillment leadership formally addressed the Ontario, CA returns-processing center bottlenecks), customer sentiment regarding post-purchase returns had severely degraded. The qualitative data flagged the operational friction long before it cleanly crossed quantitative SLA tripwires—a classic demonstration of VOC leading quantitative metrics. Specifically, the `refund delay` theme share surged past the 10% threshold during the week of 2025-12-15 (hitting 11.2%) and ultimately peaked at an alarming **16.1% during the week of 2026-01-05**, perfectly coinciding with the period when our 4-week-rolling `avg_refund_cycle_days` breached its 5.0-day SLA alert threshold (hitting 5.03 days).
+As established in our historical tracking and reviewed during the turbulent 2026-02-02 MBR escalation (where hannah.brennan and fulfillment leadership formally addressed the Ontario, CA returns-processing center bottlenecks), customer sentiment regarding post-purchase returns had severely degraded. Specifically, the `refund delay` theme share surged past the 10% threshold during the week of 2025-12-15 (hitting 11.2%) and ultimately peaked at an alarming **16.1% during the week of 2026-01-05**.
 
 With the emergency overtime authorization, temp-worker surges, and the subsequent **Ontario returns center staffing restoration on 2026-02-20**, the operational backlog has cleared steadily through March 2026. This report provides the definitive qualitative confirmation that the fix worked. As the physical processing queue cleared, the `refund delay` theme share has declined back down from its January peak toward our historical ~3.5% baseline. 
 
@@ -40,7 +40,7 @@ To understand the full arc of this incident and its resolution, we pull aggregat
 | **2026-03-02** | 2,620 | 175 | 6.7% | Post-cutover session definition version 2 active; inbound complaint volume rapidly easing. |
 | **2026-03-15** | 2,510 | 90 | **3.6%** | **Baseline Recovery:** Theme share returns to historical normal (~3.5%); refund cycle days at ~3.3 days. |
 
-As shown in the table above, the qualitative recovery mirrors the quantitative normalization of `avg_refund_cycle_days` (which dropped from its 5+ day peak back down to its historical ~3.3-day baseline by mid-March 2026). VOC has thus performed its full-circle role within Acme's analytics ecosystem: **it flagged the operational failure first** (weeks before the quantitative rolling average caught up), **tracked the severity during the peak crisis**, and **now provides the final qualitative confirmation** that the customer experience has stabilized.
+As shown in the table above, the qualitative recovery tracks alongside the quantitative normalization of `avg_refund_cycle_days` (which dropped from its 5+ day peak back down to its historical ~3.3-day baseline by mid-March 2026). This report provides the qualitative confirmation that the customer experience has stabilized; the theme-share table above stands on its own for anyone comparing it against `avg_refund_cycle_days`' own weekly series.
 
 ---
 

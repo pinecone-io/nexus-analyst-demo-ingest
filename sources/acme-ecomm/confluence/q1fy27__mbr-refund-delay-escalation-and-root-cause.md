@@ -21,25 +21,23 @@ adapter: confluence_page
 
 During our standing Monthly Business Review (MBR) session on **February 2, 2026**, the Customer Care and Post-Order Returns (POR) teams formally escalated a severe, persistent operational bottleneck that had been accumulating across the peak holiday window: **the post-order refund-delay problem**. 
 
-While our rolling quantitative metrics (`avg_refund_cycle_days`) had breached internal SLA thresholds three weeks prior—specifically crossing our 5.0-day alert threshold during the week of **January 5, 2026** (hitting 5.03 days following the post-Cyber Monday intake surge)—it was the monthly leadership review cadence, rather than the initial rolling tick itself, that finally triggered executive cross-functional action, budgetary authorization, and resource reallocation. 
+Our rolling quantitative metrics (`avg_refund_cycle_days`) crossed our 5.0-day alert threshold during the week of **January 5, 2026** (hitting 5.03 days following the post-Cyber Monday intake surge); it was the monthly leadership review cadence, rather than the initial rolling tick itself, that finally triggered executive cross-functional action, budgetary authorization, and resource reallocation. 
 
-Crucially, as giulia.romano’s Analytics Engineering team noted during the meeting, the qualitative voice of the customer (VOC) data captured via Medallia had flagged this exact friction point weeks *before* the quantitative lag registered on our dashboards. Specifically, the "refund delay" verbatim theme crossed our 10% alert share threshold the week of **December 15, 2025** (registering at 11.2% before peaking at 16.1% the week of January 5). 
+Separately, as giulia.romano’s Analytics Engineering team noted during the meeting, the qualitative voice of the customer (VOC) data captured via Medallia had its own timeline on this friction point. The "refund delay" verbatim theme crossed our 10% alert share threshold the week of **December 15, 2025** (registering at 11.2% before peaking at 16.1% the week of January 5). 
 
 This document records the formal escalation, details the rigorous root-cause investigation conducted through mid-February, and documents the operational fix that restored our processing capacity and brought refund cycle times back to baseline by late February 2026.
 
 ---
 
-## 2. Background: The Divergence Between Qualitative VOC and Quantitative Lag
+## 2. Background: Two Telemetry Streams, Reviewed Separately
 
-To understand why this issue required MBR escalation, we must review how the signal manifested across our telemetry streams. 
+To understand why this issue required MBR escalation, we must review how the signal manifested across our telemetry streams — each on its own dated timeline below.
 
 ```
 [2025-12-15] Medallia VOC "refund delay" > 10% (11.2%)
-       │
-       ▼ (3 weeks lag)
+
 [2026-01-05] Rolling avg_refund_cycle_days crosses 5.0-day SLA (5.03)
-       │
-       ▼ (4 weeks lag / monthly cadence)
+
 [2026-02-02] Formal MBR Escalation & Ontario Root-Cause Identification
 ```
 
@@ -83,7 +81,7 @@ Following the February 20 staffing restoration at Ontario, our rolling refund cy
 *Aside from slack channel `#mbr-prep-q1` (2026-02-01):*
 > **amara.shah:** Hey Hannah, do you want me to pull the raw Medallia CSVs for the Ontario catchment zone specifically, or just keep the deck focused on the company-wide 4-week rolling aggregate? Felix wants to make sure we don't spend too much time on regional drill-downs unless the board asks about West Coast logistics vs JOL1.
 > 
-> **hannah.brennan:** Let's keep the main slides on the aggregate trend, but have the Ontario breakdown in the appendix. Everyone already knows the hiring freeze exception dropped the ball there; the point of this slide is to show *why* the monthly cadence caught it when the weekly operational dashboards kept smoothing it out as holiday noise.
+> **hannah.brennan:** Let's keep the main slides on the aggregate trend, but have the Ontario breakdown in the appendix. Everyone already knows the hiring freeze exception dropped the ball there; keep the slide focused on the MBR cadence and the remediation timeline.
 > 
 > **wei.hartono:** Just verified the BigQuery numbers for `fact_orders`. The `refund_issued_date` nulls for January have cleared out entirely now that Ontario is caught up. The chart in Compass looks clean for March.
 > 

@@ -81,7 +81,7 @@ hey look on the bright side, at least the 5% holdback readout for `exp_2215` is 
 Keep me in the loop on how we're going to present this to leadership. If we have to put an asterisk on the checkout conversion gains when we go to board review, I want to make sure the narrative is tight. 
 
 **[2026-03-04 09:15:22 ET] @owen.faust**
-Quick update after pulling the raw exposures: pre-confound slice (Feb 16–28) is showing a clean +0.8% lift for Checkout Simplify. Once the nav changes hit on March 1, the blended number jumps up, but like we noted yesterday, that's definitely carrying the overlap. We'll document the confound in the official experiment readout doc so nobody tries to attribute the whole +2.1% final headline number purely to the checkout form reflow.
+Quick update: still working through the raw exposures for the pre-confound slice (Feb 16–28) — will have the isolated lift number once that query's done. Once the nav changes hit on March 1, the blended number jumps up, but like we noted yesterday, that's definitely carrying the overlap. We'll document the confound in the official experiment readout doc so nobody tries to attribute the whole +2.1% final headline number purely to the checkout form reflow.
 
 **[2026-03-04 09:18:04 ET] @maya.lindqvist**
 Appreciate you calling that out, Owen. Glad we caught it now rather than after shipping to 100% based on muddy data. I'll grab a coffee and meet you in the huddle room in 10.

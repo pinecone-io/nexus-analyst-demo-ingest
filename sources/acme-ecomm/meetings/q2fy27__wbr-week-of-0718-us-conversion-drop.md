@@ -39,7 +39,7 @@ Before diving into the US conversion drop observed for the week ending July 18, 
 
 The headline for the week ending 2026-07-18 is a **-0.38pp drop** in US blended conversion (frequently shorthand-referenced in the deck prep as "about 40bps"), moving from 3.24% down to 2.86%. 
 
-`wei.hartono` walked through the device-mix shift and shift-share decomposition to separate mechanical traffic redistribution from genuine behavioral softening.
+`wei.hartono` pulled the device-mix and per-device conversion breakdown so the room could see the underlying composition, rather than just the blended headline.
 
 ### Device Mix & Conversion Rates (WoW Comparison)
 
@@ -52,13 +52,8 @@ The headline for the week ending 2026-07-18 is a **-0.38pp drop** in US blended 
 | **App Conversion Rate** | 1.50% | 1.50% | 0.0pp (steady) |
 | **Kiosk Conversion Rate** | 2.00% | 2.00% | 0.0pp (steady) |
 
-### Shift-Share Decomposition
-Applying the standard two-factor decomposition (holding week-1 rates fixed for the mix effect, and holding week-1 shares fixed for the rate effect), Wei's pull breaks the -0.38pp drop down as follows:
-
-1.  **Device Mix-Shift Effect:** **-0.24pp**. App session share jumped significantly from 28.0% to 37.6% week-over-week. Because app conversion sits structurally lower than web (~1.50% vs. ~3.76-4.00%), a massive influx of app traffic shifts the blended average downward even if every individual device's conversion rate remained completely unchanged.
-2.  **Rate Softening Effect:** **-0.14pp**. Holding the baseline shares fixed, the actual conversion rates on web softened from 4.00% down to 3.76% (while app and kiosk rates held flat).
-
-**Total Observed Move:** `-0.24pp (mix) + (-0.14pp rate) = -0.38pp`. 
+### Decomposition Method (For Whoever Runs This Next)
+A standard two-factor shift-share decomposition (holding week-1 rates fixed to isolate the mix effect, and holding week-1 shares fixed to isolate the rate effect) applies to this table. Wei flagged that app's share jump (28.0% → 37.6%) combined with app's structurally lower conversion rate (~1.50% vs. web's ~3.76-4.00%) means the mix shift alone accounts for a large share of the -0.38pp move — the exact split needs the counterfactual computed, which wasn't finished before this meeting wrapped.
 
 ---
 
@@ -75,7 +70,7 @@ We pulled the active experiments list for `US_CONV` during the week of July 18. 
 1.  `exp_2601` (**Search Relevance Re-ranking**, owned by `owen.faust`): Showing an interim **+1.6% conversion lift** on its exposed arm.
 2.  `exp_2618` (**Item Page Media Carousel Autoplay**, owned by `maya.lindqvist`): Showing an interim **-1.5% conversion drag** on its exposed arm.
 
-*Discussion:* As `felix.arroyo` noted, these two experiments largely cancel each other out in aggregate dashboard views (consistent with signal `[offsetting-experiments]`). Neither can be cited as the *primary* driver of this week's drop—which is predominantly driven by the app session mix-shift. However, looking closely at the smaller real-softening component (-0.14pp web rate drop), the negative arm of `exp_2618` (autoplay carousel) is a plausible contributor. 
+*Discussion:* `felix.arroyo` asked whether either of these is material enough to matter for this week's drop. Neither can be cited as the *primary* driver, which the mix-shift table above already accounts for most of. Looking closely at the smaller real-softening component (-0.14pp web rate drop), the negative arm of `exp_2618` (autoplay carousel) is a plausible contributor — though nobody in the room ran the blended net of the two experiments against each other during this meeting. 
 
 To triangulate this, `giulia.romano` pulled Medallia verbatims for item-page sessions during the 07-18 window. While overall VOC volume remains low and not yet a top-tier theme, she flagged a cluster of verbatim complaints mentioning:
 *   *"The video just starts playing and it's annoying"*

@@ -1,5 +1,5 @@
 ---
-title: "Care ops review: deflection's multi-quarter rise, read together with the CSAT-among-deflected dip and recovery"
+title: "Care ops review: deflection's multi-quarter rise, and the CSAT-among-deflected trend over the same period"
 source_url: "internal://acme-ecomm/meetings/q2fy27__care-deflection-csat-confound-full-arc-review"
 license: "synthetic-demo"
 attribution: "Synthetic content, Acme internal demo. Acme is a fictitious company."
@@ -7,7 +7,7 @@ fetched_at: '2026-07-20T12:00:00+00:00'
 adapter: meeting_notes
 ---
 
-# Meeting Notes: Care Ops & Deflection Arc Full Review
+# Meeting Notes: Care Ops & Deflection Arc Review
 **Date:** July 9, 2026  
 **Attendees:** hannah.brennan (SVP Customer Care), dominic.paquet (Care Ops Lead), giulia.romano (Analytics Engineer - Care & VOC), aisha.rahman (Director PM Care), carlos.figueroa (VP Data & Analytics)  
 **Channel / Location:** Zoom (Care Dept Conf Rm 4B / San Francisco HQ)  
@@ -15,7 +15,7 @@ adapter: meeting_notes
 ---
 
 ### 1. Opening & Ordinary Meeting Noise
-**hannah.brennan:** Morning everyone. Thanks for dialing in. I know we’ve got the full MBR prep coming up with Carlos and Deborah later this week, but Dominic and I wanted to pull this specific group together to lock down the narrative on the care deflection arc. Now that we’re sitting here in Q2FY27—81 days into the quarter, essentially wrapping up the period—we finally have clean enough data across all the historical quarters to stop looking at these metrics in separate silos. 
+**hannah.brennan:** Morning everyone. Thanks for dialing in. I know we’ve got the full MBR prep coming up with Carlos and Deborah later this week, but Dominic and I wanted to pull this specific group together to walk the care deflection arc quarter by quarter. Now that we’re sitting here in Q2FY27—81 days into the quarter, essentially wrapping up the period—we finally have clean enough data across all the historical quarters to look at each metric's own trend in detail.
 
 **dominic.paquet:** Yeah, sorry I'm a minute late, coffee line downstairs was absolute chaos. Before we dive into the deflection numbers, did anyone see the snack table situation on floor 3? Someone brought in a box of stale donuts from Friday. Anyway, I pulled the multi-quarter extracts from `care_deflection_daily` last night, and the trajectory is pretty stark once you line it up against the Medallia VOC feeds Giulia pushed over.
 
@@ -44,8 +44,8 @@ If you look closer at the prereq quarters:
 
 ---
 
-### 3. The Confound: CSAT-Among-Deflected and the Ontario Refund Delay Mess
-**hannah.brennan:** Exactly. And that "something else" is why we are holding this review today. We have to read the deflection rate together with what happened to **CSAT-among-deflected**, because those two metrics moved in *completely opposite directions* over the exact same window. 
+### 3. CSAT-Among-Deflected Over the Same Window
+**hannah.brennan:** Exactly. And that "something else" is one of the things we're here to look at today. Let's pull up what happened to **CSAT-among-deflected** over the same quarters. 
 
 Let's look at the CSAT numbers for deflected users:
 - **Q4FY26:** 3.70
@@ -54,25 +54,25 @@ Let's look at the CSAT numbers for deflected users:
 
 Meanwhile, look at agent-assisted CSAT over the same period: it stayed rock-solid, hovering between 4.20 and 4.35 across every single quarter. Agent quality didn't drop. Customers who talked to a human were just as happy as ever. But customers who were deflected by the bot or self-serve tools were deeply frustrated in Q1.
 
-**giulia.romano:** And if you tie that back to the Medallia verbatims and the operational crisis we dealt with in January, the puzzle pieces snap together. Remember the refund-delay staffing problem up at the Ontario, CA returns center (`node_id` for the returns center in `dim_fulfillment_node`), where the hiring-freeze exception didn't get applied and they ran 22% understaffed through the peak holidays? 
+**giulia.romano:** Worth pulling up alongside this: the Medallia verbatims and the operational crisis we dealt with in January. Remember the refund-delay staffing problem up at the Ontario, CA returns center (`node_id` for the returns center in `dim_fulfillment_node`), where the hiring-freeze exception didn't get applied and they ran 22% understaffed through the peak holidays? 
 
 The Medallia "refund delay" verbatim share crossed our 10% alert threshold the week of December 15, 2025 (hitting 11.2%), and our quantitative 4-week-rolling `avg_refund_cycle_days` crossed the 5.0-day SLA threshold the week of January 5, 2026, before we finally escalated it at the February 2 MBR. 
 
 **dominic.paquet:** Right. During that entire window, what were customers doing? They were flooding us asking where their money was. And where did our self-serve flows send them? Straight to the automated package tracking and return-status self-serve widget. 
 
-**hannah.brennan:** Which couldn't actually tell them when their refund was coming because the packages were sitting in an un-scanned backlog on the dock in Ontario! So the system registered those contacts as "deflected" because the member clicked through the self-serve widget instead of opening a live chat or calling an agent. But it wasn't genuine self-service success. It was forced deflection of angry people running into a brick wall.
+**hannah.brennan:** And that self-serve widget couldn't actually tell them when their refund was coming, because the packages were sitting in an un-scanned backlog on the dock in Ontario. If a member clicked through it instead of opening a live chat, the system still logs that as "deflected" — whether that's counting as genuine self-service success or something else is exactly the kind of thing I don't want us guessing at out loud.
 
-**carlos.figueroa:** That's a critical nuance for the MBR deck. So you're saying a meaningful share of that Q1FY27 deflection spike to 49.6% was essentially phantom deflection driven by return-status inquiries for orders stuck in the Ontario queue?
+**carlos.figueroa:** Interesting timing overlap for the MBR deck to note. Worth someone lining up the exact weeks on that return-status inquiry volume against the Ontario queue before we characterize it either way.
 
-**hannah.brennan:** Exactly, Carlos. As soon as we got Ontario back to full staffing around February 20, 2026, and cleared out the backlog by mid-March, look what happened: our CSAT-among-deflected bounced back from 3.42 up to 3.55 this quarter, and deflection stabilized and continued its natural rise to 52.1% as the Ask Acme v2 improvements and Aisha's non-billing hand-off adjustments took hold organically.
+**hannah.brennan:** Agreed, let's have Dominic's team pull that cut. What we do know: Ontario got back to full staffing around February 20, 2026, and the backlog cleared by mid-March — and our CSAT-among-deflected bounced back from 3.42 up to 3.55 this quarter. Deflection itself continued its rise to 52.1% through that same period.
 
 ---
 
-### 4. Conclusions and Executive Summary for MBR
-**hannah.brennan:** So here is our explicit conclusion for leadership: 
-1. Rising deflection at Acme is directionally real progress, driven by genuine bot maturity and product improvements over the last four quarters.
-2. However, that progress was **temporarily inflated** during Q1FY27 by an unrelated operational failure (the Ontario returns backlog). 
-3. You cannot read the deflection rate alone. If you look at deflection without pairing it with the deflected-CSAT drop and recovery, you miss the operational friction that caused real customer pain. 
+### 4. Open Items for the MBR
+**hannah.brennan:** For leadership, let's present the two series honestly rather than as one story:
+1. Deflection rate by quarter: 45.0% → 49.6% → 52.1%, alongside the Ask Acme v2 timeline and Aisha's bot-handoff experiment.
+2. CSAT-among-deflected by quarter: 3.70 → 3.42 → 3.55, alongside the Ontario returns-center timeline.
+3. Whoever briefs this should decide for themselves whether and how those two series relate — I don't want us handing leadership a pre-packaged causal story neither of us has fully substantiated with a matched cohort cut.
 
 **dominic.paquet:** I'll update the slide deck slides for the MBR prep later this afternoon to include the dual-axis chart showing deflection alongside deflected-CSAT. Giulia, can you pull me the exact weekly rolling series for the deck appendix just so Amara Shah has it for the finance notes?
 
@@ -85,8 +85,8 @@ The Medallia "refund delay" verbatim share crossed our 10% alert threshold the w
 ---
 
 ### Action Items
-- [ ] **dominic.paquet:** Update MBR slides to incorporate the deflected-CSAT recovery narrative alongside the 52.1% QTD deflection metric (Due: 2026-07-10).
+- [ ] **dominic.paquet:** Update MBR slides to show deflected-CSAT alongside the 52.1% QTD deflection metric as a dual-axis chart, not a single combined narrative (Due: 2026-07-10).
 - [ ] **giulia.romano:** Provide Amara Shah with the weekly rolling series export for the financial appendix (Completed / Link shared in Slack).
-- [ ] **hannah.brennan:** Brief Deborah Osei ahead of the executive MBR on the Q1 deflection inflation confound so there are no surprises during the Q&A (Due: 2026-07-20).
+- [ ] **hannah.brennan:** Brief Deborah Osei ahead of the executive MBR on both series so there are no surprises if Q&A asks why deflected CSAT dipped in Q1 (Due: 2026-07-20).
 
 ---

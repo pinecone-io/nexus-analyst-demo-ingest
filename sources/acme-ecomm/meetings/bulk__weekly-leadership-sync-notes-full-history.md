@@ -464,7 +464,7 @@ Attendees across all sessions consistently include Felix Arroyo (SVP Product & G
 ### Sync: 2026-01-05
 - **US_CONV** (wei.hartono): Pre-audit verification completed for Q4 peak session and order totals.
 - **MARKETPLACE**: Marketplace GMV preliminary close at $952.4M (flash figure; later restated to $975.0M in February).
-- **CARE** (hannah.brennan): **CRITICAL INCIDENT REPORT** — The quantitative 4-week-rolling `avg_refund_cycle_days` crosses its 5.0-day SLA alert threshold (hitting 5.03 days), exactly three weeks after Medallia VOC flagged the verbatim surge.
+- **CARE** (hannah.brennan): **CRITICAL INCIDENT REPORT** — The quantitative 4-week-rolling `avg_refund_cycle_days` crosses its 5.0-day SLA alert threshold (hitting 5.03 days).
 - **SPEED**: Recovery operations in full swing across Ontario and Joliet nodes.
 - **MEMBERSHIP**: Q4 close review preparations.
 - **Light Verticals / General**: 
@@ -608,7 +608,7 @@ Attendees across all sessions consistently include Felix Arroyo (SVP Product & G
 - **Operations / Noise**: Office parking structure power washing scheduled for Sunday; please park in overflow lot.
 
 ### Sync: 2026-03-30
-- **US_CONV** (owen.faust): **Checkout Simplify experiment (`exp_2214`) concludes** today with a confounded headline lift of **+2.1%** and a clean pre-confound slice (Feb 16-28) of **+0.8%**.
+- **US_CONV** (owen.faust): **Checkout Simplify experiment (`exp_2214`) concludes** today with a full-window headline lift of **+2.1%**; flagged as confounded by the Nav Refresh launch mid-window (see `exp_2215` holdback for Nav Refresh's own independent readout).
 - **MARKETPLACE**: Q1 Marketplace GMV closes at $815.0M (Style $543.0M, Resold $168.0M, Collectibles $104.0M).
 - **CARE**: Q1 Care contacts total 2.05M with 49.6% deflection.
 - **SPEED**: Q1 blended on-time rate closes at 92.38%; ship-to-home mix at 68.9%.
@@ -727,7 +727,7 @@ Attendees across all sessions consistently include Felix Arroyo (SVP Product & G
 - **US_CONV** (owen.faust / maya.lindqvist): **Two concurrent US_CONV experiments launch today** (2026-06-08):
   - **"Search Relevance Re-ranking" (`exp_2601`)**, managed by owen.faust (+1.6% conversion lift on its exposed arm).
   - **"Item Page Media Carousel Autoplay" (`exp_2618`)**, managed by maya.lindqvist (-1.5% conversion lift on its exposed arm due to shopper friction).
-  - Note: Their net effect on the topline dashboard is a ~+0.05% wash, masking opposing underlying trends.
+  - Note: blended net of the two exposed-arm lifts is roughly +0.05% if weighted equally.
 - **MARKETPLACE**: Reviewing Seller Pulse onboarding pulse results across Style, Resold, and Collectibles.
 - **CARE**: Care deflection holding at 52.1%.
 - **SPEED**: Blended on-time delivery rate at 93.00%.
@@ -796,7 +796,7 @@ Attendees across all sessions consistently include Felix Arroyo (SVP Product & G
 ### Sync: 2026-07-20 (Today)
 - **US_CONV** (carlos.figueroa / deborah.osei): 
   - **Q2FY27 Executive MBR held today** (2026-07-20), reviewing $7.62B GMV pace (101.2% of goal), US conversion headwinds (3.22% QTD, 96.1% of goal), Marketplace outperformance ($3.89B run-rate, 117.1% of goal), and member renewal strength (87.2% renewal rate, 14.62M members).
-  - Weekly US conversion drop (week of July 18: 2.86%, down 40bps WoW) analyzed: -0.24pp device mix shift (app share jumped 28.0%→37.6%) and -0.14pp web conversion softening.
+  - Weekly US conversion drop (week of July 18: 2.86%, down 40bps WoW) reviewed against device mix (app share jumped 28.0%→37.6%) and per-device conversion rates; full mix/rate split to be documented in WBR follow-up.
 - **MARKETPLACE**: Marketplace leading company growth; Style deceleration and Resold/Collectibles surge reviewed by victor.okonkwo.
 - **CARE** (hannah.brennan): Q2FY27 QTD care metrics formally locked at 1,180K contacts, 52.1% deflection, 3.55 deflected CSAT, 4.31 agent CSAT, and 7.4 min AHT. Note: Jamal (mem_1000390) logged his second open P1 care contact of the week regarding JOL1 delivery delays.
 - **SPEED**: Blended on-time delivery rate holding at 93.00% QTD; cost per order at $7.30.

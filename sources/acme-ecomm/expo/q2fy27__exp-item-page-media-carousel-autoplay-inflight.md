@@ -99,10 +99,8 @@ Verbatim feedback from Medallia post-purchase surveys and FullStory session repl
 - *"Page feels slightly more jittery on mobile when scrolling past the hero image while it initializes."*
 - Low aggregate complaint volume (not yet a dominant Medallia theme like the refund delays from the past winter), but qualitatively consistent with the quantitative -1.5% drag.
 
-### The Masked Trend & Adjacent Experiments
-It is worth noting for executive MBR reporting that `exp_2618`'s -1.5% negative lift is currently running in parallel with Owen Faust's Search Relevance Re-ranking experiment (`exp_2601`, also kicked off on 2026-06-08), which is posting a positive **+1.6% conversion lift** on its exposed arm. 
-
-When aggregated across the broader US conversion surface, these two simultaneous, counter-directional experiments roughly cancel each other out, resulting in a net-zero composite impact (~+0.05%) that masks the underlying friction in the media carousel test. A casual dashboard observer might look at aggregate weekly conversion and assume flat optimization efficiency, missing the fact that a live feature is actively backfiring on item pages while search is picking up the slack.
+### Adjacent Experiments Running Concurrently
+It is worth noting for executive MBR reporting that `exp_2618`'s -1.5% negative lift is currently running in parallel with Owen Faust's Search Relevance Re-ranking experiment (`exp_2601`, also kicked off on 2026-06-08), which is posting a positive **+1.6% conversion lift** on its exposed arm, on the same US conversion surface.
 
 ---
 

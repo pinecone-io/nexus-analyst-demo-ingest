@@ -20,7 +20,7 @@ adapter: confluence_page
 
 Every time leadership asks *“how did the item page do last quarter (Q1FY27)?”*, the conversation immediately bogs down in definitional sand. Before we can answer whether the surface "did well," we have to explicitly state our terms, because the answer changes entirely depending on which of the two valid metrics you look at, and whether you account for the March 2 session-counting architectural change (`sessions_definition_version` 1 → 2) that fundamentally shifted our baseline.
 
-As of today (July 20, 2026, sitting deep in Q2FY27), we are past the noise of Q1FY27 (which closed on 2026-04-30). This page serves as the single source of truth for the View Item Page surface's performance during Q1FY27, tying together the 6-iteration Item Page Iteration Program, the two legitimate metric definitions, and the load-bearing impact of the mid-quarter session cutover. 
+As of today (July 20, 2026, sitting deep in Q2FY27), we are past the noise of Q1FY27 (which closed on 2026-04-30). This page lays out the 6-iteration Item Page Iteration Program timeline, the two legitimate metric definitions, and the mid-quarter session cutover as three separate reference facts — reconciling them into a single "how did the item page do" answer is left to whoever is asked that question. 
 
 *(Note from Maya: If you're looking for the Compass dashboard view, make sure your query isn't still hitting stale pre-aggregations, and keep in mind that unlike the checkout experiments owen.faust ran with `exp_2214`, our item page iteration program was a sequential series of shipped UI changes rather than an A/B test with a clean holdback — though we did have to disentangle them from the sitewide Nav Refresh holdback `exp_2215` that ran concurrently in March.)*
 
@@ -70,12 +70,10 @@ Because `product_view_sessions` and `add_to_cart_sessions` live inside those exa
 * **Post-Cutover (Version 2: Mar 2 – Apr 30, ~60 days):** View-to-cart averaged **19.9%**.
 * **The Raw Move:** +1.9pp raw.
 
-### Decomposing the +1.9pp Gain
-If you just average the whole quarter together without adjusting for the cutover, you tell a lazy story. Our deep-dive data reconciliation shows:
-1. **Mechanical / Definitional Bump (~+0.8pp):** Exactly like the sitewide conversion rate adjustment, filtering out invisible crawler traffic and multi-tab noise shrinks the session denominator, artificially lifting the ratio without a single user changing behavior.
-2. **Real, Iteration-Driven Gain (~+1.1pp):** The genuine behavioral lift attributable to our iteration program (v1 and v2 shipped in the pre-cutover window; v3 through v6 shipped post-cutover, meaning their individual baselines must be evaluated against version 2).
+### On Averaging the Whole Quarter Across the Cutover
+If you average the whole quarter together without adjusting for the cutover, the same denominator-shrinking mechanism that lifts the sitewide conversion rate lifts view-to-cart too — `product_view_sessions` and `add_to_cart_sessions` live in the exact same `fact_traffic_daily` rows as total sessions. v1 and v2 shipped in the pre-cutover window; v3 through v6 shipped post-cutover, so their individual baselines sit on different measurement bases.
 
-> **CRITICAL WARNING:** Silently averaging the whole quarter across the March 2 cutover **overstates the real, iteration-driven gain by roughly 40% relative** (+1.9pp reported raw vs. ~+1.1pp true operational lift). Anyone putting the raw +1.9pp into an executive deck without mentioning the version shift is going to get called out by Finance during the MBR.
+> **CAUTION:** Anyone putting the raw +1.9pp into an executive deck without mentioning the version shift is going to get asked about it by Finance during the MBR — the mechanical/real split needs to be worked out from the pre/post-cutover figures above before citing a single "iteration program impact" number.
 
 ---
 
@@ -92,12 +90,12 @@ As we evaluate where to take the item page surface next—especially while juggl
 ## Comments & Discussion Thread
 
 * **amara.shah** *(Data Analyst, Finance/MBR, `assoc_100211`)* — 2026-05-12 09:15 ET  
-  > Maya, thank you for putting this together. I’m updating the MBR appendix decks this morning and was about to use the raw +1.9pp figure until I saw your warning about the 40% relative overstatement. Saving this link in the master finance channel so nobody else repeats that. Quick check: does the 5.13% item-page conversion also need a version adjustment footnote?
+  > Maya, thank you for putting this together. I'm updating the MBR appendix decks this morning and want to make sure I footnote the version cutover before using the raw +1.9pp figure anywhere. Quick check: does the 5.13% item-page conversion also need a version adjustment footnote?
 * **maya.lindqvist** *(Director PM US Conversion & Traffic, `assoc_100110`)* — 2026-05-12 10:42 ET  
   > @amara.shah Yes! The denominator for item-page conversion is `product_view_sessions`, which lives in `fact_traffic_daily` right alongside total sessions. So version 2 applies there too. Stick a footnote pointing to `traffic_conversion_summary` carrying the definition flag forward.
 * **owen.faust** *(Sr PM Checkout & Conversion, `assoc_100111`)* — 2026-05-12 14:03 ET  
   > Explains a lot. We ran into a similar version-confound nightmare when untangling the Checkout Simplify `exp_2214` results from the Nav Refresh rollout back in March. Good on you for documenting the cutover cleanly here. By the way, are we seeing any spillover from the autoplay carousel test (`exp_2618`) onto the item page exit rates yet? 
 * **maya.lindqvist** *(Director PM US Conversion & Traffic, `assoc_100110`)* — 2026-05-12 15:20 ET  
-  > @owen.faust Don't remind me. The autoplay test is dragging a bit on the exposed arm (-1.5%), which is why we haven't shipped it globally yet. It's sitting right alongside search re-ranking (`exp_2601`) as a net-zero wash on the dashboard for now. Will post a separate update once that reads out fully.
+  > @owen.faust Don't remind me. The autoplay test is dragging a bit on the exposed arm (-1.5%), which is why we haven't shipped it globally yet. Search re-ranking (`exp_2601`) is running at the same time on its own arm. Will post a separate update once autoplay reads out fully.
 
 ---

@@ -207,7 +207,7 @@ GROUP BY 1, 2
 ORDER BY resp_date DESC, verbatim_count DESC
 LIMIT 50;
 ```
-*Analyst Note:* Verifying the VOC-leads-quant timeline. Medallia refund delay verbatims spiked past 10% on 2025-12-15, three weeks before the quantitative 4-week-rolling `avg_refund_cycle_days` crossed its 5.0-day SLA threshold on 2026-01-05. Ontario returns center staffing is back to normal as of late Feb (~3.3 days), and CSAT among deflected contacts is recovering toward 3.55.
+*Analyst Note:* Cross-checking the Medallia and Care timelines. Medallia refund delay verbatims spiked past 10% on 2025-12-15; the quantitative 4-week-rolling `avg_refund_cycle_days` crossed its 5.0-day SLA threshold on 2026-01-05. Ontario returns center staffing is back to normal as of late Feb (~3.3 days), and CSAT among deflected contacts is recovering toward 3.55.
 
 ---
 
@@ -251,7 +251,7 @@ FROM `nexus-analyst-demo.acme_ecomm.fact_experiment_readouts` fer
 WHERE fer.experiment_id = 'exp_2214'
   AND fer.as_of_date = '2026-03-30';
 ```
-*PM Note:* Full-window read shows +2.1% conversion lift, but this is confounded by the Nav Refresh rollout on March 1. The clean pre-confound slice (Feb 16–28) reads +0.8%. We are shipping to 100% on April 6 using the confounded +2.1% figure because leadership loves the big number. Also note: using exposed units (`units_exposed`) rather than assigned units (`units_assigned`) is essential here; ~16% of assigned sessions were never exposed due to cart abandonment before rendering.
+*PM Note:* Full-window read shows +2.1% conversion lift, but this is confounded by the Nav Refresh rollout on March 1 — the pre-confound slice (Feb 16–28) needs its own query against this table before it can be cited as a clean number. We are shipping to 100% on April 6 using the confounded +2.1% figure because leadership loves the big number. Also note: using exposed units (`units_exposed`) rather than assigned units (`units_assigned`) is essential here; ~16% of assigned sessions were never exposed due to cart abandonment before rendering.
 
 ---
 

@@ -63,7 +63,7 @@ As discussed following the April MBR and victor.okonkwo's Marketplace category-m
 * **Description:**  
   *Explicitly NON-GradeSure.* (Note for auditing teams: Collectibles utilizes the Acme Verified / GradeSure program launched back on 2025-09-08, which successfully brought Collectibles return rates down to 5.4% by Q2FY27 despite creating onboarding authentication friction for new collectible sellers like `sel_500241` vs `sel_500242`). 
   
-  This epic covers the active evaluation and RFP process for a separate, apparel-and-luxury-focused third-party authentication partner tailored specifically to Resold high-end garment categories. As Resold’s apparel/style-adjacent share climbed from 51% to 62% YoY (driving part of the Marketplace wallet-share shift alongside Style's +6.1% Q1FY27 YoY deceleration), establishing a seamless verification protocol for luxury streetwear and designer resales without repeating Collectibles' steep onboarding drop-off is paramount.
+  This epic covers the active evaluation and RFP process for a separate, apparel-and-luxury-focused third-party authentication partner tailored specifically to Resold high-end garment categories. Resold's apparel/style-adjacent share has climbed from 51% to 62% YoY over the same window Style's Q1FY27 YoY growth read +6.1%; establishing a seamless verification protocol for luxury streetwear and designer resales without repeating Collectibles' steep onboarding drop-off is paramount regardless of how those two figures relate.
 
 ---
 
@@ -88,7 +88,7 @@ As discussed following the April MBR and victor.okonkwo's Marketplace category-m
 * **Assignee:** `noah.kessler` (`assoc_100122`)
 * **Reporter:** `amara.shah` (`assoc_100211`, Data Analyst Finance/MBR)
 * **Description:**  
-  Development of dedicated internal reporting tooling and Compass dashboard widgets to track the cross-vertical category-mix shift between Style and Resold. Following the April 2026 MBR synthesis confirming that Style's Q1FY27 deceleration (+6.1% YoY) was entirely offset by Resold's massive acceleration (+90.9% YoY) due to shoppers shifting wallet share toward recommerce, Resold leadership requires real-time sub-vertical overlap reporting. 
+  Development of dedicated internal reporting tooling and Compass dashboard widgets to track the cross-vertical category-mix shift between Style and Resold. Following the April 2026 MBR review that put Style's Q1FY27 deceleration (+6.1% YoY) next to Resold's acceleration (+90.9% YoY) rather than reviewing Style in isolation, Resold leadership requires real-time sub-vertical overlap reporting. 
   
   This tooling will ingest data from `marketplace_gmv_summary` and `marketplace_seller_performance` marts to isolate category migration patterns among mid-tier and large sellers (such as Resold's `sel_500204` ReWear Collective and Style's `sel_500103` Kestrel & Vine), ensuring we accurately forecast inventory needs without misinterpreting the shift as a macro demand loss.
 

@@ -19,7 +19,7 @@ adapter: jira_ticket
 
 ## Board Overview & System Notes
 
-*Note from ines.delgado (2026-07-15):* Following the Confluence synthesis in April that formally superseded the old "Style Conversion Recovery Plan" draft and confirmed our Q1FY27 Style deceleration (+6.1% YoY) was part of a broader Marketplace wallet-share shift toward Resold (+90.9% YoY) rather than a localized demand failure, we have frozen any exploratory headcount-shifting initiatives. Our current roadmap is strictly bounded to the 5 committed epics below. No additional epics will be added this quarter. 
+*Note from ines.delgado (2026-07-15):* Following the Confluence review in April that put our Q1FY27 Style deceleration (+6.1% YoY) next to Resold's acceleration (+90.9% YoY) rather than looking at Style alone, we have paused any exploratory headcount-shifting initiatives pending a fuller cross-sub-vertical read. Our current roadmap is strictly bounded to the 5 committed epics below. No additional epics will be added this quarter. 
 
 As a reminder following our migration to Jira last January (part of nadia.esposito's `aid-jira-migration-proj`), all active engineering execution for Style lives here. Legacy Aitable cards for these initiatives have been fully archived.
 

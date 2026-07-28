@@ -23,7 +23,7 @@ To be entirely clear from the outset: we pulled these replays because it is stan
 
 Our review of roughly 4,500 session replays across desktop web, mobile web, and app viewports between July 13 and July 20 yields a straightforward, anticlimactic conclusion: **the Homepage Hero Banner Refresh shows no measurable conversion effect**, either positive or negative. Furthermore, downstream funnel behavior—specifically click-through rates to item pages, search interactions, and add-to-cart rates—remains entirely stable and statistically indistinguishable from pre-launch baselines. Because the banner's scope is strictly confined to the homepage real estate, this lack of downstream contamination is entirely expected.
 
-Crucially, this evidentiary source rules out the banner itself as any form of explanatory driver for the same week's US conversion fluctuations (such as the week-ending 2026-07-18 WoW drop from 3.24% to 2.86%, which we know from shift-share decomposition is heavily dominated by device-mix shifts toward mobile app sessions rather than homepage layout regressions). 
+Crucially, this evidentiary source rules out the banner itself as any form of explanatory driver for the same week's US conversion fluctuations (such as the week-ending 2026-07-18 WoW drop from 3.24% to 2.86%, which is a separate device-mix and rate question for the WBR team, not a homepage layout regression). 
 
 ---
 
@@ -62,7 +62,7 @@ To verify that the homepage banner refresh was not introducing subtle friction t
 
 *   **Search vs. Browse Split:** Users landing on the homepage post-July 13 split 54% to category/browse navigation and 46% to direct search bar queries. This ratio matches our trailing 12-month baseline within a 0.5% band.
 *   **Add-to-Cart Initiation:** Sessions that progressed from the homepage to an item page initiated an add-to-cart event at a rate of 19.1% across the July 13–20 window. This compares to 19.3% for the week prior (July 6–12) and sits comfortably alongside the post-cutover session definition v2 baselines established after March 2.
-*   **Interaction with Concurrent US_CONV Experiments:** As noted in our mid-quarter reviews, two major experiments are actively running in the US conversion stream: *Search Relevance Re-ranking* (`exp_2601`, showing a clean +1.6% lift on its exposed arm) and *Item Page Media Carousel Autoplay* (`exp_2618`, showing a -1.5% drag). Because these two experiments effectively offset each other on the net-topline dashboard, we verified via session tagging that users exposed to the new homepage banner were evenly distributed across the variant arms of `exp_2601` and `exp_2618`. There is no interaction effect or covariance between the homepage banner refresh and either search or media autoplay experiments.
+*   **Interaction with Concurrent US_CONV Experiments:** As noted in our mid-quarter reviews, two major experiments are actively running in the US conversion stream: *Search Relevance Re-ranking* (`exp_2601`, showing a clean +1.6% lift on its exposed arm) and *Item Page Media Carousel Autoplay* (`exp_2618`, showing a -1.5% drag). We verified via session tagging that users exposed to the new homepage banner were evenly distributed across the variant arms of `exp_2601` and `exp_2618`. There is no interaction effect or covariance between the homepage banner refresh and either search or media autoplay experiments.
 
 ---
 
@@ -73,6 +73,6 @@ The Homepage Hero Banner Refresh (shipped 2026-07-13) is functioning exactly as 
 *   **Action Items:**
     1.  Close out FullStory monitoring tag `fs_review_homepage_banner_q2fy27` as complete.
     2.  No further analysis required for this specific deploy; hand findings over to amara.shah for inclusion in the routine weekly MBR archive notes if requested, though it does not merit executive escalation given its neutral impact.
-    3.  Continue monitoring the broader US conversion weekly trends—focusing our attention where the real variance lives (device mix-share shifts and the offsetting search/media experiments) rather than revisiting the homepage banner.
+    3.  Continue monitoring the broader US conversion weekly trends—focusing our attention on device-mix shifts and the two live search/media experiments rather than revisiting the homepage banner.
 
 ---

@@ -121,7 +121,7 @@ GROUP BY 1, 2, 3, 4, 5, 10, 11, 12
 
 Because `product_view_sessions` and `add_to_cart_sessions` reside within the exact same `fact_traffic_daily` grain, this model change cascades across all secondary engagement indicators. 
 
-For instance, the site-wide view-to-cart rate (`add_to_cart_sessions / product_view_sessions`) experienced an immediate upward shift upon cutover. Pre-cutover averages in February 2026 hovered near **18.0%**, whereas post-cutover metrics across March and April 2026 settled closer to **19.9%**. Approximately **+0.8pp** of that +1.9pp raw move is purely mechanical (stemming from the removal of phantom bot sessions that viewed items without interacting), while the remaining **+1.1pp** corresponds to real user behavior influenced by Maya Lindqvist's Item Page Iteration Program (such as the image gallery zoom/swipe update shipped on March 5).
+For instance, the site-wide view-to-cart rate (`add_to_cart_sessions / product_view_sessions`) experienced an immediate upward shift upon cutover. Pre-cutover averages in February 2026 hovered near **18.0%**, whereas post-cutover metrics across March and April 2026 settled closer to **19.9%**. Some portion of that +1.9pp raw move is mechanical (stemming from the removal of phantom bot sessions that viewed items without interacting) and some corresponds to real user behavior influenced by Maya Lindqvist's Item Page Iteration Program (such as the image gallery zoom/swipe update shipped on March 5) — splitting the two requires comparing like-for-like versions, not averaging the raw quarter.
 
 ### Flat Dataset Architecture Verification
 Analysts querying these metrics must ensure they are referencing the canonical flat path:

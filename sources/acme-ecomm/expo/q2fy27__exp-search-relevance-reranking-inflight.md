@@ -75,7 +75,7 @@ No final ship or kill decision has been made. We are explicitly holding off on r
 ### Interim Analysis Notes from Owen Faust (`owen.faust`)
 The +1.6% lift on the exposed arm is encouraging, but it is **strictly interim**. 
 
-In our mid-quarter review with felix.arroyo and the growth analytics pod, we noted that while `exp_2601` is positive (+1.6%), its gains are partially offset on the broader site conversion dashboard by maya.lindqvist’s in-flight media autoplay test (`exp_2618`, running at -1.5%). Net-net, the two US conversion experiments running concurrently since June 8 wash out almost completely at the top-line summary level (+0.05% combined net effect). This reinforces why we cannot prematurely celebrate or kill either test based on headline dashboard glances alone; we must evaluate search relevance on its own isolated experimental partition.
+In our mid-quarter review with felix.arroyo and the growth analytics pod, we noted that `exp_2601` (+1.6%) and maya.lindqvist's in-flight media autoplay test (`exp_2618`, running at -1.5%) are both live on the broader site conversion dashboard at the same time. This is exactly why we cannot prematurely celebrate or kill either test based on headline dashboard glances alone; we must evaluate search relevance on its own isolated experimental partition.
 
 Furthermore, we want to verify that the drop in `avg_search_paging_depth` (-11.9%) reflects genuine intent-matching rather than users abandoning search out of frustration. Current Medallia verbatim pulls for search sessions show sentiment holding stable, with positive remarks regarding "finding exact part numbers much faster." 
 

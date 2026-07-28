@@ -61,7 +61,7 @@ adapter: gong_call
 * **System Tag:** internal_exec_sync
 
 **[00:00:20] hannah.brennan:** Thanks everyone. We have a serious operational disconnect that leadership needs to address immediately. Giulia, walk us through what Medallia picked up in December.
-**[00:00:55] giulia.romano:** Right. Back on December 15th, the Medallia verbatim theme for "refund delay" crossed the 10% share threshold, hitting 11.2%. By the first week of January—specifically the week of January 5th—our quantitative 4-week-rolling `avg_refund_cycle_days` crossed the 5.0-day SLA alert threshold, landing at 5.03 days. VOC flagged it three full weeks before the quantitative mart crossed the line.
+**[00:00:55] giulia.romano:** Right. Back on December 15th, the Medallia verbatim theme for "refund delay" crossed the 10% share threshold, hitting 11.2%. By the first week of January—specifically the week of January 5th—our quantitative 4-week-rolling `avg_refund_cycle_days` crossed the 5.0-day SLA alert threshold, landing at 5.03 days.
 **[00:01:45] hannah.brennan:** And why didn't we catch this in November? Gabriel, what's happening at the Ontario, CA returns center (`node_id` returns center)?
 **[00:02:10] gabriel.stroud:** Hannah, it's an understaffing issue. The facility ran roughly 22% understaffed through peak because an HR hiring-freeze exception we requested for returns processing didn't get pushed through correctly. With the post-Black Friday overflow and the JOL1 winter storm disruption on December 8th compounding things, our dock staging congestion backed up hard.
 **[00:03:00] dominic.paquet:** Care contact volume is surging because customers are furious about delayed refunds on returned items. Even with Ask Acme v2 handling 45% deflection, agent-assisted CSAT is taking a hit on order-status inquiries.
@@ -112,9 +112,9 @@ adapter: gong_call
 
 **[00:00:30] maya.lindqvist:** Morning everyone. Yesterday on March 1st, we launched the "Nav Refresh" sitewide redesign (`exp_2215` holdback), and right on cue, Wei rolled out `sessions_definition_version` 2 in BigQuery today to filter out those stubborn crawlers. 
 **[00:01:10] owen.faust:** Which brings up a messy experimental overlap. Since Nav Refresh launched into *both* arms of my active "Checkout Simplify" experiment (`exp_2214`), our checkout readout is officially confounded. The full-window read is showing +2.1% conversion lift, but that includes Nav Refresh's independent lift.
-**[00:01:55] wei.hartono:** That's correct, Owen. If you want the clean pre-confound slice for Checkout Simplify, you have to isolate February 16th through February 28th before Nav Refresh dropped. That clean slice reads +0.8%. 
+**[00:01:55] wei.hartono:** That's correct, Owen. If you want the clean pre-confound slice for Checkout Simplify, you have to isolate February 16th through February 28th before Nav Refresh dropped and recompute the lift on just that window — I haven't pulled that cut yet. 
 **[00:02:40] nadia.esposito:** And remember to log all of this in Jira per our consolidation project. Don't leave notes in old Aitable cards. Also, Maya, how are the Item Page iterations going? V3 (image gallery zoom/swipe) dropped on March 5th, right on top of the new session definition version.
-**[00:03:25] maya.lindqvist:** Yes, view-to-cart rate jumped to 19.9% post-cutover, but roughly 0.8pp of that is just Wei's mechanical bot-filtering bump, while 1.1pp is real engagement from our v3 through v6 feature releases. We're documenting the dual-baseline split in the Confluence PRD.
+**[00:03:25] maya.lindqvist:** Yes, view-to-cart rate jumped to 19.9% post-cutover from 18.0% pre-cutover. Some of that's Wei's mechanical bot-filtering bump and some is real engagement from our v3 through v6 feature releases — we're documenting the pre/post-cutover baselines in the Confluence PRD so whoever needs the split can work it out.
 
 ---
 
@@ -123,8 +123,8 @@ adapter: gong_call
 * **Participants:** victor.okonkwo, ines.delgado, noah.kessler, sanjay.bhatt, camille.duarte
 * **System Tag:** internal_exec_sync
 
-**[00:00:40] victor.okonkwo:** Team, let's look at the Q1FY27 Marketplace numbers that just locked. Total Marketplace GMV came in at $815.0M. Style grew at +6.1% YoY to $543.0M, which initially looked like a deceleration compared to our 10% plan. But Ines's old draft "Style Conversion Recovery Plan" from March was completely off-base—we don't need to shift T&S headcount off Collectibles.
-**[00:01:30] noah.kessler:** Exactly, Victor. Resold accelerated by +90.9% YoY to reach $168.0M, and Resold's apparel/style-adjacent category share jumped from 51% to 62% YoY. It's a clean within-marketplace wallet-share shift, not a demand loss. Shoppers are migrating from new style items to resold apparel.
+**[00:00:40] victor.okonkwo:** Team, let's look at the Q1FY27 Marketplace numbers that just locked. Total Marketplace GMV came in at $815.0M. Style grew at +6.1% YoY to $543.0M, which initially looked like a deceleration compared to our 10% plan. We're holding off on Ines's old draft "Style Conversion Recovery Plan" from March pending a fuller review — we shouldn't shift T&S headcount off Collectibles on the Style number alone.
+**[00:01:30] noah.kessler:** Agreed, Victor. Resold accelerated by +90.9% YoY to reach $168.0M, and Resold's apparel/style-adjacent category share jumped from 51% to 62% YoY over the same window. Worth putting those two side by side before anyone calls Style's number a demand problem.
 **[00:02:15] sanjay.bhatt:** Meanwhile, Collectibles hit $104.0M—up 372.7% YoY—and thanks to the GradeSure "Acme Verified" program, our return rate in Collectibles dropped all the way from the Q3 peak of 11.2% down to 5.4% in Q2FY27. 
 **[00:03:00] camille.duarte:** But we have a seller-side bottleneck, team. Since launching the "Seller Pulse" survey program on April 20th (`fact_seller_voc_responses`), our onboarding funnel data shows that new Collectibles sellers are stalling out. Only 24% reach listing 10, compared to 48% in Style and 46% in Resold. 
 **[00:03:50] victor.okonkwo:** Because authentication friction with GradeSure is brutal for newcomers. If they don't get verified within 7 days, their survival rate drops by half. Camille, let's work with Lucia to see where we can streamline seller onboarding without compromising buyer trust.
@@ -152,7 +152,7 @@ adapter: gong_call
 **[00:00:30] renee.kowalski:** Brad, welcome aboard. Now that we've officially switched our Acme+ streaming perk partner from Vidora over to Reelstream as of June 1st, how is server stability holding up across our member base?
 **[00:01:05] Brad Sterling (Reelstream):** Flawless execution on our end, Renee. CDN handoffs are clean, and we haven't seen a single latency spike since cutover. 
 **[00:01:45] derek.holloway:** The timing aligns perfectly with the conclusion of our "Benefit Onboarding Carousel" experiment (`exp_2556`) on June 15th, which drove a +9pp lift in 30-day benefit awareness. But remember, only about 34% of members actually know they have the streaming perk in the first place.
-**[00:02:30] simone.laurent:** That's our highest-leverage CLTV lever right there. Members who use 2+ benefits renew at 95%, compared to 71% for free-shipping-only members. If we can run a targeted awareness campaign for Reelstream, we'll lock in that renewal rate above 87% for the end-of-year close.
+**[00:02:30] simone.laurent:** That renewal-by-benefit-depth gradient is worth keeping in front of us regardless — members who use 2+ benefits renew at 95%, compared to 71% for free-shipping-only members. Whether a targeted Reelstream awareness campaign is the best next move against that gradient versus our other options is worth a proper look before we commit budget.
 **[00:03:15] renee.kowalski:** Let's draft the campaign brief for July. Derek, make sure you coordinate with Amara on pulling the cohort retention numbers once the 12-month lag matures.
 
 ---
@@ -163,10 +163,10 @@ adapter: gong_call
 * **System Tag:** internal_exec_sync
 
 **[00:00:45] felix.arroyo:** Let's look at where we stand with two weeks left in Q2. US conversion for Q2FY27 QTD is averaging 3.22%, with sessions pacing around 308M for US. But I want to examine what's happening with our active experiments right now.
-**[00:01:30] maya.lindqvist:** We've got two major US conversion experiments running concurrently since June 8th that are effectively canceling each other out. "Search Relevance Re-ranking" (`exp_2601`) is showing a healthy +1.6% conversion lift on its exposed arm.
-**[00:02:15] owen.faust:** But on the flip side, my "Item Page Media Carousel Autoplay" experiment (`exp_2618`) is showing a -1.5% drop on its exposed arm. The autoplay video module is feeling cluttered to shoppers and slowing down the page perceptually. Equal-weighted, their net effect on the topline dashboard is a ~+0.05% wash.
-**[00:03:00] carlos.figueroa:** That explains why looking at aggregate topline dashboards can hide active friction. If a PM checks the net experiment line and sees zero, they might assume nothing is moving, when in reality two powerful, opposite forces are colliding.
-**[00:03:45] amara.shah:** Right, and it's also why our weekly WoW drop during the week of July 18th (dropping from 3.24% down to 2.86%) wasn't caused by the roadmap or experiments. About -0.24pp of that drop was purely device-mix shift (app session share jumped from 28.0% to 37.6%, and app converts lower than web), while -0.14pp was ordinary web softening. Neither the homepage banner refresh on July 13th nor our active experiments drove that residual.
+**[00:01:30] maya.lindqvist:** We've got two major US conversion experiments running concurrently since June 8th. "Search Relevance Re-ranking" (`exp_2601`) is showing a healthy +1.6% conversion lift on its exposed arm.
+**[00:02:15] owen.faust:** And separately, my "Item Page Media Carousel Autoplay" experiment (`exp_2618`) is showing a -1.5% drop on its exposed arm. The autoplay video module is feeling cluttered to shoppers and slowing down the page perceptually.
+**[00:03:00] carlos.figueroa:** Worth keeping both of those individual reads in front of leadership rather than just a net experiment line — wouldn't want anyone to check that line, see something small, and assume nothing's moving.
+**[00:03:45] amara.shah:** Right. And separately, our weekly WoW drop during the week of July 18th (dropping from 3.24% down to 2.86%) — app session share jumped from 28.0% to 37.6% that week, and app converts lower than web, so there's a mix component in there. Neither the homepage banner refresh on July 13th nor our active experiments look like the roadmap explanation for it, but the full mix/rate split still needs to be run.
 
 ---
 
@@ -193,7 +193,7 @@ adapter: gong_call
 **[00:02:35] victor.okonkwo:** Marketplace is firing on all cylinders. Even with the Style/Resold wallet-shift dynamics and the GradeSure authentication friction in Collectibles, total marketplace GMV is outperforming expectations, and return rates in Collectibles are down to a healthy 5.4%.
 **[00:03:20] hannah.brennan:** Care deflection is exceeding targets at 52.1% (vs 50% FY27 exit goal), and our average handle time is down to 7.4 minutes. The Ontario returns center operational crisis from winter is fully behind us, and refund cycles are back to normal baseline (~3.3 days).
 **[00:04:05] renee.kowalski:** Membership is right on track. Acme+ true base has reached 14.62M members, pacing toward our 14.8M exit target, and annual renewal rates have beaten target at 87.2%. The Reelstream streaming migration is smooth.
-**[00:04:50] ben.tanaka:** Speed and fulfillment blended on-time is at 93.00% QTD, driven heavily by our pickup mix surging to 31.0% thanks to Tara's Pickup Perks campaign. Cost per order has dropped to $7.30, proving the FON2 and JOL1 automation rollout delivered real operational efficiency.
+**[00:04:50] ben.tanaka:** Speed and fulfillment blended on-time is at 93.00% QTD; pickup mix has surged to 31.0% following Tara's Pickup Perks campaign. Cost per order has dropped to $7.30, consistent with the FON2 and JOL1 automation rollout, alongside some ordinary post-peak reversion in that same window.
 **[00:05:35] deborah.osei:** Excellent work, team. Let's make sure the MBR deck reflects these trade-offs honestly. See you all at 8 AM tomorrow.
 
 ---

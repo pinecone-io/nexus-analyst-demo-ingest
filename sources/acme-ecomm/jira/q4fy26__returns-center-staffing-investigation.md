@@ -25,7 +25,7 @@ adapter: jira_ticket
 
 The quantitative 4-week-rolling `avg_refund_cycle_days` metric (tracked across `fact_orders` via `refund_issued_date − return_date`) crossed our 5.0-day SLA alert threshold during the week of **2026-01-05**, hitting **5.03 days** (and climbing further through mid-January). 
 
-As giulia.romano noted in the initial comment thread below, this quantitative breach comes hard on the heels of qualitative signals that surfaced during peak holiday operations. Specifically, giulia's Medallia theme report from earlier this round already flagged customer frustration regarding refund delays—with the "refund delay" verbatim share crossing the 10% threshold (hitting 11.2%) all the way back the week of **2025-12-15**, exactly three weeks before our internal quantitative monitoring caught up and breached the formal SLA. 
+As giulia.romano noted in the initial comment thread below, qualitative signals surfaced during peak holiday operations too. Specifically, giulia's Medallia theme report from earlier this round already flagged customer frustration regarding refund delays—with the "refund delay" verbatim share crossing the 10% threshold (hitting 11.2%) all the way back the week of **2025-12-15**. 
 
 Initial triage across the Care ops team and fulfillment leads (dominic.paquet, gabriel.stroud) points toward severe processing bottlenecks at one of our primary returns-processing facilities (`node_type='returns_center'`), with preliminary logs and Slack side-channels strongly hinting at the Ontario, CA returns center running heavily understaffed right through the Cyber Monday and December holiday peak.
 
@@ -41,15 +41,15 @@ For what it's worth, reminding everyone that per convention 5, if you're pulling
 
 ---
 *giulia.romano (Analytics Engineer, Care & VOC) — 2026-01-05 10:45 AM*  
-@hannah.brennan tagging you here because VOC saw this coming weeks ago. 
+@hannah.brennan tagging you here because Medallia flagged something in this window too.
 
 If we look back at the Medallia verbatim stream (`fact_voc_responses`), the "refund delay" theme started spiking right after Cyber Monday week. Back on **2025-12-15**, our weekly VOC report explicitly flagged that the refund-delay verbatim share crossed our 10% warning threshold for the first time, landing at **11.2%**. It felt pretty isolated at the time amid general holiday noise, but by the time we hit the Christmas and New Year surges, those complaints snowballed. 
 
-It's deeply frustrating that our quantitative alerting (`avg_refund_cycle_days` crossing 5.0 days) lagged behind the voice of the customer by a full three weeks. Customers were telling us loud and clear in mid-December that returns were sitting in limbo, but our trailing 4-week averages smooth out the daily spikes until the whole thing breaks the SLA threshold. We need a tighter feedback loop between Medallia theme shifts and operational alerts going into Q1.
+It's deeply frustrating that our trailing 4-week averages smooth out the daily spikes until the whole thing breaks the SLA threshold — by the time `avg_refund_cycle_days` crosses 5.0 days, the underlying problem has usually been building for a while. We need a tighter feedback loop between Medallia theme shifts and operational alerts going into Q1.
 
 ---
 *hannah.brennan (SVP Customer Care, Care) — 2026-01-05 11:30 AM*  
-@giulia.romano fully agree, Giulia. I'm pulling the Medallia reports from December into the leadership brief for this. A three-week lag between customer pain and our metric hitting an actionable threshold is unacceptable, especially during peak. 
+@giulia.romano fully agree, Giulia. I'm pulling the Medallia reports from December into the leadership brief for this. Whatever lag there is between customer pain and our metric hitting an actionable threshold, it's unacceptable, especially during peak. 
 
 I've pinged ben.tanaka and gabriel.stroud to get eyes on warehouse return-processing throughput immediately. We know Cyber Monday week (starting Dec 1) kicked off a massive wave of inbound merchandise, but customers shouldn't be waiting over five days on average to see funds returned to their accounts once the carrier scans the package in. Let's set up an emergency sync for tomorrow morning.
 
@@ -79,7 +79,7 @@ Just reading through this thread—are we seeing any bleed-over into B2B bulk re
 *carlos.figueroa (VP Data & Analytics, Data) — 2026-01-12 10:00 AM*  
 Noting for the record that this will definitely be a primary agenda item for the upcoming MBR review. Hannah, make sure we have the exact timeline of the Ontario staffing gap pulled together so we can present a clear root-cause narrative to deborah.osei and felix.arroyo. 
 
-Also, regarding Giulia's point on the Medallia lag: let's make sure our data engineering pod figures out a way to weight verbatim volume spikes into our automated anomaly detection dashboards so we don't have to wait for a 4-week rolling average to cross a hard SLA line when qualitative signals are flashing red two weeks prior. Wei, let's chat about that during our Wednesday sync.
+Also, regarding Giulia's point on the Medallia data: let's make sure our data engineering pod figures out a way to weight verbatim volume spikes into our automated anomaly detection dashboards so we don't have to wait for a 4-week rolling average to cross a hard SLA line whenever qualitative signals are already flashing red. Wei, let's chat about that during our Wednesday sync.
 
 ---
 *wei.hartono (Analytics Engineer, Data) — 2026-01-14 02:30 PM*  

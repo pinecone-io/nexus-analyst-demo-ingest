@@ -23,7 +23,7 @@ The "Checkout Simplify" experiment (`exp_2214`), which aimed to reduce friction 
 
 Mid-flight on **2026-03-01**, an independent initiative owned by maya.lindqvist's team—the "Nav Refresh" sitewide navigation redesign—was deployed to production. Due to a coordination gap between teams regarding release slotting, Nav Refresh was pushed into *both* the control and treatment arms of `exp_2214` simultaneously. To measure Nav Refresh's independent impact, maya's team carved out a concurrent 5%-of-traffic, 3-week no-launch holdback (`exp_2215`), which completed its readout on **2026-03-21** showing a standalone +1.3% conversion lift sitewide.
 
-Because Nav Refresh contaminated the entire experiment traffic pool after March 1, the full-window read for `exp_2214` (+2.1% conversion lift) represents a confounded joint effect. However, isolating the pre-contamination window (**Feb 16–28**) reveals a clean baseline lift of **+0.8%**. 
+Because Nav Refresh contaminated the entire experiment traffic pool after March 1, the full-window read for `exp_2214` (+2.1% conversion lift) represents a confounded joint effect, not Checkout Simplify's effect in isolation. A clean read requires isolating the pre-contamination window (**Feb 16–28**) and recomputing the lift on that sub-window alone.
 
 On **2026-04-06**, a shipping decision was made to roll out Checkout Simplify to 100% of US traffic based on the headline +2.1% figure, accepting the structural boost from the nav redesign as part of the live checkout experience.
 
@@ -65,10 +65,7 @@ At the same time, separate from checkout engineering, maya.lindqvist's team had 
 * **Caveat:** As detailed below, this number absorbs the unisolated impact of Nav Refresh, which launched midway through.
 
 ### B. Pre-Contamination Sub-Window (Feb 16 – Feb 28)
-To filter out the noise introduced by Nav Refresh, we pulled a clean sub-window query covering the 12 days prior to March 1.
-* **Sample Size:** ~4.1M exposed sessions.
-* **Observed Lift:** **+0.8%** relative to control ($p = 0.042$).
-* **Interpretation:** The true isolated effect of simplifying the checkout accordion is a modest +0.8% conversion lift. The remaining +1.3% delta observed in the full-window read maps almost perfectly to the independent +1.3% lift measured by Nav Refresh's own holdback (`exp_2215`) readout on **2026-03-21**.
+To filter out the noise introduced by Nav Refresh, a clean sub-window query covering the 12 days prior to March 1 is needed. That query has not been re-run since the confound was flagged — the exposure and conversion rows for this sub-window are in `fact_experiment_exposures` / `fact_experiment_readouts` for whoever needs the isolated figure. Nav Refresh's own holdback (`exp_2215`) separately read an independent **+1.3%** sitewide lift as of its **2026-03-21** readout, on its own 5%-of-traffic cohort.
 
 ```
 +--------------------------------------------------------------------------+
@@ -76,9 +73,9 @@ To filter out the noise introduced by Nav Refresh, we pulled a clean sub-window 
 +--------------------------------------------------------------------------+
 |  Feb 16          Feb 28         Mar 01         Mar 21         Mar 30     |
 |    |---------------|--------------|--------------|--------------|       |
-|    | Clean Window  |              | Nav Refresh  | Holdback     |       |
-|    | (+0.8% lift)  |              | Deployed     | Readout (+1.3%)      |
-|    |               |              | (Confounded)                |       |
+|    | Pre-window    |              | Nav Refresh  | Holdback     |       |
+|    | (not yet      |              | Deployed     | Readout (+1.3%)      |
+|    |  recomputed)  |              | (Confounded)                |       |
 |    |               |              | Joint Read: (+2.1% lift)    |       |
 +--------------------------------------------------------------------------+
 ```
@@ -90,7 +87,7 @@ To filter out the noise introduced by Nav Refresh, we pulled a clean sub-window 
 * **owen.faust (03-01 11:15 ET):** *"Wait, did someone just push the nav redesign CSS to production? My checkout experiment variants are suddenly showing a weird step-jump in session duration right around 10am. Is that on my end or did the header change?"*
 * **maya.lindqvist (03-01 11:28 ET):** *"Hey Owen! Yeah, sorry, we rolled out Nav Refresh to 100% this morning per the Q1 roadmap. Didn't realize it touched the global wrapper above your checkout frames too. We *do* have a 5% holdback running (`exp_2215`) so we can isolate the sitewide effect, but your traffic pool is definitely getting the new nav in both arms now. Let me know if you want to pause or just ride it out."*
 * **amara.shah (Data, 03-02 14:00 ET):** *"Just a reminder to everyone reconciling conversion rates this week: we also have the `sessions_definition_version` 1→2 bot-filtering cutover landing today. Between Owen's checkout test, Maya's nav drop, and the bot cleanup, don't expect the WBR charts to tie out cleanly without segmenting by date."*
-* **carlos.figueroa (Data, 03-05 09:30 ET):** *"Let's make sure we document the confound clearly in the MBR appendix. Leadership is going to see the +2.1% on Checkout Simplify and ask why it's higher than the initial spec projection. We need to attribute the +0.8% to Owen's accordion work and the rest to Maya's nav refresh."*
+* **carlos.figueroa (Data, 03-05 09:30 ET):** *"Let's make sure we document the confound clearly in the MBR appendix. Leadership is going to see the +2.1% on Checkout Simplify and ask why it's higher than the initial spec projection. Somebody needs to pull the pre-March-1 sub-window before we can say how much of that is Owen's accordion work versus Maya's nav refresh."*
 
 ---
 

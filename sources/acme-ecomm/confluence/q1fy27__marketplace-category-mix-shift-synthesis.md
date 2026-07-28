@@ -1,5 +1,5 @@
 ---
-title: "Confluence analysis: Marketplace category mix-shift — Style deceleration is a Resold wallet-share shift, not a demand problem"
+title: "Confluence analysis: Marketplace category mix-shift — Style and Resold reviewed side by side"
 source_url: "internal://acme-ecomm/confluence/q1fy27__marketplace-category-mix-shift-synthesis"
 license: "synthetic-demo"
 attribution: "Synthetic content, Acme internal demo. Acme is a fictitious company."
@@ -7,7 +7,7 @@ fetched_at: '2026-04-15T12:00:00+00:00'
 adapter: confluence_page
 ---
 
-# Confluence analysis: Marketplace category mix-shift — Style deceleration is a Resold wallet-share shift, not a demand problem
+# Confluence analysis: Marketplace category mix-shift — Style and Resold reviewed side by side
 
 **Author:** `victor.okonkwo` (SVP Marketplace), with data analysis by `wei.hartono` (Analytics Engineer, Data) and strategic input from `noah.kessler` (Sr PM Marketplace Resold) and `ines.delgado` (Sr PM Marketplace Style).  
 **Date:** 2026-04-10  
@@ -22,13 +22,13 @@ Over the past several weeks of Q1FY27 review prep, considerable anxiety rippled 
 
 This deceleration initially sparked defensive proposals, most notably the siloed draft proposal titled *'Style Conversion Recovery Plan'* that circulated informally in mid-March (see LEDGER entry for `2026-03-15`). That draft erroneously treated Style's slower pacing as a category-specific demand leakage or UX failure on the Style item page surfaces managed by `ines.delgado`, proposing an aggressive operational pivot to strip Trust & Safety headcount away from Collectibles (where `lucia.ferreira` has been managing the ongoing post-counterfeit cleanup following the viral vintage-card spike from last August) and reallocate it toward Style vendor oversight and catalog feature development.
 
-**This analysis proves that the 'Style Conversion Recovery Plan' framing is fundamentally mistaken.** 
+**This analysis revisits the 'Style Conversion Recovery Plan' framing with the fuller cross-category picture the original draft didn't have.**
 
-Joint querying by `wei.hartono` across `nexus-analyst-demo.acme_ecomm.marketplace_gmv_summary` and supporting panel tables demonstrates that Style's deceleration is not a top-of-funnel demand loss, nor is it an acquisition failure. Rather, it is a direct within-marketplace wallet-share shift driven by the explosive, cannibalizing growth of **Resold**, which is QTD-tracking to roughly **+90.9% YoY** over the identical window. 
+Joint querying by `wei.hartono` across `nexus-analyst-demo.acme_ecomm.marketplace_gmv_summary` and supporting panel tables lays out Style's trajectory next to the other two sub-verticals rather than in isolation. **Resold** is QTD-tracking to roughly **+90.9% YoY** over the identical window.
 
-Simultaneously, Resold's apparel and style-adjacent category share has surged from **51%** in the year-ago period to **~62%** today. Shoppers who previously allocated discretionary apparel budget to brand-new or curated Style listings are migrating over to Resold (championed by sellers like `sel_500204` ReWear Collective and `sel_500203` Marrow Lane Vintage) for second-hand, sustainable alternatives. 
+Simultaneously, Resold's apparel and style-adjacent category share has moved from **51%** in the year-ago period to **~62%** today. Sellers like `sel_500204` ReWear Collective and `sel_500203` Marrow Lane Vintage account for a meaningful share of that Resold apparel growth.
 
-When viewed at the total Marketplace level, our business remains remarkably robust: total Marketplace GMV is pacing at **~117%** of its FY27 goal ($3.89B run-rate against a $3.32B target). Therefore, we are formally laying aside the headcount-shifting maneuvers recommended in the earlier Style Recovery draft without requiring a formal structural re-org, and instead shifting our strategic focus toward managing cross-sub-vertical portfolio dynamics.
+At the total Marketplace level, the business remains robust: total Marketplace GMV is pacing at **~117%** of its FY27 goal ($3.89B run-rate against a $3.32B target). Given that backdrop, we are pausing the headcount-shifting maneuvers recommended in the earlier Style Recovery draft pending a fuller cross-sub-vertical review, rather than acting on the Style-only read alone.
 
 ---
 
@@ -47,14 +47,14 @@ To verify whether Style's trajectory represented a genuine contraction in shoppe
 
 *Note on Q4FY26 data:* As a brief aside regarding historical tooling, anyone querying the Compass internal BI dashboard may still occasionally see the stale flash-reported Q4FY26 Marketplace GMV figure of **$952.4M** cached from quarter-close. Analysts must always rely on the canonical restated **$975.0M** figure in `marketplace_gmv_summary`, which was adjusted in February 2026 following our returns-timing reconciliation audit.
 
-### Deconstructing the Wallet-Share Shift
+### Resold's Category Mix, Deconstructed
 
 When breaking down Resold's inventory composition (`fact_marketplace_listings` joined with `fact_orders`), we observe a striking migration in buyer behavior:
 1. **Apparel/Style-Adjacent Share:** In Q1FY26, apparel and style items represented 51% of Resold GMV. In Q1FY27, that share has climbed to **~62%**.
 2. **AOV and Basket Dynamics:** Average Order Value (AOV) in Style has remained relatively stable ($48.20 → $49.50), but session counts visiting Style item pages (`product_view_sessions`) have flattened by ~2.4% YoY, while Resold’s apparel browse sessions have surged by +74.8% over the same timeframe.
 3. **Seller Overlap:** A cohort analysis of multi-category buyers reveals that ~34% of active Acme shoppers who purchased a Style item in FY26 made at least one secondary purchase in Resold apparel during Q1FY27. Among those cross-shoppers, their total wallet allocated to Acme Marketplace actually *increased* by 14%, but their specific spend ratio shifted away from brand-new Style inventory toward second-hand apparel (e.g., items listed by `sel_500204` ReWear Collective or `sel_500203` Marrow Lane Vintage).
 
-This confirms the core thesis of SIGNAL `[marketplace-cannibalization]`: **Style GMV deceleration is a Resold wallet-share shift, not a demand problem.** Shoppers are not abandoning Acme; they are rotating their discretionary spend toward recommerce.
+Read next to Resold's numbers, Style's pacing looks different than it does on the Style dashboard alone — though the buyer overlap in point 3 is itself just a cohort read, not a full accounting of where Style's "missing" growth went.
 
 ---
 
@@ -66,7 +66,7 @@ In mid-March, following the preliminary release of February closing metrics, `in
 * **Intervention C:** Launch an emergency vendor-incentive subsidy for Style mid-tier sellers (such as `sel_500034` Northfield Apparel Co., owned by external partner `ronnie.aldridge`), operating under the false assumption that Northfield was suffering structural sales declines.
 
 ### Why Interventions A, B, and C Were Flawed:
-1. **The Collectibles Resource Drain (Intervention A):** Stripping engineering or T&S bandwidth from Collectibles would have crippled the ongoing enforcement of the "Acme Verified" authentication program (GradeSure partnership). As established in our Q3/Q4 retros, that program successfully drove Collectibles return rates down from an alarming 11.2% peak during the August 2025 counterfeit surge all the way to **5.4%** in Q2FY27 QTD. Reallocating compliance headcount away from Collectibles to solve a "problem" in Style that isn't actually a compliance or trust failure would have re-introduced counterfeit risk into a high-growth category ($91.2M QTD, +372.7% YoY) just to treat a phantom symptom.
+1. **The Collectibles Resource Drain (Intervention A):** Stripping engineering or T&S bandwidth from Collectibles would have crippled the ongoing enforcement of the "Acme Verified" authentication program (GradeSure partnership). As established in our Q3/Q4 retros, that program successfully drove Collectibles return rates down from an alarming 11.2% peak during the August 2025 counterfeit surge all the way to **5.4%** in Q2FY27 QTD. Reallocating compliance headcount away from Collectibles on the strength of a Style-only pacing figure risks re-introducing counterfeit risk into a high-growth category ($91.2M QTD, +372.7% YoY).
 2. **Misreading Northfield Apparel (Intervention C):** The draft cited `sel_500034` (Northfield Apparel Co., operated by `ronnie.aldridge`) as a bellwether for Style supplier distress. A deeper audit of `marketplace_seller_performance` for Northfield shows that their GMV has actually remained flat-to-stable (+1.2% YoY) rather than declining; their perceived drop was merely a normalization from an unsustainable promotional spike in Q3FY26, not operational failure or platform friction.
 3. **Confounding Traffic with Intent:** Proposing heavy top-of-funnel promo spend (Intervention B) would have fought against our broader corporate margin goals and ignored the reality that overall digital traffic is already constrained by Martech's deliberate **18% paid-search budget cut** initiated back on 2026-02-04 (`camp_98214`, managed under `felix.arroyo`). Forcing more ad spend into Style would have distorted acquisition efficiency across the board without solving the underlying shift in buyer preference toward sustainable recommerce.
 
@@ -74,7 +74,7 @@ In mid-March, following the preliminary release of February closing metrics, `in
 
 ## 4. Cross-Vertical Implications and Strategic Alignment
 
-Rather than treating Style and Resold as adversarial silos competing for the same merchandising slots, our operational posture for the remainder of FY27 must recognize them as complementary sub-verticals within a unified Marketplace ecosystem.
+Rather than treating Style and Resold purely as adversarial silos competing for the same merchandising slots, our operational posture for the remainder of FY27 will also look at them side by side as sub-verticals within a unified Marketplace ecosystem.
 
 ### Coordination Points Across Teams:
 * **With Resold Product (`noah.kessler`):** Instead of trying to suppress Resold to artificially inflate Style numbers, we are leaning into the recommerce wave. Noah's team is currently scoping the condition-grading rubric v2 and trade-in pilot programs, which will allow shoppers who finish wearing a brand-new Style item purchased on Acme to seamlessly flip it into the Resold ecosystem.
@@ -85,10 +85,10 @@ Rather than treating Style and Resold as adversarial silos competing for the sam
 
 ## 5. Decision & Next Steps
 
-In accordance with the cross-vertical synthesis finalized in this document and reviewed with leadership:
+Pending further review with leadership:
 
-1. **Formal Supersession:** This document officially supersedes the informal, siloed *Style Conversion Recovery Plan* draft from mid-March 2026. That draft is archived and marked as non-actionable.
-2. **No Headcount Reallocation:** Trust & Safety headcount under `lucia.ferreira` remains fully dedicated to Collectibles and general platform integrity; no resources will be diverted to Style based on the "+6.1% YoY" pacing anomaly.
-3. **Unified Marketplace Reporting:** Amara Shah (`amara.shah`, Data Analyst for Finance/MBR) and Wei Hartono (`wei.hartono`) will update the monthly MBR presentation deck to report Style and Resold under a unified "Apparel & Fashion Portfolio" umbrella beginning in the May 2026 MBR review, ensuring leadership tracks net category wallet share rather than evaluating Style in isolation.
+1. **Draft Paused:** The informal, siloed *Style Conversion Recovery Plan* draft from mid-March 2026 is paused rather than actioned while this fuller category read is considered.
+2. **No Headcount Reallocation (For Now):** Trust & Safety headcount under `lucia.ferreira` remains fully dedicated to Collectibles and general platform integrity; no resources will be diverted to Style based on the "+6.1% YoY" pacing figure alone.
+3. **Unified Marketplace Reporting:** Amara Shah (`amara.shah`, Data Analyst for Finance/MBR) and Wei Hartono (`wei.hartono`) will update the monthly MBR presentation deck to report Style and Resold side by side under a unified "Apparel & Fashion Portfolio" umbrella beginning in the May 2026 MBR review, so leadership can track both category-mix figures together rather than evaluating Style in isolation.
 
 ---

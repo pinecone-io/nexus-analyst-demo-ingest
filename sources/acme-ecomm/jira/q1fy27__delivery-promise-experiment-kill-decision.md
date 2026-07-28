@@ -48,9 +48,7 @@ As flagged in the Confluence rollout plan (`confluence.acme-ecomm.internal/speed
 **`tara.oduya` (2026-03-02 09:30 EST):**
 > Thanks for running the deconfounding models, Leo. I spent the weekend looking over the split with Carlos and Amara. 
 > 
-> Let's unpack what's actually happening here: once we back out the operational lift driven by Gabriel's DC automation at FON2/JOL1 (which is a permanent infrastructure win we get anyway, regardless of what we write on the checkout button), the *isolated* benefit of the wider promise window itself shrinks to a meager +1.5pp on-time-rate win. And that marginal win is completely wiped out by the conversion penalty from presenting a slower, less appealing delivery promise to the shopper. 
-> 
-> Put simply: widening the promise window makes us look less competitive on the checkout page, hurting conversion, without delivering a clean enough offsetting on-time-rate win once you strip away the sorting automation improvements. It's a net-negative trade.
+> Given the overlap with Gabriel's DC automation at FON2/JOL1 (a permanent infrastructure win we get anyway, regardless of what we write on the checkout button) and the real conversion penalty from presenting a slower, less appealing delivery promise to the shopper, we don't have confidence the on-time-rate win holds up as a clean, standalone result once the automation's own contribution is backed out.
 > 
 > I am officially marking `exp_1187` as **Killed** today (2026-03-02). Let's update the Confluence page so nobody tries to revive this spec next quarter. Good effort on testing it rigorously, but we keep the current promise window logic and let the new DC automation carry our efficiency gains instead.
 

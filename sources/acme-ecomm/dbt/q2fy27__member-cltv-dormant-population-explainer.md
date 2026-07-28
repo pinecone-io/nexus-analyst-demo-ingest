@@ -20,9 +20,9 @@ adapter: dbt_model
 
 The `member_cltv` model is the canonical board source for Acme+ Customer Lifetime Value (CLTV) metrics, supporting financial planning, member lifecycle reporting, and the membership analytics dashboards reviewed regularly by renee.kowalski and simone.laurent. 
 
-With Q2FY27 currently in flight (88% elapsed as of today, 2026-07-20), executive leadership is closely tracking our year-end membership goals. As of our recent MBR review, Acme+ is performing exceptionally well on standard headline indicators: total active members stand at 14.62M (pacing toward an exit of ~15.05M against our 14.8M FY27 target, putting us at 101.7% of goal), and our annual renewal rate is pacing at an impressive 87.2% (beating the 86.0% target). 
+With Q2FY27 currently in flight (88% elapsed as of today, 2026-07-20), executive leadership is closely tracking our year-end membership goals: total active members stand at 14.62M (pacing toward an exit of ~15.05M against our 14.8M FY27 target, putting us at 101.7% of goal), and our annual renewal rate is pacing at 87.2% (beating the 86.0% target). These are the standard headline indicators; they're computed from active-subscriber and renewal counts and don't reference order activity at all.
 
-However, **these high-level goal-tracking metrics are structurally blind to a latent risk within our member base: the dormant-member population.** Because dormant members have not cancelled their subscriptions, they continue to pay their annual or monthly fees and are counted as "active" in our renewal and subscriber totals. Yet, beneath this reassuring surface, a substantial slice of our panel shows zero purchasing activity over the trailing 12 months.
+Separately, `member_cltv` carries an order-activity cut of the same panel worth knowing about: because dormant members have not cancelled their subscriptions, they continue to pay their annual or monthly fees and are counted as "active" in the subscriber and renewal totals above. Yet a substantial slice of our panel shows zero purchasing activity over the trailing 12 months.
 
 This model note documents the canonical SQL construction required to capture this population accurately, walks through the math of the "$500 vs. $625 join trap," and highlights why an inner join fundamentally skews our financial modeling.
 
